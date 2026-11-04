@@ -27,7 +27,7 @@ The layout adapts to portrait 9:16 screens and iPad; touch orbit controls disabl
 
 ## Project ownership and status
 
-See [PROJECT_SPEC.md](PROJECT_SPEC.md), [ROADMAP.md](ROADMAP.md), [TASKS.md](TASKS.md) and [AGENTS.md](AGENTS.md). The first milestone separates event rules and mock transport, persists player balances and replaces the static leaderboard. Future ranks, quizzes, exams, appointments, admin, database and live integration are planned, not implemented.
+See [PROJECT_SPEC.md](PROJECT_SPEC.md), [ROADMAP.md](ROADMAP.md), [TASKS.md](TASKS.md) and [AGENTS.md](AGENTS.md). The first milestone separates event rules and mock transport, persists player balances and replaces the static leaderboard. Mock ranks, quiz answers, exams, ceremonies and basic limited appointments are now implemented. Timed quizzes, full governance, server database/authentication and live integration remain planned.
 
 ## CI and Cloudflare Pages
 
@@ -43,7 +43,7 @@ are needed. No deployment workflow or public deployment is enabled by these file
 
 ## Validation status
 
-Elevated dependency installation succeeds. Eight engine/storage tests pass on
+Elevated dependency installation succeeds. Twenty-five rule/storage/presentation tests pass on
 Node 24 and TypeScript/Vite production compilation succeeds. CI independently
 validates the pinned Node 22.18.0 runtime. Browser rendering, reload behavior and
 physical iPad performance remain unverified.
@@ -57,3 +57,7 @@ transitive override. No TypeScript or Vite compilation errors were found.
 ## Livestream presentation
 
 Use **Broadcast Mode** (or `?mode=broadcast`) for the dedicated 9:16 scene and overlays. **Admin Mode** keeps the dashboard. See [broadcast guide](docs/BROADCAST.md) for iPad sharing, notification previews, performance limits and validation. No TikTok API connection or deployment is enabled.
+
+## Academic ranks and ceremonies
+
+Admin Mode now includes configurable academic progression, mock quizzes/exams, promotion history and capacity-limited office commands. New ranks trigger a 3D ceremony; gifts cannot buy academic XP or office priority. Existing local saves retain their balances. See [progression guide](docs/PROGRESSION.md) for thresholds, exam/session rules and mock-only limitations.

@@ -146,3 +146,9 @@
 
 .broadcast-mode .scene-controls { display: none; }
 .broadcast-name { line-height: 1.1; padding-block: 1px; }
+
+/* Rank and nickname occupy separate lines within one bounded label. */
+.broadcast-name { max-width: clamp(40px,10cqw,68px); padding-inline: 2px; }
+.broadcast-name .academic-tag { font-size: 8px; max-width: 100%; white-space: nowrap; }
+.broadcast-name { padding-block: 0; }
+.broadcast-name .academic-tag { margin-top: 0; line-height: 1; }
