@@ -1,15 +1,17 @@
 import {createGame} from '../game/engine.ts';
 import type {GameState} from '../game/engine.ts';
 import {receive} from '../missions/rules.ts';
+import type {NormalizedEvent} from './types.ts';
 import {isNormalizedEvent} from './types.ts';
 export type Outcome='invalid'|'duplicate'|'anonymous'|'aggregate'|'stale'|'pending'|'processed'|'blocked'|'capacity';
 export type ReplayState={game:GameState;seen:string[];counters:Record<string,number>;closed:string[];clock:number};
 export const REPLAY_CAPACITY=10000;
+export function eventKey(e:NormalizedEvent):string{return JSON.stringify([e.source,e.roomId,e.sessionId,e.kind,e.eventId]);}
 export function createReplay():ReplayState{return {game:createGame([]),seen:[],counters:{},closed:[],clock:0};}
 export function processEvent(state:ReplayState,input:unknown):{state:ReplayState;outcome:Outcome;units:number} {
  const result=(outcome:Outcome,units=0,next=state)=>({state:next,outcome,units});
  if(!isNormalizedEvent(input))return result('invalid');const e=input;
- const key=JSON.stringify([e.source,e.roomId,e.sessionId,e.kind,e.eventId]);
+ const key=eventKey(e);
  if(state.seen.includes(key))return result('duplicate');
  // Never evict dedup keys silently: a full offline run fails closed.
  if(state.seen.length>=REPLAY_CAPACITY)return result('capacity');

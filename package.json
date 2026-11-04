@@ -5,19 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && tsc -p tsconfig.local.json && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "node tests/engine.test.ts && node tests/broadcast.test.ts && node tests/progression.test.ts && node tests/qa.test.ts && node tests/i18n.test.ts && node tests/layout.test.ts && node tests/missions.test.ts && node tests/events.test.ts"
+    "test": "node tests/engine.test.ts && node tests/broadcast.test.ts && node tests/progression.test.ts && node tests/qa.test.ts && node tests/i18n.test.ts && node tests/layout.test.ts && node tests/missions.test.ts && node tests/events.test.ts && node tests/durable.test.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
+    "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "three": "^0.172.0",
-    "lucide-react": "^0.468.0"
+    "three": "^0.172.0"
   },
   "devDependencies": {
+    "@types/node": "^22.20.5",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/three": "^0.172.0",

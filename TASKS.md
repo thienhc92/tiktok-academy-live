@@ -127,3 +127,12 @@
 - [x] Document Worker/DO transactional boundaries without backend deployment.
 - [ ] TASK-018C: durable transaction/crash recovery contract and tests.
 - [x] 66 automated tests and production build; browser replay/isolation checks passed.
+
+## TASK-018C — local SQLite persistence and recovery
+- [x] Typed repository, SQLite ledger/reward/snapshot transaction and shared event key.
+- [x] Versioned snapshots and sequences; restart preserves complete engine state.
+- [x] Real SIGKILL before/after commit and concurrent-process reward/dedup tests.
+- [x] Like/streak, identity, quiz/promotion and schema recovery checks.
+- [x] Frontend remains backend-free; local adapter is not in its import graph.
+- [ ] Production outbox, backup/retention and Cloudflare adapter/deployment (TASK-018D+).
+- [x] 77 tests, strict local/frontend type checking and production build validated.
