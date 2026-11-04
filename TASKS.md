@@ -53,3 +53,11 @@
 - [x] Ten Node tests and production build pass; Chromium portrait/tablet smoke passes.
 - [ ] Physical iPad Safari and TikTok screen-sharing validation (see docs/BROADCAST.md).
 - [ ] Actual mission/reward and exam/promotion engines remain M2/M3 work.
+
+## Broadcast portrait refinement
+- [x] Compact header (~35% reduction), closer camera and wider four-column stagger.
+- [x] Nickname scale reduced 20%; no overlaps detected at three portrait sizes.
+- [x] Three-second compact notices, two-entry cap and reserved announcement region.
+- [x] Corner goal/top-three panels with expandable top 10; dedicated fullscreen/fallback.
+- [x] Eleven Node tests and production build pass; gameplay engine/Admin layout retained.
+- [ ] Verify physical iPad Safari fullscreen, screen-share readability and frame rate.

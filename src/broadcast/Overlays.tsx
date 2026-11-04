@@ -6,7 +6,7 @@ const titles = { join: 'Joined the courtyard', like: 'Sent some love', gift: 'Se
 const icons = { join: '✦', like: '♥', gift: '🎁', promotion: '🎓' };
 export function Notifications({ notices }: { notices: Notice[] }) {
   return <div className="broadcast-notices" aria-live="polite" aria-atomic="false">
-    {notices.map(n => <div key={n.id} className={`broadcast-notice notice-${n.kind}`}><span>{icons[n.kind]}</span><div><b>{n.nickname}</b><small>{titles[n.kind]}</small></div></div>)}
+    {notices.filter(n => n.kind !== 'promotion').map(n => <div key={n.id} className={`broadcast-notice notice-${n.kind}`}><span>{icons[n.kind]}</span><div><b>{n.nickname}</b><small>{titles[n.kind]}</small></div></div>)}
   </div>;
 }
 export function BroadcastOverlays({ xp, likes, players, notices, warning, paused }: {
@@ -14,10 +14,13 @@ export function BroadcastOverlays({ xp, likes, players, notices, warning, paused
 }) {
   const goal = communityGoal(xp);
   return <div className="broadcast-overlays">
-    <div className="broadcast-heading"><span className="live-badge">● MOCK LIVE{paused ? ' · PAUSED' : ''}</span><h1>TikTok Academy</h1><p>A little campus. Big possibilities.</p><div className="broadcast-stats"><span>✦ {xp.toLocaleString()} XP</span><span>♥ {likes.toLocaleString()}</span><span>20 students</span></div></div>
+    <div className="broadcast-heading"><span className="live-badge">● MOCK LIVE{paused ? ' · PAUSED' : ''}</span><h1>TikTok Academy</h1><div className="broadcast-stats"><span>✦ {xp.toLocaleString()} XP</span><span>♥ {likes.toLocaleString()}</span><span>20 students</span></div></div>
     <Notifications notices={notices}/>
-    <div className="broadcast-bottom"><section className="broadcast-goal"><small>SCHOOL MISSION · COMMUNITY GOAL</small><b>{goal.complete ? 'Together, we did it! ✨' : 'Grow our academy together'}</b><progress aria-label="Community XP goal" max={goal.target} value={goal.progress}/><span>{goal.progress.toLocaleString()} / {goal.target.toLocaleString()} XP · no extra reward</span></section>
-      <section className="broadcast-ranks"><h2>TOP STUDENTS <span>XP</span></h2><ol>{players.map(p => <li key={p.id}><span>{p.nickname}</span><b>{p.xp.toLocaleString()}</b></li>)}</ol></section>
+    <section className="broadcast-announcement" aria-label="Quiz and promotion announcement area" aria-live="polite">
+      {notices.filter(n => n.kind === 'promotion').map(n => <div key={n.id} className="broadcast-notice notice-promotion"><span>🎓</span><div><b>{n.nickname}</b><small>{titles.promotion}</small></div></div>)}
+    </section>
+    <div className="broadcast-bottom"><section className="broadcast-goal"><small>SCHOOL GOAL</small><b>{goal.complete ? 'Goal complete ✨' : 'Grow together'}</b><progress aria-label="Community XP goal" max={goal.target} value={goal.progress}/><span>{goal.progress.toLocaleString()} / {goal.target.toLocaleString()} XP</span></section>
+      <section className="broadcast-ranks"><details><summary>TOP 10 <span>XP ▾</span></summary><ol>{players.map(p => <li key={p.id}><span>{p.nickname}</span><b>{p.xp.toLocaleString()}</b></li>)}</ol></details><ol className="rank-preview">{players.slice(0,3).map(p => <li key={p.id}><span>{p.nickname}</span><b>{p.xp.toLocaleString()}</b></li>)}</ol></section>
       {warning && <p className="broadcast-warning" role="status">{warning}</p>}
       <p className="broadcast-disclaimer">Local simulation · Likes, comments, shares & gifts</p>
     </div>

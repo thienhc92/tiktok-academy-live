@@ -15,6 +15,8 @@ Each milestone ends with updated TASKS.md, verification evidence, a reviewable c
 
 Critical path: browser/device baseline → learning loop → exams → governance → durable server → live transport. Visual polish can follow the learning loop without delaying core rule tests. No paid infrastructure is needed for local MVP development. Creating a hosted PR depends on remote capability; public deployment is a separate approval gate.
 
-Build infrastructure: npm lockfile, PR test/build workflow, pinned Node and static Cloudflare Pages configuration prepared. Public deployment remains unauthorized.
+Build infrastructure: npm lockfile, PR test/build workflow, pinned Node and static Cloudflare Pages configuration prepared. Cloudflare automatic deployment was approved for the Broadcast PR #3 merge.
 
 M5 presentation subset: dedicated Broadcast Mode, compact overlays, bounded notification animations and mobile rendering controls implemented. Classroom interior, real promotion/gift effects, context recovery and measured iPad validation remain pending.
+
+Portrait refinement: compact header/corners, three-second notifications, reserved announcement region, improved student spacing and Safari fullscreen guidance. Device-specific validation remains open.
