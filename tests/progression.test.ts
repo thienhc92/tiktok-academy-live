@@ -6,7 +6,7 @@ const answers=QUESTIONS.map(q=>q.answer);
 const ready=(xp=10000,n=1)=>{const s=createGame(Array.from({length:n},(_,i)=>`Student ${i}`));s.players=s.players.map(p=>({...p,xp}));return s;};
 function graduate(s:ReturnType<typeof createGame>,id:string,rank:number){for(let r=1;r<=rank;r++){if(r>=4){s=startSession(s,`session-${r}-${id}`);s=takeExam(s,id,answers);}s=promotePlayer(s,id,r*100,r);}return s;}
 test('11 configurable ranks enforce every exact XP boundary and valid ordering',()=>{
- assert.equal(RANKS.length,11);assert.equal(RANKS[0],'Student');assert.equal(RANKS[10],'Principal');
+ assert.equal(RANKS.length,11);assert.equal(RANKS[0],'Học sinh');assert.equal(RANKS[10],'Hiệu trưởng');
  for(let rank=1;rank<11;rank++){
   let s=graduate(ready(), 'mock-0',rank-1);
   if(rank>=4){s=startSession(s,`boundary-${rank}`);s=takeExam(s,'mock-0',answers);}

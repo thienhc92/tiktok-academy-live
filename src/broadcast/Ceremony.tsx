@@ -1,3 +1,4 @@
+import { t } from '../i18n/vi';
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
@@ -16,6 +17,6 @@ export function Ceremony({event}:{event:CeremonyEvent}) {
     <spotLight position={[0,6,1.5]} color="#fff2bb" intensity={35} angle={.4} penumbra={.6} distance={12}/>
     <pointLight position={[0,2,1]} color="#fff0b1" intensity={8} distance={5}/>
     <points ref={points}><bufferGeometry><bufferAttribute attach="attributes-position" args={[positions,3]}/></bufferGeometry><pointsMaterial color="#e9be47" size={.11} sizeAttenuation transparent opacity={.85} depthWrite={false}/></points>
-    <Html center position={[0,3.2,0]}><div className="promotion-title" role="status"><small>ACADEMY PROMOTION</small><b>{event.nickname}</b>{RANKS[event.rank]}</div></Html>
+    <Html center position={[0,3.2,0]}><div className="promotion-title" role="status"><small>{t("ACADEMY PROMOTION")}</small><b>{event.nickname}</b>{RANKS[event.rank]}</div></Html>
   </group>;
 }

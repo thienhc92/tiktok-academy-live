@@ -91,3 +91,11 @@
 - [x] Confirmed QA-only reset; QA data retained across mode switches, no Broadcast UI.
 - [x] 32 tests and production build; browser isolation/reset/preview smoke.
 - [ ] Physical iPad Safari and QA preview performance validation.
+
+## TASK-015 — Vietnamese localization
+- [x] Central Vietnamese catalog for all built-in UI, ranks, questions and help.
+- [x] Keep TikTok Academy/XP, saved IDs, numeric ranks and gameplay rules intact.
+- [x] Vietnamese document language and number/date formatting.
+- [x] Portrait wrapping and type adjustments; five phone/iPad sizes checked.
+- [x] 35 tests, production build and browser smoke passed.
+- [ ] Physical iPad Safari font/readability verification.
