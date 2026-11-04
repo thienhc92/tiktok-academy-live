@@ -43,7 +43,7 @@ are needed. No deployment workflow or public deployment is enabled by these file
 
 ## Validation status
 
-Elevated dependency installation succeeds. Twenty-five rule/storage/presentation tests pass on
+Elevated dependency installation succeeds. Thirty-two rule/storage/presentation tests pass on
 Node 24 and TypeScript/Vite production compilation succeeds. CI independently
 validates the pinned Node 22.18.0 runtime. Browser rendering, reload behavior and
 physical iPad performance remain unverified.
@@ -61,3 +61,7 @@ Use **Broadcast Mode** (or `?mode=broadcast`) for the dedicated 9:16 scene and o
 ## Academic ranks and ceremonies
 
 Admin Mode now includes configurable academic progression, mock quizzes/exams, promotion history and capacity-limited office commands. New ranks trigger a 3D ceremony; gifts cannot buy academic XP or office priority. Existing local saves retain their balances. See [progression guide](docs/PROGRESSION.md) for thresholds, exam/session rules and mock-only limitations.
+
+## QA simulation lab
+
+Use the clearly labeled Admin-only QA panel for isolated test XP, exams, promotions, office assignments and 3D previews. It has its own memory-only students and reset confirmation; regular player saves are untouched. See [QA guide](docs/QA_SIMULATION.md).

@@ -82,3 +82,12 @@
 - [x] 25 tests and production build; portrait and progression browser smoke pass.
 - [ ] Timed quizzes, live activity/moderation policy and cross-session office rotation.
 - [ ] Physical iPad Safari and screen-share validation.
+
+## Isolated Admin QA simulation lab
+- [x] Memory-only test roster, independent of regular useGame/storage.
+- [x] All-student selection, validated configurable QA XP and eligibility checks.
+- [x] Existing exam/promotion/appointment validators reused without bypasses.
+- [x] Separate six-second 3D preview; no rank is granted by preview.
+- [x] Confirmed QA-only reset; QA data retained across mode switches, no Broadcast UI.
+- [x] 32 tests and production build; browser isolation/reset/preview smoke.
+- [ ] Physical iPad Safari and QA preview performance validation.
