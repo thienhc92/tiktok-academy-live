@@ -13,5 +13,8 @@ export function communityGoal(xp: number) {
 /** Four wider columns with staggered rows; Admin coordinates are unchanged. */
 export function broadcastPosition(index: number): [number, number, number] {
   const row = Math.floor(index / 4);
-  return [(index % 4 - 1.5) * 1.8 + (row % 2 ? 0.25 : -0.25), 0, 0.1 + row * 1.15];
+  return [(index % 4 - 1.5) * 1.8 + (row % 2 ? 0.25 : -0.25), 0, -1.1 + row * 1.8];
+}
+export function ceremonyScale(elapsedMs:number,reducedMotion=false):number {
+  return reducedMotion?1:1+Math.sin(Math.min(1,Math.max(0,elapsedMs/6000))*Math.PI)*.6;
 }

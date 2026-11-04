@@ -4,7 +4,7 @@
 
 A host-operated virtual school displayed on TikTok LIVE in portrait 9:16. Viewers participate exclusively through likes, comments, shares and gifts. The browser's direct controls are simulator/operator tools, not a required viewer interface. Default mode is offline mock simulation; no TikTok affiliation or API access is implied.
 
-A working local MVP takes priority over production integration. This specification defines proposed defaults that can be changed before their milestone. No paid dependencies or public deployment are authorized.
+A working local MVP takes priority over production integration. This specification defines proposed defaults that can be changed before their milestone. No paid services are authorized. Existing Cloudflare automatic deployment follows the owner-approved merge workflow; new hosting/integrations require approval.
 
 ## Existing implementation audit (baseline 4aaabad)
 
@@ -17,12 +17,12 @@ Vite/React/TypeScript SPA; procedural R3F/Drei school exterior, gate, courtyard,
 | F01 | 3D school | Courtyard, classroom interior and ceremony stage render; view switching preserves game state | Exterior/stage implemented; interior pending |
 | F02 | Student avatars | At least 20 animated avatars, distinct nicknames, selected profile, reduced-motion support | Implemented; browser verification blocked |
 | F03 | Profiles | Stable IDs survive nickname changes; XP and contribution survive reload; invalid saves handled visibly | Local implementation in M1; server durability pending |
-| F04 | Eleven ranks | Ordered thresholds, examination gates and rank labels; exact boundary tests | Pending M3 |
+| F04 | Eleven ranks | Ordered thresholds, examination gates and rank labels; exact boundary tests | Mock rank/exam implementation complete; see docs/PROGRESSION.md |
 | F05 | Separate currencies | Academic XP and contribution independent; gifts give no academic XP | Implemented M1; engine tests passed |
 | F06 | Missions | Per-player like/comment/share/gift objectives, visible progress, capped rewards exactly once per mission | Pending M2 |
 | F07 | Quizzes | Host opens question; first valid A/B/C/D comment per ID wins submission; deadline, scoring and answer reveal | Pending M2 |
-| F08 | Exams and ceremony | Eligible players enter; score gate; no duplicate promotion; stage animation confirms outcome | Pending M3 |
-| F09 | Management positions | Capacity, published eligibility, deterministic tie breaks, terms, audit and no paid appointment | Pending M4 |
+| F08 | Exams and ceremony | Eligible players enter; score gate; no duplicate promotion; stage animation confirms outcome | Mock rank/exam implementation complete; see docs/PROGRESSION.md |
+| F09 | Management positions | Capacity, published eligibility, deterministic tie breaks, terms, audit and no paid appointment | Mock capacity-limited session appointments; full governance pending |
 | F10 | Top 10 | Sort XP descending, contribution descending, then stable ID ascending; update after events | Implemented M1; engine tests passed |
 | F11 | Effects | Bounded, pooled gift effects and promotion animation; reduced-motion option | Pending M5; avatar animation exists |
 | F12 | Admin | Pause intake, open/close quiz/exam, inspect events, reset with confirmation; production authentication | Pending M2/M6 |
@@ -60,4 +60,8 @@ Dependency-free Node tests cover engine rules, identity, invalid inputs, orderin
 
 ## Broadcast presentation increment
 
-Dedicated 9:16 Broadcast Mode and separate Admin Mode share existing game state. Overlays show XP, top 10 and the existing 5,000 XP community goal. Join/like/gift notices and an explicit promotion preview are presentation only; the mission/exam/rank engines above remain pending. See docs/BROADCAST.md for rendering budgets and browser validation evidence. No TikTok API or public deployment added.
+Dedicated 9:16 Broadcast Mode and separate Admin Mode share existing game state. Overlays show XP, top 10 and the existing 5,000 XP community goal. Join/like/gift notices and an explicit promotion preview are presentation only; the original presentation increment did not include learning rules; academic progression and exams are now implemented in the increment below. See docs/BROADCAST.md for rendering budgets and browser validation evidence. No TikTok API or public deployment added.
+
+## Academic progression implementation
+
+The eleven-rank ladder, configurable thresholds, exam gates, local rank/history persistence and 3D promotion ceremony are implemented. A mock question-bank harness awards validated quiz XP; full timed/live quizzes remain M2 work. Academic-only limited session appointments are separate from rank. See docs/PROGRESSION.md for exact implemented rules, migration, bounded records and remaining governance limitations. Existing browser balance saves are retained.

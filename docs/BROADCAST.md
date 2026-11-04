@@ -22,7 +22,7 @@ Timed per-player missions remain future work. Mock joins announce roster student
 likes and gifts follow simulated/operator events. Notices expire after 3 seconds
 and are capped at two during bursts. **Preview ceremony** in Admin Mode plays
 a clearly labeled promotion preview; it does not grant a rank or change balances.
-Actual promotion rules remain pending. No real TikTok API is connected.
+Academic promotion rules and a 3D ceremony are now implemented; see docs/PROGRESSION.md. No real TikTok API is connected.
 
 Mobile cost controls: broadcast DPR 1, no shadow maps or contact-shadow pass,
 fixed camera, demand rendering with a 30 Hz idle-animation ticker, no animation

@@ -36,3 +36,11 @@ test('fullscreen port supports entry, exit and unavailable/rejected Safari fallb
   assert.equal(await toggleFullscreen({active:false,enter:async()=>{throw Error('Not supported');}}), FULLSCREEN_FALLBACK);
   assert.equal(await toggleFullscreen({active:true,exit:async()=>{throw Error('Denied');}}), FULLSCREEN_FALLBACK);
 });
+
+test('ceremony grows then returns to normal and respects reduced motion',async()=>{
+ const {ceremonyScale}=await import('../src/broadcast/model.ts');
+ assert.equal(ceremonyScale(0),1);assert.equal(ceremonyScale(3000),1.6);
+ assert.ok(Math.abs(ceremonyScale(6000)-1)<.0001);
+ assert.ok(Math.abs(ceremonyScale(9000)-1)<.0001);
+ assert.equal(ceremonyScale(3000,true),1);
+});

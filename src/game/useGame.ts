@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { applyEvent, createGame, parseProgress, saveProgress, STORAGE_KEY } from './engine';
-import type { LiveEvent } from './engine';
+import type { GameState, LiveEvent } from './engine';
 
 export function useGame(nicknames: string[]) {
   const [initial] = useState(() => {
@@ -23,5 +23,6 @@ export function useGame(nicknames: string[]) {
     catch { setStorageWarning('Progress could not be saved. Keep this tab open; storage may be full or disabled.'); }
   }, [game, initial.writable]);
   function dispatch(event: LiveEvent) { setGame(state => applyEvent(state, event)); }
-  return { game, dispatch, storageWarning };
+  function update(reducer:(state:GameState)=>GameState){setGame(reducer);}
+  return { game, dispatch, update, storageWarning };
 }

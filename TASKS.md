@@ -30,7 +30,7 @@
 ## Known limitations / risks
 - Browser-local progress is not a database or a secure source of truth; single-tab only.
 - Replay IDs expire after 2,000 entries; not sufficient for real connector retries.
-- No real connector, ranks, exams, missions, governance, classroom interior or admin authentication yet.
+- No real connector, timed quiz/mission engine, full governance, classroom interior or admin authentication yet. Mock progression/exams/basic appointments are now implemented.
 - Existing UI source remains densely formatted; component extraction should accompany later UI work.
 - No browser, frame-rate, physical-device or production claims until checks succeed. Production compilation now passes.
 - Original MVP published in PR #1 and merged into main. Elevated network access works; ordinary sandbox access previously failed. No public deployment.
@@ -52,7 +52,7 @@
 - [x] Demand rendering, hidden-tab pause, reduced motion, DPR 1 and no broadcast shadows.
 - [x] Ten Node tests and production build pass; Chromium portrait/tablet smoke passes.
 - [ ] Physical iPad Safari and TikTok screen-sharing validation (see docs/BROADCAST.md).
-- [ ] Actual mission/reward and exam/promotion engines remain M2/M3 work.
+- [ ] Timed mission/quiz rounds remain M2 work; mock exam/promotion engine is now implemented.
 
 ## Broadcast portrait refinement
 - [x] Compact header (~35% reduction), closer camera and wider four-column stagger.
@@ -69,3 +69,16 @@
 - [x] Fullscreen capability adapter with persistent unsupported/rejected fallback.
 - [x] Twelve Node tests and production build; phone/iPad portrait browser validation.
 - [ ] Physical Safari chrome/fullscreen, screen-sharing and thermal validation.
+
+## Academic progression / promotion increment
+- [x] Eleven configurable rank thresholds; one-step promotions and target replay guard.
+- [x] Mentor+ exam gate, 80% pass and one attempt per session.
+- [x] Validated first-answer quiz XP; gifts remain contribution only.
+- [x] Separate academic-only capacity-limited session office appointments.
+- [x] Admin rank, eligibility, question/exam controls, history and threshold settings.
+- [x] Additive local save loading preserves legacy balances/replay IDs.
+- [x] Six-second 3D spotlight ceremony, scale envelope, particles and rank title.
+- [x] Separate rank/nickname lines with portrait spacing; reduced motion preserved.
+- [x] 25 tests and production build; portrait and progression browser smoke pass.
+- [ ] Timed quizzes, live activity/moderation policy and cross-session office rotation.
+- [ ] Physical iPad Safari and screen-share validation.
