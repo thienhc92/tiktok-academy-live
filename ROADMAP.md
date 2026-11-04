@@ -38,3 +38,7 @@ anti-abuse and actual live integration are still release gates.
 TASK-018B implements the offline normalized event boundary, synthetic replay,
 identity/dedup/counter policies and Admin inspection. Real connector, durable
 backend, authentication and deployment are not implemented; see docs/OFFLINE_EVENTS.md.
+
+TASK-018C adds local Node SQLite repository/crash recovery with atomic dedup,
+reward ledger and sequenced snapshots. Cloudflare integration remains a documented
+boundary, with no deployed backend; next is outbox/client resync and backup tests.
