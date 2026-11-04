@@ -1,0 +1,4 @@
+# Configuration only; no deploy command is run by CI.
+name = "tiktok-academy-live"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-11-04"
