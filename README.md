@@ -29,6 +29,27 @@ The layout adapts to portrait 9:16 screens and iPad; touch orbit controls disabl
 
 See [PROJECT_SPEC.md](PROJECT_SPEC.md), [ROADMAP.md](ROADMAP.md), [TASKS.md](TASKS.md) and [AGENTS.md](AGENTS.md). The first milestone separates event rules and mock transport, persists player balances and replaces the static leaderboard. Future ranks, quizzes, exams, appointments, admin, database and live integration are planned, not implemented.
 
+## CI and Cloudflare Pages
+
+The committed lockfile supports repeatable `npm ci` installs. GitHub Actions runs
+`npm ci`, `npm test` and `npm run build` for PRs and pushes to main using Node
+22.18.0 (`.node-version`). The check is named **Test and build**. Making it required
+for all merges remains a repository branch-protection setting.
+
+Cloudflare Pages preparation is in [docs/CLOUDFLARE_PAGES.md](docs/CLOUDFLARE_PAGES.md)
+and `wrangler.toml`. Vite preset, repository root, output `dist`, build command
+`npm ci && npm run build`, Node 22.18.0. No secrets or app environment variables
+are needed. No deployment workflow or public deployment is enabled by these files.
+
 ## Validation status
 
-`npm test` passes eight dependency-free engine/storage tests on Node 24. These verify rules and storage-port round trips, not React rendering or a real browser reload. Dependency installation failed with `EPERM` connecting to the cloud proxy at `172.31.0.221:8080`. `npm run build` cannot run without the missing TypeScript dependency. No network security settings were changed; no lockfile was generated. Frontend typechecking, browser behavior and iPad performance remain unverified. Retry `npm install` then `npm run build` when connectivity is restored.
+Elevated dependency installation succeeds. Eight engine/storage tests pass on
+Node 24 and TypeScript/Vite production compilation succeeds. CI independently
+validates the pinned Node 22.18.0 runtime. Browser rendering, reload behavior and
+physical iPad performance remain unverified.
+
+Vite reports a roughly 1 MB minified JavaScript bundle (284 KB gzip); mobile load
+and rendering performance still need measurement. Drei 9 pulls deprecated
+`three-mesh-bvh@0.7.8`; the current scene does not use its BVH APIs. A compatible
+Drei/BVH upgrade should be evaluated separately rather than forcing an untested
+transitive override. No TypeScript or Vite compilation errors were found.
