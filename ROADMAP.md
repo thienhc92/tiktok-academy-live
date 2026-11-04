@@ -34,3 +34,7 @@ Layout correction: Vietnamese mode controls moved into document flow; aspect-awa
 TASK-017 adds simulated timed quizzes, daily/collective missions, command-driven
 exams and bounded academic rewards. The transport remains mock-only; server-ledger
 anti-abuse and actual live integration are still release gates.
+
+TASK-018B implements the offline normalized event boundary, synthetic replay,
+identity/dedup/counter policies and Admin inspection. Real connector, durable
+backend, authentication and deployment are not implemented; see docs/OFFLINE_EVENTS.md.

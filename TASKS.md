@@ -117,3 +117,13 @@
 - [x] 52 tests, production build and browser mission/quiz/reload smoke.
 - [ ] Physical iPad Safari, long-running storage/performance verification.
 - [ ] Real TikTok/server authority remains explicitly out of scope.
+
+## TASK-018B — offline event architecture
+- [x] Typed and validated normalized union, stable string IDs and missing-ID policy.
+- [x] Transport-independent adapter and deterministic anonymized synthetic replay.
+- [x] Dedup/reconnect, monotonic receipt clock, like high water and gift finalization.
+- [x] Existing capped engine rules reused; regular player data unchanged.
+- [x] Vietnamese Admin inspector isolated from Broadcast and local gameplay save.
+- [x] Document Worker/DO transactional boundaries without backend deployment.
+- [ ] TASK-018C: durable transaction/crash recovery contract and tests.
+- [x] 66 automated tests and production build; browser replay/isolation checks passed.
