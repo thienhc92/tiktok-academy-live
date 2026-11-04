@@ -171,3 +171,21 @@
 .admin-mode .actions span { white-space: normal; min-width: 0; }
 .admin-mode .actions small { line-height: 1.4; }
 .qa-row label { min-width: 0; max-width: 100%; }
+/* Mode entry occupies its own flow row; it never floats over page content. */
+.admin-mode-controls { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:16px 0; }
+.admin-mode .mode-switch { position:static; max-width:100%; flex-wrap:wrap; box-shadow:none; }
+.admin-mode header { padding-top:20px; min-height:90px; }
+.reset-camera { border:1px solid #bdcdb2; border-radius:10px; padding:10px 14px; min-height:44px; background:#fafff1; }
+.broadcast-mode .admin-mode-controls { display:none; }
+.admin-mode .canvas-wrap { isolation:isolate; }
+.name-tag { max-width:68px; display:block; overflow:hidden; text-overflow:ellipsis; }
+.admin-mode .name-tag { font-size:10px; line-height:1.1; padding:1px 3px; }
+@media(max-width:1100px) and (min-width:801px){.workspace{grid-template-columns:minmax(0,1fr) 260px}.scene-card{min-height:620px}}
+.admin-mode .name-tag { padding:0 2px; }
+.admin-mode .name-tag .academic-tag { margin-top:0; line-height:1; }
+@media (orientation:portrait) and (max-width:1100px) {
+  .admin-mode .workspace { grid-template-columns:minmax(0,1fr); }
+}
+@media(max-width:520px) {
+  .admin-mode .scene-card { height:620px; min-height:620px; max-height:none; }
+}

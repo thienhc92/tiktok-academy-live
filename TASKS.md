@@ -99,3 +99,10 @@
 - [x] Portrait wrapping and type adjustments; five phone/iPad sizes checked.
 - [x] 35 tests, production build and browser smoke passed.
 - [ ] Physical iPad Safari font/readability verification.
+
+## Vietnamese responsive layout / camera correction
+- [x] Flow-positioned mode-entry controls, separated from page content.
+- [x] Aspect-aware default camera, bounded orbit/zoom and Đặt lại camera.
+- [x] Wider shared student spacing and screen-space label declutter.
+- [x] 38 unit tests and production build; portrait/landscape browser checks.
+- [ ] Physical iPad Safari framing, touch/stream capture and performance.

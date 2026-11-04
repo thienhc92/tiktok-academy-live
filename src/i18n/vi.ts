@@ -1,5 +1,6 @@
 /** Central Vietnamese catalog. Keys are stable English source phrases, never saved IDs. */
 export const vi: Record<string,string> = {
+  "Reset Camera": "Đặt lại camera",
   "Appoint eligible {0}": "Bổ nhiệm {0} đủ điều kiện",
   "Promotion Exam": "Kỳ thi thăng cấp",
   "Student": "Học sinh",

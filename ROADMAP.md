@@ -28,3 +28,5 @@ Academic increment adds quiz answer harness and basic limited appointments. Full
 QA increment: isolated memory-only Admin simulation lab reuses academic validators, with independent XP grants/reset and a separate ceremony preview. No production/player storage or live event integration.
 
 TASK-015: centralized Vietnamese UI implemented across Admin, Broadcast, progression and QA; portrait browser validation completed, physical-device validation remains open.
+
+Layout correction: Vietnamese mode controls moved into document flow; aspect-aware camera fit/reset, bounded orbit and collision-aware labels added. Gameplay remains unchanged; physical device verification pending.
