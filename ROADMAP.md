@@ -42,3 +42,10 @@ backend, authentication and deployment are not implemented; see docs/OFFLINE_EVE
 TASK-018C adds local Node SQLite repository/crash recovery with atomic dedup,
 reward ledger and sequenced snapshots. Cloudflare integration remains a documented
 boundary, with no deployed backend; next is outbox/client resync and backup tests.
+
+TASK-019: thêm Worker + Durable Object SQLite cục bộ, xác thực/phân quyền,
+outbox giao dịch, WebSocket snapshot/delta và UI kết nối tiếng Việt. Pages tiếp
+tục mặc định mô phỏng; không triển khai backend hay kết nối TikTok. Cổng phát
+hành tiếp theo: compaction replay dài hạn, tải thực, quyền/backup vận hành và
+phê duyệt staging; xem docs/REALTIME_BACKEND.md. Không thay thế hạn mức kế thừa
+10.000 sự kiện bằng việc xóa khóa chống trùng thiếu an toàn.

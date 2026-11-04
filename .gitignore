@@ -8,3 +8,10 @@ dist/
 *.db
 *.db-wal
 *.db-shm
+
+# Worker local state and local secret files
+.wrangler/
+.dev.vars
+.dev.vars.*
+.env
+.env.*
