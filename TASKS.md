@@ -106,3 +106,14 @@
 - [x] Wider shared student spacing and screen-space label declutter.
 - [x] 38 unit tests and production build; portrait/landscape browser checks.
 - [ ] Physical iPad Safari framing, touch/stream capture and performance.
+
+## TASK-017 — simulated LIVE mission system
+- [x] Validated five-event adapter, commands and rate/count/replay controls.
+- [x] Configurable day/session XP caps and gift contribution separation.
+- [x] Daily and collective missions, timed quiz/deadline/scoring/top 10.
+- [x] Real exam/promotion validators and automatic eligible ceremonies.
+- [x] Vietnamese Admin simulator and portrait Broadcast mission/quiz views.
+- [x] Additive validated local persistence; bounded success/gift 3D effects.
+- [x] 52 tests, production build and browser mission/quiz/reload smoke.
+- [ ] Physical iPad Safari, long-running storage/performance verification.
+- [ ] Real TikTok/server authority remains explicitly out of scope.
