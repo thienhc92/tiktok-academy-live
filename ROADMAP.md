@@ -20,3 +20,5 @@ Build infrastructure: npm lockfile, PR test/build workflow, pinned Node and stat
 M5 presentation subset: dedicated Broadcast Mode, compact overlays, bounded notification animations and mobile rendering controls implemented. Classroom interior, real promotion/gift effects, context recovery and measured iPad validation remain pending.
 
 Portrait refinement: compact header/corners, three-second notifications, reserved announcement region, improved student spacing and Safari fullscreen guidance. Device-specific validation remains open.
+
+iPad Broadcast View increment: largest-fit safe-viewport composition, clean operator-control reveal, explicit entry, readable minimum type and capability-tested fullscreen fallback. Real-device Safari behavior remains a validation task.

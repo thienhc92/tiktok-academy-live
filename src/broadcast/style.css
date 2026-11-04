@@ -97,3 +97,52 @@
 @media(prefers-reduced-motion:reduce) { .broadcast-notice, .notice-like > span { animation: none; } }
 /* Keep the fixed selector clear of Admin controls even on narrow phones. */
 .admin-mode header { height: auto; min-height: 116px; padding-top: 58px; padding-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+/* Portrait-first capture surface, fitted inside the device's safe viewport. */
+.broadcast-mode {
+  box-sizing: border-box;
+  --device-safe-top: env(safe-area-inset-top,0px);
+  --device-safe-right: env(safe-area-inset-right,0px);
+  --device-safe-bottom: env(safe-area-inset-bottom,0px);
+  --device-safe-left: env(safe-area-inset-left,0px);
+  padding: var(--device-safe-top) var(--device-safe-right) var(--device-safe-bottom) var(--device-safe-left);
+}
+.broadcast-mode main {
+  width: min(100%,calc((100dvh - var(--device-safe-top) - var(--device-safe-bottom)) * .5625));
+  height: auto; aspect-ratio: 9 / 16;
+}
+.broadcast-mode .scene-card {
+  /* Keep essential content clear of typical LIVE right-hand and bottom UI. */
+  --live-right: 16%; --live-bottom: 18%;
+}
+.broadcast-name { font-size: clamp(10px,1.36dvh,12px); }
+.broadcast-heading { top: 6%; right: var(--live-right); }
+.broadcast-heading h1 { font-size: clamp(21px,3.2dvh,28px); }
+.broadcast-stats span { font-size: clamp(11px,1.25dvh,13px); padding: 3px 5px; }
+.broadcast-goal,.broadcast-ranks { bottom: var(--live-bottom); }
+.broadcast-ranks { right: var(--live-right); width: 34%; }
+.broadcast-goal { width: 37%; }
+.broadcast-goal small,.broadcast-goal > span { font-size: 10px; }
+.broadcast-goal > b { font-size: 12px; }
+.broadcast-ranks summary { min-height: 36px; font-size: 10px; display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+.broadcast-ranks li { font-size: clamp(10px,1.2dvh,12px); }
+.broadcast-ranks li > span { max-width: 62%; }
+.broadcast-disclaimer { bottom: 14%; font-size: 8px; right: var(--live-right); }
+.broadcast-warning { bottom: calc(var(--live-bottom) + 120px); right: var(--live-right); }
+.broadcast-notices { right: var(--live-right); }
+.broadcast-announcement { right: var(--live-right); }
+.broadcast-tools { position: absolute; z-index: 35; bottom: 2%; left: 6%; right: 6%; pointer-events: none; display: flex; justify-content: flex-end; }
+.broadcast-tools button { min-height: 44px; padding: 8px 12px; font-size: 11px; border-radius: 12px; pointer-events: auto; }
+.show-broadcast-tools { background: #fafff1d9; color: #355740; border: 1px solid #c5d5b5; }
+.broadcast-tool-panel { width: 100%; background: #fafff1fa; border: 1px solid #c5d5b5; border-radius: 12px; padding: 5px; pointer-events: auto; }
+.broadcast-tool-buttons { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px; }
+.broadcast-tool-buttons button { flex: 1; }
+.broadcast-tool-panel p { font-size: 12px; line-height: 1.5; margin: 8px; }
+.broadcast-mode:not(.broadcast-tools-open) .scene-controls { display: none; }
+.broadcast-mode .scene-controls { bottom: 11%; right: 6%; }
+.broadcast-mode .scene-controls button { min-width: 44px; min-height: 44px; }
+.broadcast-mode .scene-controls { height: 46px; }
+.enter-broadcast { background: #42684e; color: white; font-weight: 700; }
+.mode-switch .enter-broadcast { min-height: 44px; }
+
+.broadcast-mode .scene-controls { display: none; }
+.broadcast-name { line-height: 1.1; padding-block: 1px; }

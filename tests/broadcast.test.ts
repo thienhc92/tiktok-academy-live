@@ -25,3 +25,14 @@ test('broadcast layout spreads all 20 students over four columns without changin
   }
   assert.equal(NOTICE_DURATION_MS, 3000);
 });
+
+test('fullscreen port supports entry, exit and unavailable/rejected Safari fallback', async () => {
+  const { toggleFullscreen, FULLSCREEN_FALLBACK } = await import('../src/broadcast/fullscreen.ts');
+  let entered = 0, exited = 0;
+  assert.equal(await toggleFullscreen({active:false,enter:async()=>{entered++;}}), '');
+  assert.equal(await toggleFullscreen({active:true,exit:async()=>{exited++;}}), '');
+  assert.equal(entered,1); assert.equal(exited,1);
+  assert.equal(await toggleFullscreen({active:false}), FULLSCREEN_FALLBACK);
+  assert.equal(await toggleFullscreen({active:false,enter:async()=>{throw Error('Not supported');}}), FULLSCREEN_FALLBACK);
+  assert.equal(await toggleFullscreen({active:true,exit:async()=>{throw Error('Denied');}}), FULLSCREEN_FALLBACK);
+});
