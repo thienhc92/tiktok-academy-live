@@ -24,3 +24,5 @@ Portrait refinement: compact header/corners, three-second notifications, reserve
 iPad Broadcast View increment: largest-fit safe-viewport composition, clean operator-control reveal, explicit entry, readable minimum type and capability-tested fullscreen fallback. Real-device Safari behavior remains a validation task.
 
 Academic increment adds quiz answer harness and basic limited appointments. Full timed M2 rounds and M4 rotation/moderation/activity governance remain pending; see docs/PROGRESSION.md.
+
+QA increment: isolated memory-only Admin simulation lab reuses academic validators, with independent XP grants/reset and a separate ceremony preview. No production/player storage or live event integration.
