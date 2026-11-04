@@ -1,6 +1,7 @@
 import { t } from '../i18n/vi';
 import { useEffect, useState } from 'react';
-import { applyEvent, createGame, parseProgress, saveProgress, STORAGE_KEY } from './engine';
+import { createGame, parseProgress, saveProgress, STORAGE_KEY } from './engine';
+import { receive } from '../missions/rules';
 import type { GameState, LiveEvent } from './engine';
 
 export function useGame(nicknames: string[]) {
@@ -23,7 +24,7 @@ export function useGame(nicknames: string[]) {
     try { saveProgress(window.localStorage, game); setStorageWarning(''); }
     catch { setStorageWarning(t("Progress could not be saved. Keep this tab open; storage may be full or disabled.")); }
   }, [game, initial.writable]);
-  function dispatch(event: LiveEvent) { setGame(state => applyEvent(state, event)); }
+  function dispatch(event: LiveEvent & {text?:string}) { setGame(state => receive(state, {...event,...(event.kind==='comment'?{text:event.text??'Bình luận mô phỏng '+event.id.slice(-8)}:{})}, Date.now())); }
   function update(reducer:(state:GameState)=>GameState){setGame(reducer);}
   return { game, dispatch, update, storageWarning };
 }

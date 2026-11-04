@@ -65,3 +65,7 @@ Dedicated 9:16 Broadcast Mode and separate Admin Mode share existing game state.
 ## Academic progression implementation
 
 The eleven-rank ladder, configurable thresholds, exam gates, local rank/history persistence and 3D promotion ceremony are implemented. A mock question-bank harness awards validated quiz XP; full timed/live quizzes remain M2 work. Academic-only limited session appointments are separate from rank. See docs/PROGRESSION.md for exact implemented rules, migration, bounded records and remaining governance limitations. Existing browser balance saves are retained.
+
+## TASK-017 simulated LIVE missions
+
+Normalized mock events and Vietnamese commands now drive capped academic rewards, daily/collective missions, timed quizzes and command-based examinations. Mission XP triggers eligible academic promotions/ceremonies, with gifts excluded from academic rewards. The Admin simulator and Broadcast question/goal overlays are implemented; see docs/MISSIONS.md for exact limits, persistence and mock-only scope. No real connector or production anti-cheat is introduced.

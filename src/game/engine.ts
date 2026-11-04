@@ -1,3 +1,5 @@
+import { parseLive } from '../missions/rules.ts';
+import type { LiveState } from '../missions/rules.ts';
 import { createAcademy, parseAcademy, recordFor, replaceRecord, eligibility, gradeExam, QUESTIONS, OFFICES, validThresholds } from './progression.ts';
 import type { Academy } from './progression.ts';
 /** Transport-independent rules. Never import React or a TikTok SDK here. */
@@ -10,7 +12,7 @@ export type LiveEvent = {
   count: number;
 };
 export type Player = { id: string; nickname: string; xp: number; contribution: number };
-export type GameState = { version: 1; players: Player[]; processedIds: string[]; academy: Academy };
+export type GameState = { version: 1; players: Player[]; processedIds: string[]; academy: Academy; live?:LiveState };
 export const MAX_PLAYERS = 1000;
 export const REPLAY_WINDOW = 2000;
 export const STORAGE_KEY = 'tiktok-academy.progress.v1';
@@ -70,7 +72,9 @@ export function parseProgress(raw: string | null): GameState | null {
       || new Set(s.processedIds).size !== s.processedIds.length) return null;
     const academy = s.academy === undefined ? createAcademy() : parseAcademy(s.academy, s.players.map(p=>p.id));
     if(!academy)return null;
-    return { version: 1, academy, players: s.players.map(({ id, nickname, xp, contribution }) => ({ id, nickname, xp, contribution })), processedIds: [...s.processedIds] };
+    const live=s.live===undefined?undefined:parseLive(s.live,s.players.map(p=>p.id));
+    if(live===null)return null;
+    return { version: 1, academy, ...(live?{live}:{}), players: s.players.map(({ id, nickname, xp, contribution }) => ({ id, nickname, xp, contribution })), processedIds: [...s.processedIds] };
   } catch { return null; }
 }
 export type StoragePort = { getItem(key: string): string | null; setItem(key: string, value: string): void };
