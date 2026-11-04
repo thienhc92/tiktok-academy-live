@@ -1,17 +1,18 @@
+import { t } from '../i18n/vi.ts';
 /** Academic ranks qualify players; office seats never change academic rank. */
-export const RANKS = ['Student','Active Student','Scholar','Senior Scholar','Mentor','Class Leader','Teaching Assistant','Teacher','Department Head','Vice Principal','Principal'] as const;
+export const RANKS = [t("Student"),t("Active Student"),t("Scholar"),t("Senior Scholar"),t("Mentor"),t("Class Leader"),t("Teaching Assistant"),t("Teacher"),t("Department Head"),t("Vice Principal"),t("Principal")] as const;
 export const DEFAULT_THRESHOLDS = [0,100,300,600,1000,1500,2200,3200,4500,6000,8000];
 export const QUESTIONS = [
-  { id:'q1', prompt:'Which action earns academic XP without a gift?', options:['Like','Buy a rank','Send diamonds','Buy an office'], answer:'A' },
-  { id:'q2', prompt:'What do gifts award?', options:['Principal rank','Contribution points','Exam passes','Office seats'], answer:'B' },
-  { id:'q3', prompt:'How should classmates be treated?', options:['Ignore them','Spam them','With respect','By gift value'], answer:'C' },
-  { id:'q4', prompt:'What is needed for senior promotion?', options:['A gift','A nickname change','An office','XP and a passed exam'], answer:'D' },
-  { id:'q5', prompt:'Are academic ranks the same as limited offices?', options:['No','Yes','Only for gifts','Always'], answer:'A' },
+  { id:'q1', prompt:t("Which action earns academic XP without a gift?"), options:[t("Like"),t("Buy a rank"),t("Send diamonds"),t("Buy an office")], answer:'A' },
+  { id:'q2', prompt:t("What do gifts award?"), options:[t("Principal rank"),t("Contribution points"),t("Exam passes"),t("Office seats")], answer:'B' },
+  { id:'q3', prompt:t("How should classmates be treated?"), options:[t("Ignore them"),t("Spam them"),t("With respect"),t("By gift value")], answer:'C' },
+  { id:'q4', prompt:t("What is needed for senior promotion?"), options:[t("A gift"),t("A nickname change"),t("An office"),t("XP and a passed exam")], answer:'D' },
+  { id:'q5', prompt:t("Are academic ranks the same as limited offices?"), options:[t("No"),t("Yes"),t("Only for gifts"),t("Always")], answer:'A' },
 ] as const;
 export type Promotion = { from:number; to:number; at:number; session:string };
 export type Exam = { session:string; target:number; score:number };
 export type AcademicRecord = { playerId:string; rank:number; history:Promotion[]; exams:Exam[]; quizzes:string[] };
-export const OFFICES = [ {id:'class-leader',title:'Class Leader',rank:5,capacity:4}, {id:'department-head',title:'Department Head',rank:8,capacity:2}, {id:'vice-principal',title:'Vice Principal',rank:9,capacity:1}, {id:'principal',title:'Principal',rank:10,capacity:1} ] as const;
+export const OFFICES = [ {id:'class-leader',title:t("Class Leader"),rank:5,capacity:4}, {id:'department-head',title:t("Department Head"),rank:8,capacity:2}, {id:'vice-principal',title:t("Vice Principal"),rank:9,capacity:1}, {id:'principal',title:t("Principal"),rank:10,capacity:1} ] as const;
 export type Appointment = { office:string; playerId:string; session:string };
 export type Academy = { thresholds:number[]; session:string; records:AcademicRecord[]; appointments:Appointment[] };
 export function createAcademy():Academy { return {thresholds:[...DEFAULT_THRESHOLDS],session:'mock-session-1',records:[],appointments:[]}; }
@@ -19,10 +20,10 @@ export function recordFor(academy:Academy,playerId:string):AcademicRecord { retu
 export function validThresholds(values:unknown):values is number[] {return Array.isArray(values)&&values.length===11&&values[0]===0&&values.every((v,i)=>Number.isSafeInteger(v)&&v>=0&&v<=1e9&&(i===0||v>values[i-1]));}
 export function eligibility(academy:Academy,playerId:string,xp:number) {
   const r=recordFor(academy,playerId),next=r.rank+1;
-  if(next>=RANKS.length)return {eligible:false,reason:'Highest rank reached',next:null};
-  if(xp<academy.thresholds[next])return {eligible:false,reason:`Need ${academy.thresholds[next]-xp} more XP`,next};
-  if(next>=4&&!r.exams.some(e=>e.target===next&&e.score>=80))return {eligible:false,reason:'Pass the promotion exam (80%)',next};
-  return {eligible:true,reason:'Eligible for promotion',next};
+  if(next>=RANKS.length)return {eligible:false,reason:t("Highest rank reached"),next:null};
+  if(xp<academy.thresholds[next])return {eligible:false,reason:t("Need {0} more XP",academy.thresholds[next]-xp),next};
+  if(next>=4&&!r.exams.some(e=>e.target===next&&e.score>=80))return {eligible:false,reason:t("Pass the promotion exam (80%)"),next};
+  return {eligible:true,reason:t("Eligible for promotion"),next};
 }
 export function replaceRecord(a:Academy,r:AcademicRecord):Academy {return {...a,records:[...a.records.filter(p=>p.playerId!==r.playerId),r]};}
 export function gradeExam(answers:unknown):number|null {

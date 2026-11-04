@@ -152,3 +152,22 @@
 .broadcast-name .academic-tag { font-size: 8px; max-width: 100%; white-space: nowrap; }
 .broadcast-name { padding-block: 0; }
 .broadcast-name .academic-tag { margin-top: 0; line-height: 1; }
+/* Vietnamese labels need wrapping and container-relative sizing in portrait. */
+.mode-switch { max-width: calc(100vw - 24px); }
+.mode-switch button { white-space: normal; overflow-wrap: anywhere; }
+.broadcast-heading h1 { font-size: clamp(20px,5cqw,28px); }
+.broadcast-stats { gap: 3px; }
+.broadcast-stats span { font-size: clamp(10px,2.5cqw,12px); }
+.broadcast-goal small { font-size: 9px; }
+.broadcast-goal > b { font-size: 11px; line-height: 1.25; }
+.broadcast-goal > span { font-size: 9px; }
+.broadcast-ranks summary { font-size: 10px; }
+.broadcast-notice small { white-space: normal; overflow-wrap: anywhere; }
+.broadcast-tools button { flex-basis: 90px; overflow-wrap: anywhere; }
+.broadcast-disclaimer { line-height: 1.3; }
+.academic-tag { white-space: nowrap; }
+.broadcast-name { max-width: clamp(40px,10cqw,68px); }
+.admin-mode .actions button { min-width: 0; }
+.admin-mode .actions span { white-space: normal; min-width: 0; }
+.admin-mode .actions small { line-height: 1.4; }
+.qa-row label { min-width: 0; max-width: 100%; }
