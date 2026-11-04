@@ -61,3 +61,11 @@
 - [x] Corner goal/top-three panels with expandable top 10; dedicated fullscreen/fallback.
 - [x] Eleven Node tests and production build pass; gameplay engine/Admin layout retained.
 - [ ] Verify physical iPad Safari fullscreen, screen-share readability and frame rate.
+
+## iPad portrait Broadcast View
+- [x] Clear Enter Broadcast action and clean view with revealable operator controls.
+- [x] Safe-area-aware largest-fit 9:16 frame and TikTok right/bottom reserved margins.
+- [x] Readable minimum font sizes and compact label padding without rule changes.
+- [x] Fullscreen capability adapter with persistent unsupported/rejected fallback.
+- [x] Twelve Node tests and production build; phone/iPad portrait browser validation.
+- [ ] Physical Safari chrome/fullscreen, screen-sharing and thermal validation.

@@ -1,17 +1,18 @@
 # Broadcast and Admin modes
 
-Use **Broadcast Mode** in the mode selector, or open `?mode=broadcast` directly.
+Use **Enter Broadcast** from Admin Mode, or open `?mode=broadcast` directly.
 Admin Mode remains the original desktop dashboard and simulation controls. Both
 modes share one game state; switching recreates only the camera/scene, not saved
 progress, simulation state or event feed.
 
 Broadcast fits a 9:16 stage into the available viewport without stretching; tablet
 landscape shows dark sidebars. For iPad screen sharing, use portrait orientation,
-hide Safari's browser chrome using its supported controls, and select Broadcast.
+select Enter Broadcast. Safari toolbar behavior varies by device and browser; no
+physical-device fullscreen or browser-chrome hiding has been verified.
 The expand control requests browser fullscreen when supported; unsupported Safari
 versions show guidance and continue in viewport mode. Browser permissions cannot
-be overridden by the app. The mode selector and pause/sound/fullscreen controls
-remain available. Top/right/bottom margins reserve room for typical LIVE overlays;
+be overridden by the app. Broadcast starts with operator tools hidden. Tap **Controls** to access Admin Mode,
+pause, sound and fullscreen; **Hide controls** returns to the clean view. Top/right/bottom margins reserve room for typical LIVE overlays;
 check placement in the actual TikTok sharing flow before going live.
 
 The fixed camera shows larger students, high-contrast screen-sized nickname tags,
@@ -49,10 +50,36 @@ the full ranking. The empty upper-middle announcement region is reserved for fut
 quizzes and promotion notices, rather than consuming the courtyard with banners.
 Gifts and other notices are compact, last 3 seconds and retain at most two entries.
 
-**Broadcast fullscreen** requests fullscreen on the page and exits if already full.
-When Safari lacks/rejects the API, an on-screen message explains portrait orientation
-and toolbar hiding; the viewport layout remains 9:16. Physical Safari behavior still
+**Fullscreen** in the Controls panel requests fullscreen on the page and exits if already full.
+When Safari lacks/rejects the API, a persistent on-screen message explains the viewport fallback; the viewport layout remains 9:16. Physical Safari behavior still
 needs device validation. Browser portrait checks cover 320×568, 390×844 and 768×1024,
 including no horizontal overflow and no label-to-label overlaps at those viewports.
 
 The narrow Admin header also reserves space below the mode selector so the ceremony preview stays clickable. Gameplay engine, persistence and Admin student coordinates remain unchanged.
+
+## iPad portrait capture workflow
+
+1. Open Admin Mode, configure/pause simulation as desired, then choose **Enter Broadcast**.
+2. The view starts clean: only the scene, game overlays and a small **Controls** button.
+3. Keep the iPad portrait. The largest fitting 9:16 rectangle is centered within the
+   available dynamic viewport after device safe-area insets; iPad 3:4 displays retain
+   side gutters because stretching/cropping would break the composition.
+4. If desired, open Controls → Fullscreen. API absence or rejection keeps Broadcast
+   View active with readable fallback guidance. **Hide controls** clears guidance.
+5. Open Controls → Admin Mode to return without resetting progress. These are local
+   presentation/operator tools, not viewer input or authenticated admin security.
+
+Essential overlay content keeps 16% on the right and 18% at the bottom reserved
+for typical TikTok LIVE UI. These are layout defaults, not an integration guarantee;
+verify against the actual capture UI. Device insets are applied separately around
+the entire composition. Nicknames have a 10px minimum, XP/goal/ranking text is raised
+for small phones, and labels use tight line height/padding to avoid row collisions.
+
+Validation for this increment: twelve Node tests (including fullscreen entry/exit,
+absence and rejection), TypeScript/Vite build and Chromium software-WebGL checks.
+Portrait dimensions: 320×568, 390×844, 768×1024, 820×1180, 834×1194, 1024×1366;
+landscape fallback: 1024×768. Tests check ratio, bounds, overflow, 20 nickname labels,
+label collisions, clean controls, entry/exit, saved progress and fullscreen fallback.
+Additional simulated 24px top/34px bottom/8px side insets check frame containment;
+this does not establish real Safari safe-area or chrome behavior. Physical iPad
+screen-sharing, thermal performance and browser UI behavior remain unverified.
