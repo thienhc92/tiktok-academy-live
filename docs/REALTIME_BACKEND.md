@@ -50,11 +50,19 @@ Client gửi `{type:'resume',epoch,sequence}` khi mở socket, phát hiện gap 
 ## Lưu giữ, backup và phục hồi
 
 - Giữ 20 snapshot toàn phần và 200 delta gần nhất; fallback snapshot khi client quá cũ.
-- Không tự xóa receipt, mốc like hay quà đã đóng. Giới hạn kế thừa engine: 10.000 khóa sự kiện, 1.000 lệnh quản trị, game JSON tối đa 1 MB. Đạt giới hạn thì từ chối batch nguyên vẹn. Đây là cổng an toàn **chưa đủ cho buổi LIVE dài**; cần thiết kế compaction/retention có tombstone ở TASK-020 trước live.
+- Không tự xóa receipt, mốc like hay quà đã đóng. Giới hạn kế thừa engine: 10.000 khóa sự kiện, 1.000 lệnh quản trị, game JSON tối đa 1 MB. Đạt giới hạn thì từ chối batch nguyên vẹn. Đây là cổng an toàn **chưa đủ cho buổi LIVE dài**; cần thiết kế compaction/retention có tombstone ở mốc hardening tiếp theo trước live.
 - Ngân sách 1.000 đơn vị/phút theo vai trò (ingest tính thêm số sự kiện), 1.000 thông điệp resume/phút toàn trường; request không xác thực không mở DO. Cần rate limiting ở biên và giới hạn payload/quota theo account trước công khai.
 - Trước thay schema và định kỳ trong thử nghiệm: quản trị tải backup có chữ ký, cất giữ riêng. Đề xuất 7 bản ngày + 4 bản tuần ngoài backend; **chưa có nơi lưu hay job backup ngoài hệ thống**. Bản export gồm snapshot mới nhất và toàn bộ receipt, không gồm secret/vé. Chữ ký đảm bảo toàn vẹn, **không mã hóa** dữ liệu. Giới hạn cả export và import là 16 MiB; file vượt giới hạn bị từ chối thay vì xuất file không thể nhập. Cần compaction trước khi dùng lâu dài. Không commit backup vào repo.
 - Phục hồi thử trên DO trống, cùng `BACKUP_KEY`; chỉ tạm bật restore khi đã được phê duyệt. Không ghi đè DB đang hoạt động. Kiểm tra signature, replay một event cũ, xác nhận sequence/XP, rồi tắt restore. Nếu thất lạc signing key thì không phục hồi file qua endpoint. Epoch mới buộc mọi client nhận snapshot.
 - Cloudflare có công cụ phục hồi SQLite theo gói tài khoản; cần xác minh giới hạn hiện hành, không thay thế bản export độc lập. Không thêm R2 hoặc dịch vụ trả phí.
+
+## Chuẩn bị staging TASK-020
+
+Xem [hướng dẫn Workers Free/iPad](CLOUDFLARE_STAGING.md) cho cấu hình riêng
+`backend/wrangler.staging.json`, đúng origin `https://tiktok-academy-live.pages.dev`,
+quy trình Secrets không ghi đè và hai cổng phê duyệt triển khai kín/mở endpoint.
+Cấu hình gốc `backend/wrangler.toml` giữ nguyên, không dùng để triển khai staging.
+Tài liệu xác nhận tính tương thích Free, không xác nhận plan/quyền của account thực tế.
 
 ## Chạy và triển khai sau khi được phê duyệt
 
@@ -64,15 +72,15 @@ Yêu cầu Node theo `.node-version` (22.19 trở lên do công cụ kiểm th�
 Chỉ sau khi chủ sở hữu phê duyệt:
 1. Kiểm tra account có SQLite Durable Object trong hạn mức miễn phí, xác nhận ngân sách và giới hạn. Không bật gói trả phí.
 2. Dùng Wrangler CLI tương thích, cấu hình bốn Worker secret và một frontend origin. Không gửi secret vào chat hay file theo dõi bởi Git. Máy iPad có thể dùng trình quản lý Cloudflare sau khi chốt phương án cấp secret an toàn.
-3. Triển khai với `--config backend/wrangler.toml` cùng migration `new_sqlite_classes`; cấu hình hiện tại tắt workers.dev và preview, không có route công khai. Việc mở route/URL cần phê duyệt riêng; không có workflow deploy backend.
+3. Với staging, triển khai bằng `--config backend/wrangler.staging.json` cùng migration `new_sqlite_classes`; cấu hình hiện tại tắt workers.dev và preview, không có route công khai. Việc mở route/URL cần phê duyệt riêng; không có workflow deploy backend.
 4. Kiểm tra auth/Origin, quyền view/ingest/admin, giới hạn và backup/restore trên môi trường staging được phê duyệt trước khi kết nối frontend. Không tự kết nối khi mở demo Pages.
 5. Nhập URL + view/admin token trong màn hình quản trị; không thêm token vào cấu hình build của Pages.
 
-## Giới hạn phát hành và TASK-020 đề xuất
+## Giới hạn phát hành và hardening tiếp theo
 
 Đây là nền tảng chạy/kiểm thử cục bộ, chưa được xác nhận sẵn sàng vận hành công khai. Chưa có tải thực tế Cloudflare, thiết bị iPad Safari vật lý, autoscaled multi-school, secret rotation/SSO, lịch backup ngoài hệ thống hoặc SLA. 100 người được kiểm thử theo batch và trạng thái nhất quán, không phải tuyên bố đạt FPS/độ trễ mạng ở 100 thiết bị. Bundle 3D còn cảnh báo kích thước như hiện có. Ngân hàng câu hỏi mẫu vẫn trong frontend; cần tách đáp án khỏi bundle trước thi có giá trị thật.
 
-TASK-020: compact receipt/counter có tombstone và thời hạn replay rõ ràng; quota/giám sát và thử tải 100 client; kiểm thử mạng chập chờn trên iPad vật lý; quản lý/luân chuyển quyền và backup ngoài hệ thống được phê duyệt; tách đáp án quiz. Chỉ sau những cổng này mới xem xét adapter TikTok hợp lệ ở nhiệm vụ riêng.
+Backlog sau chuẩn bị staging: compact receipt/counter có tombstone và thời hạn replay rõ ràng; quota/giám sát và thử tải 100 client; kiểm thử mạng chập chờn trên iPad vật lý; quản lý/luân chuyển quyền và backup ngoài hệ thống được phê duyệt; tách đáp án quiz. Chỉ sau những cổng này mới xem xét adapter TikTok hợp lệ ở nhiệm vụ riêng.
 
 ## Xác minh mốc triển khai mã
 

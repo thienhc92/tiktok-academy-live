@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { build } from 'esbuild';
@@ -10,6 +10,8 @@ import { Store } from '../backend/store.ts';
 import { RealtimeClient, backendUrl, retryDelay } from '../src/realtime/client.ts';
 import { applyMessage } from '../src/realtime/protocol.ts';
 import type { Message, SnapshotMessage } from '../src/realtime/protocol.ts';
+const staging = JSON.parse(readFileSync(new URL('../backend/wrangler.staging.json', import.meta.url), 'utf8'));
+const stagingOrigin = staging.vars.FRONTEND_ORIGIN;
 const event = { version: 1, source: 'fixture', roomId: 'school', sessionId: 'live-1', eventId: 'enroll', occurredAt: 100000, receivedAt: 100000, viewer: { id: '90071992547409931234', nickname: 'Học sinh mẫu' }, kind: 'comment', text: 'nhaphoc' };
 function open(path: string) {
     const db = new DatabaseSync(path);
@@ -28,6 +30,21 @@ function open(path: string) {
         } });
     return { db, store };
 }
+test('staging configuration is isolated, SQLite-backed, secret-free and has no public ingress', () => {
+    assert.equal(staging.name, 'tiktok-academy-realtime-staging');
+    assert.equal(staging.main, 'worker.ts');
+    assert.equal(staging.compatibility_date, '2026-07-01');
+    assert.equal(staging.workers_dev, false);
+    assert.equal(staging.preview_urls, false);
+    assert.deepEqual(staging.routes, []);
+    assert.deepEqual(staging.vars, { FRONTEND_ORIGIN: 'https://tiktok-academy-live.pages.dev', RESTORE_ENABLED: 'false' });
+    assert.deepEqual(staging.durable_objects.bindings, [{ name: 'SCHOOLS', class_name: 'School' }]);
+    assert.deepEqual(staging.migrations, [{ tag: 'v1', new_sqlite_classes: ['School'] }]);
+    const allowed = ['name', 'main', 'compatibility_date', 'workers_dev', 'preview_urls', 'routes', 'vars', 'durable_objects', 'migrations'];
+    assert.ok(Object.keys(staging).every(key => allowed.includes(key)), 'additional deployment capabilities require review');
+    for (const name of ['INGEST_TOKEN', 'ADMIN_TOKEN', 'VIEW_TOKEN', 'BACKUP_KEY'])
+        assert.equal(Object.hasOwn(staging.vars, name), false);
+});
 test('transaction rolls back rewards, dedup and outbox together; restart after lost ack pays once', t => {
     const dir = mkdtempSync(join(tmpdir(), 'academy-outbox-'));
     t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -111,7 +128,7 @@ test('admin command allowlist rejects arbitrary XP updates and invalid promotion
     store.processBatch([event]);
     assert.throws(() => store.command('xp', { type: 'xp', amount: 100 }, 104000));
     assert.throws(() => store.command('promotion', { type: 'promote', playerId: 'fixture:' + event.viewer.id, target: 10 }, 104000));
-    assert.throws(()=>store.command('office',{type:'office.appoint',office:'principal'},104000));
+    assert.throws(() => store.command('office', { type: 'office.appoint', office: 'principal' }, 104000));
     const q = store.command('question', { type: 'quiz.open', question: 'q1', seconds: 30 }, 104000);
     assert.deepEqual(store.command('question', { type: 'quiz.open', question: 'q1', seconds: 30 }, 104000), q);
     assert.equal(store.snapshot().game.players[0].xp, 20);
@@ -228,15 +245,15 @@ test('client reconnects with a fresh ticket, resumes gaps, polls tail losses and
     assert.equal(instances.length, 2);
     assert.equal(statuses.at(-1), 'offline');
 });
-test('real Worker + Durable Object SQLite: auth, WebSocket, concurrent delivery, restart, backup', { timeout: 30000 }, async (t) => {
+test('real Worker + Durable Object SQLite: auth, WebSocket, concurrent delivery, restart, backup', { timeout: 60000 }, async (t) => {
     const output = await build({ entryPoints: ['backend/worker.ts'], bundle: true, write: false, format: 'esm', platform: 'browser', external: ['cloudflare:workers'] });
     const dir = mkdtempSync(join(tmpdir(), 'academy-workerd-'));
     t.after(() => rmSync(dir, { recursive: true, force: true }));
     const admin = 'fixture-admin-'.padEnd(40, 'a'), ingest = 'fixture-ingest-'.padEnd(40, 'i'), view = 'fixture-view-'.padEnd(40, 'v');
-    const options = { modules: true as const, script: output.outputFiles[0].text, compatibilityDate: '2026-07-01', durableObjects: { SCHOOLS: { className: 'School', useSQLite: true } }, durableObjectsPersist: dir, bindings: { ADMIN_TOKEN: admin, INGEST_TOKEN: ingest, VIEW_TOKEN: view, BACKUP_KEY: 'fixture-backup-'.padEnd(40, 'b'), FRONTEND_ORIGIN: 'https://academy.example', RESTORE_ENABLED: 'false' } };
+    const options = { modules: true as const, script: output.outputFiles[0].text, compatibilityDate: '2026-07-01', durableObjects: { SCHOOLS: { className: 'School', useSQLite: true } }, durableObjectsPersist: dir, bindings: { ADMIN_TOKEN: admin, INGEST_TOKEN: ingest, VIEW_TOKEN: view, BACKUP_KEY: 'fixture-backup-'.padEnd(40, 'b'), FRONTEND_ORIGIN: stagingOrigin, RESTORE_ENABLED: 'false' } };
     let mf = new Miniflare(options);
     t.after(() => mf.dispose());
-    const req = (path: string, token: string, body?: unknown, origin = 'https://academy.example') => mf.dispatchFetch('https://worker.example' + path, { method: body === undefined ? 'GET' : 'POST', headers: { Authorization: 'Bearer ' + token, Origin: origin, 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+    const req = (path: string, token: string, body?: unknown, origin = stagingOrigin) => mf.dispatchFetch('https://worker.example' + path, { method: body === undefined ? 'GET' : 'POST', headers: { Authorization: 'Bearer ' + token, Origin: origin, 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
     await t.test('unauthorized requests, wrong origin, view mutations, ingest reads are rejected', async () => {
         assert.equal((await req('/state', 'bad')).status, 403);
         assert.equal((await req('/state', admin, undefined, 'https://evil.example')).status, 403);
@@ -245,13 +262,52 @@ test('real Worker + Durable Object SQLite: auth, WebSocket, concurrent delivery,
         assert.equal((await mf.dispatchFetch('https://worker.example/state', { headers: { 'X-Academy-Role': 'admin' } })).status, 401);
         assert.equal((await req('/commands', admin, { id: 'xp', command: { type: 'xp', amount: 100 } })).status, 400);
     });
+    await t.test('staging CORS preflight permits only the exact frontend origin without credentials', async () => {
+        const preflight = (origin: string) => mf.dispatchFetch('https://worker.example/events', { method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'POST', 'Access-Control-Request-Headers': 'authorization,content-type' } });
+        const allowed = await preflight(stagingOrigin);
+        assert.equal(allowed.status, 204);
+        assert.equal(allowed.headers.get('Access-Control-Allow-Origin'), stagingOrigin);
+        assert.equal(allowed.headers.get('Vary'), 'Origin');
+        assert.equal(allowed.headers.get('Access-Control-Allow-Credentials'), null);
+        assert.equal(allowed.headers.get('Access-Control-Allow-Headers'), 'Authorization, Content-Type');
+        for (const origin of ['https://evil.example', 'https://preview.tiktok-academy-live.pages.dev', stagingOrigin + '.evil.example', 'null']) {
+            const denied = await preflight(origin);
+            assert.equal(denied.status, 403);
+            assert.equal(denied.headers.get('Access-Control-Allow-Origin'), null);
+        }
+        const response = await req('/state', view);
+        assert.equal(response.status, 200);
+        assert.equal(response.headers.get('Access-Control-Allow-Origin'), stagingOrigin);
+        assert.equal(response.headers.get('Cache-Control'), 'no-store');
+    });
+    await t.test('route and method protections cannot be bypassed with a role header or another token', async () => {
+        assert.equal((await req('/events', admin, [event])).status, 403);
+        assert.equal((await req('/commands', ingest, { id: 'denied', command: { type: 'session.start' } })).status, 403);
+        assert.equal((await req('/events', ingest)).status, 403);
+        assert.equal((await req('/state', view, {})).status, 404);
+        assert.equal((await mf.dispatchFetch('https://worker.example/state', { method: 'PUT', headers: { Origin: stagingOrigin, Authorization: 'Bearer ' + view } })).status, 405);
+        assert.equal((await req('/unknown', admin)).status, 403);
+        const forged = await mf.dispatchFetch('https://worker.example/commands', { method: 'POST', headers: { Origin: stagingOrigin, Authorization: 'Bearer ' + view, 'X-Academy-Role': 'admin' }, body: JSON.stringify({ id: 'forged', command: { type: 'session.start' } }) });
+        assert.equal(forged.status, 403);
+        const state = await (await req('/state', view)).json() as SnapshotMessage;
+        assert.equal(state.sequence, 0);
+    });
+    await t.test('WebSocket denies wrong or missing origin and forged tickets', async () => {
+        for (const origin of [undefined, 'https://evil.example']) {
+            const headers: Record<string, string> = { Upgrade: 'websocket', 'Sec-WebSocket-Protocol': 'academy-v1, ticket-00000000-0000-0000-0000-000000000000' };
+            if (origin)
+                headers.Origin = origin;
+            assert.equal((await mf.dispatchFetch('https://worker.example/ws', { headers })).status, 403);
+        }
+        assert.equal((await mf.dispatchFetch('https://worker.example/ws', { headers: { Origin: stagingOrigin, Upgrade: 'websocket', 'Sec-WebSocket-Protocol': 'academy-v1, ticket-00000000-0000-0000-0000-000000000000' } })).status, 401);
+    });
     let socket: NonNullable<Awaited<ReturnType<typeof mf.dispatchFetch>>['webSocket']>;
     let messages: Message[] = [];
     await t.test('one-use ticket authenticates WebSocket; snapshot is first message', async () => {
         const { ticket } = await (await req('/ticket', view, {})).json() as {
             ticket: string;
         };
-        const connect = () => mf.dispatchFetch('https://worker.example/ws', { headers: { Upgrade: 'websocket', Origin: 'https://academy.example', 'Sec-WebSocket-Protocol': 'academy-v1, ' + ticket } });
+        const connect = () => mf.dispatchFetch('https://worker.example/ws', { headers: { Upgrade: 'websocket', Origin: stagingOrigin, 'Sec-WebSocket-Protocol': 'academy-v1, ' + ticket } });
         const response = await connect();
         assert.equal(response.status, 101);
         socket = response.webSocket!;
@@ -326,10 +382,17 @@ test('real Worker + Durable Object SQLite: auth, WebSocket, concurrent delivery,
         };
         assert.equal(duplicate.receipts[0].duplicate, true);
     });
-    await t.test('missing secrets fail closed while health remains credential-free', async () => {
-        await mf.dispose();
-        mf = new Miniflare({ ...options, bindings: { ...options.bindings, ADMIN_TOKEN: '' } });
-        assert.equal((await req('/state', admin)).status, 503);
-        assert.equal((await mf.dispatchFetch('https://worker.example/health')).status, 200);
+    await t.test('each missing secret, short or duplicate secret and absent origin fail closed', async () => {
+        const keys = ['ADMIN_TOKEN', 'INGEST_TOKEN', 'VIEW_TOKEN', 'BACKUP_KEY'];
+        const cases = [...keys.map(missing => Object.fromEntries(Object.entries(options.bindings).filter(([key]) => key !== missing))), { ...options.bindings, VIEW_TOKEN: 'short' }, { ...options.bindings, INGEST_TOKEN: admin }, { ...options.bindings, FRONTEND_ORIGIN: '' }];
+        for (const bindings of cases) {
+            await mf.setOptions({ ...options, bindings });
+            for (const path of ['/state', '/events', '/commands', '/ticket', '/backup', '/restore'])
+                assert.equal((await req(path, admin, path === '/state' ? undefined : {})).status, 503);
+            assert.equal((await mf.dispatchFetch('https://worker.example/ws', { headers: { Upgrade: 'websocket', Origin: stagingOrigin } })).status, 503);
+            const health = await mf.dispatchFetch('https://worker.example/health');
+            assert.equal(health.status, 200);
+            assert.deepEqual(await health.json(), { service: 'TikTok Academy', version: 1 });
+        }
     });
 });

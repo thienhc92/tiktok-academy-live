@@ -86,3 +86,13 @@ No real connector, public backend deployment or automatic frontend connection is
 introduced. Previous Node-only architecture notes describe earlier milestones;
 Worker/DO is the target for this increment. Long-running compaction, operations,
 physical-device/performance verification and public launch remain release gates.
+
+## TASK-020 — Staging preparation only
+
+The isolated staging configuration is `backend/wrangler.staging.json`: same
+Worker entry and SQLite class, a separate Worker/namespace, exact existing Pages
+origin, workers.dev/preview disabled and no routes. No account changes, real
+secrets, deploy workflows, frontend changes or public backend are introduced.
+The iPad runbook in docs/CLOUDFLARE_STAGING.md distinguishes Free-plan compatibility
+from unverified account readiness, documents quota/secret/deployment side effects
+and separates approval for a closed deployment from public ingress approval.

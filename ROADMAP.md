@@ -49,3 +49,9 @@ tục mặc định mô phỏng; không triển khai backend hay kết nối Tik
 hành tiếp theo: compaction replay dài hạn, tải thực, quyền/backup vận hành và
 phê duyệt staging; xem docs/REALTIME_BACKEND.md. Không thay thế hạn mức kế thừa
 10.000 sự kiện bằng việc xóa khóa chống trùng thiếu an toàn.
+
+TASK-020 chuẩn bị cấu hình Worker staging độc lập cho Workers Free và SQLite,
+origin Pages chính xác, ingress đóng; hướng dẫn Secrets/rollback từ Safari iPad
+và ngân sách/quota. Chưa triển khai, chưa xác minh account Cloudflare. Triển khai
+kín và mở endpoint cần hai phê duyệt riêng. Compaction và thử tải dài hạn vẫn ở
+backlog hardening; xem docs/CLOUDFLARE_STAGING.md.
