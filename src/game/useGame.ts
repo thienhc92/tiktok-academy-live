@@ -4,7 +4,7 @@ import { createGame, parseProgress, saveProgress, STORAGE_KEY } from './engine';
 import { receive } from '../missions/rules';
 import type { GameState, LiveEvent } from './engine';
 
-export function useGame(nicknames: string[]) {
+export function useGame(nicknames: string[], remote?:{enabled:boolean;game:GameState|null}) {
   const [initial] = useState(() => {
     const fallback = createGame(nicknames);
     try {
@@ -24,7 +24,8 @@ export function useGame(nicknames: string[]) {
     try { saveProgress(window.localStorage, game); setStorageWarning(''); }
     catch { setStorageWarning(t("Progress could not be saved. Keep this tab open; storage may be full or disabled.")); }
   }, [game, initial.writable]);
-  function dispatch(event: LiveEvent & {text?:string}) { setGame(state => receive(state, {...event,...(event.kind==='comment'?{text:event.text??'Bình luận mô phỏng '+event.id.slice(-8)}:{})}, Date.now())); }
-  function update(reducer:(state:GameState)=>GameState){setGame(reducer);}
-  return { game, dispatch, update, storageWarning };
+  function dispatch(event: LiveEvent & {text?:string}) { if(remote?.enabled)return; setGame(state => receive(state, {...event,...(event.kind==='comment'?{text:event.text??'Bình luận mô phỏng '+event.id.slice(-8)}:{})}, Date.now())); }
+  function update(reducer:(state:GameState)=>GameState){if(!remote?.enabled)setGame(reducer);}
+  const [empty] = useState(()=>createGame([]));
+  return { game:remote?.enabled?(remote.game??empty):game, dispatch, update, storageWarning:remote?.enabled?'':storageWarning };
 }

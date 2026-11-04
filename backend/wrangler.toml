@@ -1,0 +1,21 @@
+name = "tiktok-academy-realtime"
+main = "worker.ts"
+compatibility_date = "2026-07-01"
+workers_dev = false
+preview_urls = false
+
+[vars]
+# Replace only after deployment approval; must be one exact trusted HTTPS origin.
+FRONTEND_ORIGIN = "https://example.invalid"
+RESTORE_ENABLED = "false"
+
+[[durable_objects.bindings]]
+name = "SCHOOLS"
+class_name = "School"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["School"]
+
+# ADMIN_TOKEN, INGEST_TOKEN, VIEW_TOKEN and BACKUP_KEY must be distinct Worker secrets.
+# Do not deploy until account limits/cost, trusted origin and secret provisioning are approved.

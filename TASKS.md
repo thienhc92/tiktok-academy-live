@@ -136,3 +136,16 @@
 - [x] Frontend remains backend-free; local adapter is not in its import graph.
 - [ ] Production outbox, backup/retention and Cloudflare adapter/deployment (TASK-018D+).
 - [x] 77 tests, strict local/frontend type checking and production build validated.
+
+## TASK-019 — Worker/SQLite và đồng bộ thời gian thực
+- [x] Repository SQL tái sử dụng bộ xử lý sự kiện/quy tắc hiện có, receipt + snapshot + outbox trong cùng giao dịch.
+- [x] Worker phân quyền ingest/admin/view, Origin chính xác, vé WebSocket một lần và giới hạn request/batch.
+- [x] Snapshot/delta theo epoch/sequence, resume/gap recovery, hibernation và retry/alarm.
+- [x] Giao diện quản trị tiếng Việt: trạng thái, sequence, kết nối cục bộ/backend, quiz có quyền và tải backup.
+- [x] Cô lập bản lưu cục bộ, chặn chỉnh XP từ client khi dùng backend; cảnh 20 avatar giữ ID máy chủ.
+- [x] Retention 20 snapshot/200 delta; backup HMAC và restore chỉ tới kho trống, mặc định tắt.
+- [x] Cấu hình Worker/SQLite và hướng dẫn triển khai, không triển khai backend công khai.
+- [x] 95 kiểm thử qua (77 hồi quy + 18 realtime), TypeScript frontend/local/backend và build production qua; audit không còn lỗ hổng.
+- [x] Chromium: kết nối/xác thực, nickname, quiz, backup download, 3 kích thước portrait 9:16, ẩn Admin và cô lập/khôi phục bản lưu. Chưa kiểm thiết bị Safari vật lý.
+- [ ] CI/PR/merge: kiểm tra trên GitHub sau khi push; không triển khai backend.
+- [ ] TASK-020: compaction chống trùng dài hạn, thử tải mạng/thiết bị, quản lý quyền và backup vận hành trước khi phát hành live.

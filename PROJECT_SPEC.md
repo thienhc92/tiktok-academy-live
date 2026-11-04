@@ -69,3 +69,20 @@ The eleven-rank ladder, configurable thresholds, exam gates, local rank/history 
 ## TASK-017 simulated LIVE missions
 
 Normalized mock events and Vietnamese commands now drive capped academic rewards, daily/collective missions, timed quizzes and command-based examinations. Mission XP triggers eligible academic promotions/ceremonies, with gifts excluded from academic rewards. The Admin simulator and Broadcast question/goal overlays are implemented; see docs/MISSIONS.md for exact limits, persistence and mock-only scope. No real connector or production anti-cheat is introduced.
+
+## TASK-019 — Authoritative realtime increment
+
+Current implementation adds an opt-in Cloudflare Worker + SQLite Durable Object
+backend alongside existing browser-only simulation. The server reuses normalized
+processing and academic rules; event receipts, reward deltas, snapshots and
+outbox commit atomically. Browser state is a projection, never a source of trusted
+XP. Separate ingest/admin/view bearer roles, one-use WebSocket tickets, exact
+Origin checks and bounded requests protect the boundary. Snapshot/delta epoch and
+sequence support reconnect/gap recovery. Vietnamese Admin diagnostics and signed
+backup export are included; restore is disabled by default and only supports an
+empty repository. See docs/REALTIME_BACKEND.md for acceptance criteria, protocol,
+retention, free-tier verification, deployment gates and explicit runtime limits.
+No real connector, public backend deployment or automatic frontend connection is
+introduced. Previous Node-only architecture notes describe earlier milestones;
+Worker/DO is the target for this increment. Long-running compaction, operations,
+physical-device/performance verification and public launch remain release gates.
