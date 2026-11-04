@@ -1,5 +1,7 @@
 # TikTok Academy Live
 
+A 3D virtual school powered by TikTok LIVE interactions. This is the project vision; the current implementation uses local mock events.
+
 A local, interactive 3D school courtyard built with Vite, React, TypeScript, React Three Fiber, and Drei. All students, comments, likes, and gifts are mocked; no TikTok account, credentials, or API connection is required. Fonts use system fallbacks and the scene has no external asset dependencies.
 
 ## Develop
