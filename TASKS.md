@@ -41,5 +41,15 @@
 - [x] Commit npm lockfile and pin CI/Pages Node version to 22.18.0.
 - [x] Add pull_request/main-push GitHub Actions Test and build job, without deployment.
 - [x] Prepare wrangler.toml and document Pages settings without connecting/deploying.
-- [ ] Verify hosted CI and enable PR auto-merge; report actual result in task handoff.
+- [x] PR #2 hosted CI passed and merged; no deployment.
 - [ ] Measure mobile bundle/frame costs and evaluate Drei/BVH dependency upgrade.
+
+## Broadcast presentation milestone
+- [x] Dedicated fitted 9:16 scene and separate Admin dashboard with shared game state.
+- [x] Fixed front camera, enlarged avatars, high-contrast nicknames and safe-area overlays.
+- [x] XP, top 10 and existing community-goal overlays; no new mission rewards.
+- [x] Bounded expiring join/like/gift banners and labeled promotion preview.
+- [x] Demand rendering, hidden-tab pause, reduced motion, DPR 1 and no broadcast shadows.
+- [x] Ten Node tests and production build pass; Chromium portrait/tablet smoke passes.
+- [ ] Physical iPad Safari and TikTok screen-sharing validation (see docs/BROADCAST.md).
+- [ ] Actual mission/reward and exam/promotion engines remain M2/M3 work.

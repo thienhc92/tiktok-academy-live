@@ -57,3 +57,7 @@ Production gates: authenticated admin authorization on the server; no secrets in
 ## Verification strategy
 
 Dependency-free Node tests cover engine rules, identity, invalid inputs, ordering, replay, storage round trips and limits. Build must typecheck and bundle. Future milestones add deterministic clock-driven mission/quiz tests, database restart/transaction tests, adapter contract tests and browser flows. Manual iPad checks: portrait layout, touch orbit, text legibility, sound unlock, fullscreen fallback, storage restrictions, reload persistence and 10-minute thermal/frame-rate run. Distinguish tests of the storage port from an actual browser reload.
+
+## Broadcast presentation increment
+
+Dedicated 9:16 Broadcast Mode and separate Admin Mode share existing game state. Overlays show XP, top 10 and the existing 5,000 XP community goal. Join/like/gift notices and an explicit promotion preview are presentation only; the mission/exam/rank engines above remain pending. See docs/BROADCAST.md for rendering budgets and browser validation evidence. No TikTok API or public deployment added.

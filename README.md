@@ -53,3 +53,7 @@ and rendering performance still need measurement. Drei 9 pulls deprecated
 `three-mesh-bvh@0.7.8`; the current scene does not use its BVH APIs. A compatible
 Drei/BVH upgrade should be evaluated separately rather than forcing an untested
 transitive override. No TypeScript or Vite compilation errors were found.
+
+## Livestream presentation
+
+Use **Broadcast Mode** (or `?mode=broadcast`) for the dedicated 9:16 scene and overlays. **Admin Mode** keeps the dashboard. See [broadcast guide](docs/BROADCAST.md) for iPad sharing, notification previews, performance limits and validation. No TikTok API connection or deployment is enabled.
