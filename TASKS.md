@@ -147,5 +147,14 @@
 - [x] Cấu hình Worker/SQLite và hướng dẫn triển khai, không triển khai backend công khai.
 - [x] 95 kiểm thử qua (77 hồi quy + 18 realtime), TypeScript frontend/local/backend và build production qua; audit không còn lỗ hổng.
 - [x] Chromium: kết nối/xác thực, nickname, quiz, backup download, 3 kích thước portrait 9:16, ẩn Admin và cô lập/khôi phục bản lưu. Chưa kiểm thiết bị Safari vật lý.
-- [ ] CI/PR/merge: kiểm tra trên GitHub sau khi push; không triển khai backend.
-- [ ] TASK-020: compaction chống trùng dài hạn, thử tải mạng/thiết bị, quản lý quyền và backup vận hành trước khi phát hành live.
+- [x] PR #14 đã merge sau CI/Pages thành công; backend không được triển khai.
+- [ ] Backlog hardening: compaction chống trùng dài hạn, thử tải mạng/thiết bị và backup vận hành trước khi phát hành live.
+
+## TASK-020 — Chuẩn bị staging Cloudflare Free
+- [x] Cấu hình staging riêng: origin Pages chính xác, namespace SQLite riêng, workers.dev/preview tắt và routes rỗng.
+- [x] Đối chiếu Workers Free/SQLite, quota/chi phí và giới hạn SQL theo tài liệu chính thức; chưa xác minh account thực tế.
+- [x] Hướng dẫn iPad: Secrets không ghi đè, deployment kín, rollback không xóa DB và cổng phê duyệt mở endpoint riêng.
+- [x] Checklist thủ công giám sát request/CPU/DO/rows/storage với ngân sách staging bảo thủ.
+- [x] 99 kiểm thử qua (22 realtime/staging), TypeScript frontend/local/backend và production build qua; audit 0 lỗ hổng.
+- [ ] CI/PR/merge: xem kết quả GitHub khi xuất bản, chỉ merge khi checks đạt.
+- [x] Không triển khai; không tạo/cấp/đổi secret, endpoint hoặc dịch vụ trả phí; Pages settings và mã ứng dụng giữ nguyên.
