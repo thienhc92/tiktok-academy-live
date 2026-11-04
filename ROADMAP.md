@@ -1,0 +1,16 @@
+# Development roadmap
+
+Each milestone ends with updated TASKS.md, verification evidence, a reviewable commit and remaining risks. Implementation does not imply browser validation.
+
+| Milestone | Scope | Exit criteria | State |
+| --- | --- | --- | --- |
+| M0 — baseline | Audit, specification, architecture, acceptance criteria | Existing behavior and missing features documented | Complete |
+| M1 — player foundation | Pure event reducer, mock adapter, XP/contribution, local saved profiles, reactive leaderboard | Rule/storage tests pass; build and browser reload checked when environment permits | Implemented; build/browser blocked |
+| M2 — learning loop | Timed quizzes via A/B/C/D, automatic missions, local operator panel | Fake-clock tests for deadlines, first submission, single rewards; host can complete full round | Next |
+| M3 — advancement | Eleven ranks, eligibility, exam attempts and ceremony state | Boundary and duplicate-promotion tests; complete promotion on stage | Pending |
+| M4 — school governance | Capacity, terms, rotation, auditable fair appointments | No overbooking; deterministic ties; gifts cannot buy office | Pending |
+| M5 — campus polish | Classroom interior, ceremony/gift effects, low-quality mode, context recovery | Portrait stream legibility and measured iPad 30 FPS target; bounded effects | Pending |
+| M6 — durable host | Node service, SQLite migrations, authoritative engine, authenticated admin, WebSockets | Transaction, restart, backup/restore and authorization tests; local startup docs | Pending |
+| M7 — integration/release | Authorized TikTok adapter, reconnect/dedup/backpressure, health checks, deployment packaging | Contract/replay tests; staging smoke; owner approves any public deployment | Pending |
+
+Critical path: restore dependency access → build/browser baseline → learning loop → exams → governance → durable server → live transport. Visual polish can follow the learning loop without delaying core rule tests. No paid infrastructure is needed for local MVP development. Creating a hosted PR depends on remote capability; public deployment is a separate approval gate.

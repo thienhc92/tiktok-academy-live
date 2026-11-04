@@ -1,0 +1,27 @@
+import { useEffect, useState } from 'react';
+import { applyEvent, createGame, parseProgress, saveProgress, STORAGE_KEY } from './engine';
+import type { LiveEvent } from './engine';
+
+export function useGame(nicknames: string[]) {
+  const [initial] = useState(() => {
+    const fallback = createGame(nicknames);
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw === null) return { state: fallback, writable: true, warning: '' };
+      const saved = parseProgress(raw);
+      if (saved) return { state: saved, writable: true, warning: '' };
+      return { state: fallback, writable: false, warning: 'Saved progress is unreadable. Temporary session active; existing save preserved.' };
+    } catch {
+      return { state: fallback, writable: false, warning: 'Storage unavailable. Progress lasts only for this session.' };
+    }
+  });
+  const [game, setGame] = useState(initial.state);
+  const [storageWarning, setStorageWarning] = useState(initial.warning);
+  useEffect(() => {
+    if (!initial.writable) return;
+    try { saveProgress(window.localStorage, game); setStorageWarning(''); }
+    catch { setStorageWarning('Progress could not be saved. Keep this tab open; storage may be full or disabled.'); }
+  }, [game, initial.writable]);
+  function dispatch(event: LiveEvent) { setGame(state => applyEvent(state, event)); }
+  return { game, dispatch, storageWarning };
+}
