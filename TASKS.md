@@ -158,3 +158,14 @@
 - [x] 99 kiểm thử qua (22 realtime/staging), TypeScript frontend/local/backend và production build qua; audit 0 lỗ hổng.
 - [ ] CI/PR/merge: xem kết quả GitHub khi xuất bản, chỉ merge khi checks đạt.
 - [x] Không triển khai; không tạo/cấp/đổi secret, endpoint hoặc dịch vụ trả phí; Pages settings và mã ứng dụng giữ nguyên.
+
+## Product pivot — Chùa Online visual MVP
+- [x] Default temple experience; preserve Academy implementation at a separate legacy URL and leave its storage untouched.
+- [x] Original local golden altar SVG, 28 procedural gray-robed visitors and stable nickname labels.
+- [x] Portrait 9:16, compact mock interactions, three-second notices, reflection cards and wish composer.
+- [x] Vietnamese catalog, optional synthesized bell, operator controls, fullscreen fallback, reduced motion/hidden-tab rendering.
+- [x] 101 tests and production build passed; Chromium verified 5 viewports, non-overlapping labels, interactions and preservation of existing storage.
+- [ ] Draft PR/CI verification; no automatic production merge for this product pivot.
+- [ ] Owner review of the new product direction before merging the default experience into production.
+- [ ] Physical iPad Safari and real screen-sharing validation.
+- Paused: TASK-021 school backend deployment. No Cloudflare deployment, credentials or live TikTok connection added.

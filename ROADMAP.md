@@ -1,3 +1,11 @@
+# Active direction — Chùa Online
+
+1. Portrait visual MVP inspired by the supplied temple reference: original local altar illustration, 28 procedural visitors, reflection card, mock wishes and offerings.
+2. Review the visual direction on iPad; refine artwork, robe detail, camera and readable names based on the owner's feedback.
+3. Agree temple-specific interaction rules before designing persistence or backend integration. No real TikTok or public backend deployment in this stage.
+
+Existing school implementation and progress are retained independently. TASK-021 school staging deployment is paused by the owner's change of product direction. Earlier roadmap entries below are historical context.
+
 # Development roadmap
 
 Each milestone ends with updated TASKS.md, verification evidence, a reviewable commit and remaining risks. Implementation does not imply browser validation.

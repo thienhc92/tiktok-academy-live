@@ -14,7 +14,7 @@ Use the existing isolated checkout; do not create worktrees unless requested. Pr
 8. Never skip type checking, relevant security validation or required CI checks. Keep passed, failed, blocked and unrun checks distinct; never claim unverified browser/device behavior works.
 9. Avoid unnecessary package installations, repeated full builds, excessive logging and repetitive research. Reuse valid results until a change or failure justifies another run.
 10. Add dependencies only when necessary; prefer existing or built-in capabilities and lockfile-based installs.
-11. Keep all visible UI text in natural Vietnamese using the central translation catalog. Preserve TikTok Academy, XP and portrait 9:16 Broadcast Mode; optimize for iPad Safari, safe areas, reduced motion and user-initiated audio.
+11. Keep all visible UI text in natural Vietnamese using the central translation catalog. The active product is Chùa Online; keep the previous TikTok Academy implementation and data isolated for reference. Preserve portrait 9:16 presentation; optimize for iPad Safari, safe areas, reduced motion and user-initiated audio.
 12. For routine changes, create a focused feature branch and PR without requiring manual code review. Enable auto-merge only after all required checks pass. Never bypass failures, force-push or merge an unverified head; verify the actual merge outcome. If auto-merge is unavailable, report why.
 13. Do not wait indefinitely for CI. Observe briefly, then report queued/blocked status accurately. Do not rerun unchanged jobs or weaken protections to work around a runner queue. If checks remain pending, leave the PR unmerged and report the next step.
 14. Obtain approval before introducing paid services, credentials, destructive or breaking changes, production security changes, or real TikTok connectivity. Default to mock mode. Preserve existing authorization for routine actions and the approved Cloudflare deployment workflow; new public deployment or hosting requires approval. Never put credentials in repository files, logs or chat.
@@ -24,7 +24,7 @@ Use the existing isolated checkout; do not create worktrees unless requested. Pr
 
 - Keep game rules pure and separate from transport/presentation. Normalize and validate incoming events and saved data before use.
 - Use stable player IDs, never nicknames as identities. Academic XP and contribution are separate; gifts cannot buy academic promotion or appointments.
-- Preserve the 20-avatar scene, local progress and existing gameplay. Prefer procedural/local assets and bounded rendering/effect costs.
+- Preserve existing school code/local progress separately; the default Chùa Online scene has 28 mock visitors and independent presentation. Prefer procedural/local assets and bounded rendering/effect costs.
 - When networking is blocked, preserve completed work, run useful independent checks and report the exact blocker. Do not weaken TLS verification or change proxy/network policy to make commands pass. Use the supported permission flow when authorized.
 - Commit reviewable changes. Do not reset history, discard user work or claim a local commit is published without verifying the remote result.
 - Production requires server authority, authenticated admin access, durable transactions, replay protection and a data-retention policy. Browser storage is an MVP convenience, not a secure production source of truth.

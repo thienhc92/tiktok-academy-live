@@ -1,3 +1,11 @@
+# Chùa Online — active product direction
+
+The owner has replaced the school direction with an online temple inspired by the supplied portrait livestream reference. The active MVP is an offline Vietnamese presentation: a warm golden altar/Buddha illustration, lotus flowers and bells, 28 animated gray-robed mock visitors, compact name labels, reflection cards and simulated incense/flower/wish/bell controls. Use a true 9:16 stage on iPad/phone; desktop may show secondary controls alongside it.
+
+Acceptance: no horizontal overflow; all 28 visitor slots fit the camera; short notifications expire after three seconds; wishes/cards/operator controls work; sound requires an explicit gesture; reduced motion and hidden-tab throttling remain available. No payments, fortune predictions, real TikTok connection or religious merit scores are introduced. Academy progress is neither read nor modified by the temple UI. The former experience remains isolated at `?experience=academy` to preserve previous work. The earlier Cloudflare backend deployment task is paused; no backend is deployed for this pivot. See docs/TEMPLE.md.
+
+The following specification records the previous school implementation for reference.
+
 # TikTok Academy Live — project specification
 
 ## Goal and scope
