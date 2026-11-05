@@ -169,3 +169,12 @@
 - [ ] Owner review of the new product direction before merging the default experience into production.
 - [ ] Physical iPad Safari and real screen-sharing validation.
 - Paused: TASK-021 school backend deployment. No Cloudflare deployment, credentials or live TikTok connection added.
+
+## Reference-fidelity refinement (owner requests exact screenshot match)
+- [x] Replace flat temple/low-poly people with local generated realistic artwork and two visitor sprites.
+- [x] Reproduce 888×1280 capture, 720×1280 inner scene, fortune overlay anchors, calligraphy, clustered crowd/foreground and mock LIVE chrome.
+- [x] 52 stable IDs, local mock follow/like/gift/wish/card interactions; no external requests or saved Academy data changes.
+- [x] Charm font self-hosted with OFL; no dependency/service added.
+- [x] 102 tests, TypeScript/build and audit passed; browser verified 6 viewports, frame/card anchors, simulation interactions, reduced/hidden motion, no external calls and unchanged Academy save.
+- [ ] Draft PR/CI status: update existing PR #16; do not merge until owner accepts the revised visuals.
+- [ ] Exact-match certification blocked by absence of original artwork/models/fonts/icons; do not label this 100% identical.

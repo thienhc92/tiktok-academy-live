@@ -1,6 +1,6 @@
 # Active direction — Chùa Online
 
-1. Portrait visual MVP inspired by the supplied temple reference: original local altar illustration, 28 procedural visitors, reflection card, mock wishes and offerings.
+1. Portrait visual MVP inspired by the supplied temple reference: original local altar illustration, 52 layered realistic visitor sprites, reflection card, mock wishes and offerings.
 2. Review the visual direction on iPad; refine artwork, robe detail, camera and readable names based on the owner's feedback.
 3. Agree temple-specific interaction rules before designing persistence or backend integration. No real TikTok or public backend deployment in this stage.
 
@@ -63,3 +63,9 @@ origin Pages chính xác, ingress đóng; hướng dẫn Secrets/rollback từ S
 và ngân sách/quota. Chưa triển khai, chưa xác minh account Cloudflare. Triển khai
 kín và mở endpoint cần hai phê duyệt riêng. Compaction và thử tải dài hạn vẫn ở
 backlog hardening; xem docs/CLOUDFLARE_STAGING.md.
+
+Reference-fidelity refinement replaces the rejected flat illustration/regular grid
+with realistic local imagery, 52 visitor sprites, calligraphy and mock LIVE chrome.
+The screenshot frame and overlay anchors are reproduced explicitly; this is not a
+claim of 100% identity. Original source assets/app URL remain necessary for exact
+matching. Existing draft PR #16 stays unmerged while the visual direction is reviewed.

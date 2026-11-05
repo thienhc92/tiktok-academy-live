@@ -1,57 +1,16 @@
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
-import type { Group } from 'three';
-import { FrameDriver } from '../broadcast/FrameDriver';
-import { TEMPLE_PEOPLE, templePosition } from './model';
-import { t } from '../i18n/vi';
-function CameraFit() {
-    const { camera, size } = useThree();
-    useEffect(() => {
-        camera.position.set(0, 12, 19);
-        camera.lookAt(0, 0, 0);
-        if ('zoom' in camera)
-            camera.zoom = Math.min(size.width / 9.6, size.height / 5.6);
-        camera.updateProjectionMatrix();
-    }, [camera, size]);
-    return null;
-}
-function Visitor({ index, selected, onSelect }: {
-    index: number;
-    selected: boolean;
-    onSelect: () => void;
-}) {
-    const ref = useRef<Group>(null), reduced = useRef(window.matchMedia('(prefers-reduced-motion: reduce)'));
-    useFrame(({ clock }) => {
-        if (ref.current && !reduced.current.matches)
-            ref.current.rotation.z = Math.sin(clock.elapsedTime * .65 + index) * .012;
-    });
-    return <group position={templePosition(index)} onClick={event => {
-        event.stopPropagation();
-        onSelect();
-    }}>
- <group ref={ref}>
- <mesh position={[0, .16, .12]} scale={[.42, .16, .37]}><sphereGeometry args={[1, 12, 8]}/><meshStandardMaterial color="#969ba5" roughness={.9}/></mesh>
- <mesh position={[0, .51, 0]}><cylinderGeometry args={[.18, .34, .66, 12]}/><meshStandardMaterial color={selected ? '#c0c6cc' : '#a4a9b2'} roughness={.9}/></mesh>
- <mesh position={[0, .94, -.025]}><sphereGeometry args={[.17, 12, 10]}/><meshStandardMaterial color="#caaa8e" roughness={.85}/></mesh>
- <mesh position={[0, 1.005, .018]} scale={[1, 1, .9]}><sphereGeometry args={[.174, 12, 8, 0, Math.PI * 2, 0, 1.85]}/><meshStandardMaterial color={index % 4 === 0 ? '#635549' : '#312c27'} roughness={.9}/></mesh>
- {index % 3 !== 0 && <mesh position={[0, 1.085, .13]}><sphereGeometry args={[.08, 8, 8]}/><meshStandardMaterial color="#342d27"/></mesh>}
- {[-1, 1].map(side => <mesh key={side} position={[side * .235, .57, -.01]} rotation={[.25, 0, side * .24]}><capsuleGeometry args={[.085, .32, 4, 8]}/><meshStandardMaterial color={selected ? '#c0c6cc' : '#a4a9b2'}/></mesh>)}
- <mesh position={[0, .57, .197]}><boxGeometry args={[.012, .48, .012]}/><meshStandardMaterial color="#787e8b"/></mesh>
- </group>
- {selected && <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, .012, .08]}><ringGeometry args={[.48, .51, 40]}/><meshBasicMaterial color="#eed092" transparent opacity={.8}/></mesh>}
- <Html position={[0, .02, .57]} center zIndexRange={[8, 0]} style={{ pointerEvents: 'auto' }}><button className={`temple-name ${selected ? 'is-selected' : ''}`} onClick={onSelect} aria-pressed={selected} title={TEMPLE_PEOPLE[index].name}><span>✿</span><span className="temple-person-name">{TEMPLE_PEOPLE[index].name}</span></button></Html>
- </group>;
-}
+import {useEffect,useState} from 'react';
+import { TEMPLE_PEOPLE, visitorLayout } from './model';
 export function TempleScene({ selected, onSelect }: {
     selected: string;
     onSelect: (id: string) => void;
 }) {
-    const [visible, setVisible] = useState(!document.hidden);
-    useEffect(() => {
-        const update = () => setVisible(!document.hidden);
-        document.addEventListener('visibilitychange', update);
-        return () => document.removeEventListener('visibilitychange', update);
-    }, []);
-    return <Suspense fallback={<p className="temple-loading">{t('Temple opening')}</p>}><Canvas orthographic frameloop={visible ? 'demand' : 'never'} dpr={1} camera={{ position: [0, 12, 19], zoom: 40, near: .1, far: 80 }} gl={{ alpha: true, antialias: true, powerPreference: 'low-power' }} fallback={<p className="temple-loading">{t('Temple WebGL fallback')}</p>}><CameraFit /><FrameDriver visible={visible}/><ambientLight intensity={1.7}/><directionalLight position={[-3, 8, 5]} color="#ffe5b4" intensity={2.2}/><directionalLight position={[3, 5, -5]} color="#e5b672" intensity={1.3}/>{TEMPLE_PEOPLE.map((person, index) => <Visitor key={person.id} index={index} selected={person.id === selected} onSelect={() => onSelect(person.id)}/>)}</Canvas></Suspense>;
+    const [hidden,setHidden]=useState(document.hidden);
+    useEffect(()=>{const update=()=>setHidden(document.hidden);document.addEventListener('visibilitychange',update);return()=>document.removeEventListener('visibilitychange',update);},[]);
+    return <div className="temple-congregation" data-hidden={hidden}>{TEMPLE_PEOPLE.map((person, index) => {
+            const layout = visitorLayout(index), image = index < 3 || index >= 50 ? '/temple/devotee-standing.webp' : '/temple/devotee-realistic.webp';
+            return <button key={person.id} className={`temple-visitor ${selected === person.id ? 'is-selected' : ''} ${index < 3 ? 'front-visitor' : ''}`} style={{ left: `${layout.x * 100}%`, top: `${layout.y * 100}%`, height: `${layout.height * 100}%`, zIndex: layout.layer, animationDelay: `${index % 9 * -.7}s` }} onClick={() => onSelect(person.id)} aria-label={person.name} aria-pressed={selected === person.id} title={person.name}>
+ <span className="visitor-shadow" aria-hidden="true"/><img className="visitor-reflection" src={image} alt="" aria-hidden="true" draggable={false}/><img className="visitor-figure" src={image} alt="" draggable={false}/>
+ <span className="temple-name"><span className="visitor-profile" style={{ backgroundColor: ['#584d39', '#9e7785', '#678282', '#a3854f'][index % 4], backgroundPosition: `${index % 3 * 50}% ${index % 5 * 15}%` }}></span><span className="visitor-rank">{index % 5 + 1}</span><span className="temple-person-name"><b>{person.name}</b><i><em /></i></span><small>{index % 3 === 0 ? '🌹' : '●'}</small></span>
+ </button>;
+        })}</div>;
 }

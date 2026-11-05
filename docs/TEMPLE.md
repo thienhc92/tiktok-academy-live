@@ -1,36 +1,67 @@
-# Chùa Online — bản giao diện mô phỏng
+# Chùa Online — dựng lại bố cục ảnh tham khảo
 
-Bản đầu tiên theo ảnh tham khảo: chính điện vàng ấm, minh họa tượng Phật trên tòa sen,
-chuông, hoa và sàn gỗ; 28 người tham gia mặc áo lam trong cảnh 3D, nhìn từ phía sau.
-Minh họa SVG là tài sản gốc của dự án, không tải ảnh, font hoặc mô hình bên ngoài.
-Không giả lập các nút Follow/thu tiền hay tài khoản TikTok thật trong ảnh tham khảo.
+Bản minh họa phẳng và nhân vật đơn giản đầu tiên đã bị chủ sở hữu từ chối. Bản hiện
+nay tái hiện chính điện với chất liệu chi tiết, chữ thư pháp, thẻ cầu an lớn, đám đông
+áo lam và các lớp LIVE trong ảnh. Không gọi bản này là giống 100%: tượng, nhân vật,
+font và icon gốc chưa được cung cấp; tài sản mới là hình tái tạo, không phải asset
+của ứng dụng gốc. Chưa có nguồn ảnh đính kèm dạng file để chạy pixel-diff tự động;
+đối chiếu trực quan trong hội thoại và kiểm tra các mốc DOM không chứng minh đồng
+nhất từng pixel. Đã hỏi đường dẫn ứng dụng/video gốc để đối chiếu thêm.
 
-- Trang mặc định: Chùa Online, bố cục chính 9:16, màn hình rộng có bảng phụ hai bên.
-- Chạm tên để chọn nhân vật; các nút thắp hương/dâng hoa/chuông cập nhật số minh họa
-  và thông báo ngắn. Có hiệu ứng hoa; chuông tổng hợp chỉ phát sau khi chủ động bật âm thanh.
-- Lời chúc tối đa 160 ký tự, hiển thị bằng văn bản React; chỉ giữ một danh sách ngắn trong bộ nhớ.
-- Thẻ an lành là lời nhắc chiêm nghiệm miễn phí, không xem bói/dự đoán hoặc hứa kết quả tâm linh.
-- Bảng điều khiển chọn người mẫu, bật/tắt tương tác tự động và âm thanh. Thông báo tồn tại 3 giây.
-- Dùng Fullscreen API khi có; fallback giữ giao diện dọc. Chưa xác nhận ẩn thanh Safari trên thiết bị thật.
-- Tối đa 30 fps, DPR 1, ít đa giác, không realtime shadows, dừng rendering khi thẻ bị ẩn,
-  tắt chuyển động trang trí theo prefers-reduced-motion. Chưa đo FPS iPad vật lý.
+## Bố cục
 
-Không đọc/ghi localStorage hoặc điểm/tiến trình Academy, không gửi API hay mở kết nối
-TikTok/Cloudflare. Dữ liệu mới chỉ trong bộ nhớ và trở về mẫu ban đầu khi reload.
-Mã trường học cũ ở `src/academy.tsx`, chỉ tải khi mở `?experience=academy`; backend,
-config staging, engine và lịch sử Git được bảo toàn. Product Owner đã đổi hướng,
-nên kế hoạch triển khai backend trường học tạm dừng.
+| Thành phần | Mốc trong frame ảnh |
+| --- | --- |
+| Frame tham khảo | 888×1280, co vừa viewport, nền đen |
+| Chính điện bên trong | 720×1280 (9:16), căn giữa |
+| Thẻ cầu an | Trái 13%, trên 28,7%, rộng 74,5%, cao 12,25% |
+| Người tham gia | 52 slot cố định, ba người phía trước, hàng giữa, cụm hai bên và một người tiền cảnh |
+| Lớp LIVE | Header/follow, quà bên phải, bình luận/quà ở dưới, thanh thao tác và bảng số liệu mẫu |
 
-Đây là thay đổi hướng sản phẩm lớn: chuẩn bị draft PR để xem giao diện trước, chưa
-auto-merge vào production. Cần chủ sở hữu duyệt giao diện mới trước khi thay trang
-mặc định đang công khai; không cần triển khai backend để xem thử bản frontend.
+Bỏ sidebar desktop của bản trước. Cảnh chính vẫn 9:16; toàn bộ khung capture rộng
+hơn để chứa hai lề đen và lớp LIVE như ảnh. Khung được letterbox nếu màn hình có tỷ
+lệ khác; không kéo giãn tượng/nhân vật để lấp đầy viewport.
 
-## Xác minh bản đầu
+## Tài sản và hiệu năng
 
-101 kiểm thử qua, TypeScript frontend/local/backend và production build qua.
-Chromium kiểm tra 768×1024, 390×844, 320×568, 1024×768 và 1440×900: khung 9:16,
-không cuộn ngang/chồng nhãn, đủ 28 nhân vật, gửi hoa/lời chúc/thẻ, chọn người, đóng
-dialog bằng Escape và giữ nguyên bản lưu Academy có sẵn. Route Academy cũ vẫn mở
-được. Đây không phải kiểm tra Safari vật lý; bundle 3D còn cảnh báo kích thước.
+- `public/temple/shrine-realistic.webp`: hình chính điện tái tạo bằng image generation.
+- `devotee-realistic.webp`, `devotee-standing.webp`: hình nhân vật áo lam nền trong suốt,
+  xếp lớp theo chiều sâu. Đây là sprite 2.5D, **không phải model 3D gốc** của mẫu.
+- Hình được đổi định dạng/kích thước thành WebP cho web; không đưa PNG nguồn dung
+  lượng lớn vào bundle. Các file nguồn sinh ra vẫn được giữ tại `/workspace/generated_images`.
+- `fonts/Charm-Bold.ttf`: Charm của Cadson Demak, lấy từ Google Fonts, giấy phép
+  SIL Open Font License đi kèm tại `fonts/OFL.txt`. Không phải font gốc đã xác nhận.
+- Tất cả asset/font tải cùng app, không gọi CDN/ảnh đại diện người thật. Không thêm
+  dependency. Cảnh Chùa không cần tải WebGL/Three; route Academy vẫn dùng renderer cũ.
+- Chuyển động nhẹ bằng CSS, tắt khi reduced motion và dừng khi tab ẩn. Không tuyên bố
+  FPS hay khả năng Safari fullscreen khi chưa kiểm trên iPad vật lý.
 
-[Ảnh xem trước trên viewport iPad](previews/chua-online-ipad.png).
+## Hành vi và dữ liệu
+
+Các nhãn quẻ, biểu tượng “COIN”, số quà/likes, follow, người xem, chat, trạng thái pin
+và giờ trong lớp LIVE đều là **đạo cụ mô phỏng của ảnh**. Có badge MÔ PHỎNG. Không phải
+UI TikTok được nhúng, không có phiên TikTok LIVE, xác thực người xem, thanh toán hoặc
+mua quà. Follow/like đổi state cục bộ; quà tạo thông báo, rút thẻ đổi nội dung mẫu.
+Lời quẻ chỉ là nội dung giải trí/chiêm nghiệm, không dự đoán kết quả thật hoặc bán
+điểm công đức. Các số ở bảng TẤM LÒNG THÀNH là số liệu mẫu.
+
+Nút nhập mở form lời chúc, tối đa 160 ký tự; React hiển thị text, không HTML. Chỉ giữ
+vài bản ghi trong bộ nhớ. Menu ⋯ chọn người mô phỏng, chạy/dừng mô phỏng, âm thanh,
+chuông và fullscreen. Modal hỗ trợ Escape/focus. Thông báo tồn tại 3 giây; âm thanh
+chỉ sau thao tác bật của người dùng. Không đọc/ghi localStorage của Academy, không
+gửi API. Reload trả dữ liệu mới về mẫu ban đầu.
+
+`?experience=academy`, engine, backend, cấu hình Cloudflare và lịch sử trước đây giữ
+nguyên. Nhiệm vụ triển khai backend trường học tiếp tục tạm dừng. Cập nhật cùng draft
+PR #16, chưa merge vào trang chính khi hình ảnh chưa được chủ sở hữu chấp nhận.
+
+[Ảnh chụp trình duyệt theo tỷ lệ tham khảo](previews/chua-online-reference.png).
+
+## Kiểm chứng lần dựng lại
+
+102 kiểm thử qua; TypeScript frontend/local/backend và production build qua; audit
+không có lỗ hổng. Chromium kiểm tra 888×1280, 768×1024, 390×844, 320×568, 1024×768
+và 1440×900: đúng tỷ lệ frame/scene và mốc card, không cuộn ngang, đủ 52 người,
+follow/like/gift/card/wish/settings/Escape, thông báo 3 giây, reduced motion/tab ẩn,
+không request ra ngoài app và không sửa bản lưu Academy có sẵn. Route Academy cũ
+vẫn mở được. Chưa kiểm Safari/iPad vật lý và chưa chứng nhận giống ảnh 100%.
