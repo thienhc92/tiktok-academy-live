@@ -106,3 +106,7 @@ Kiểm chứng bổ sung: Chromium so sánh pixel vùng tượng (loại UI), x�
 thay đổi sau orbit và trở lại đúng từng pixel sau reset. Smoke kiểm tra 5 viewport,
 manual/preset state, tải GLB, đổi chất lượng, 9:16 và route/storage cũ đều qua.
 Ảnh trong `docs/previews/temple-3d-*.png` đã cập nhật theo bản tinh chỉnh này.
+
+Bản tinh chỉnh `7e6258b` đã qua GitHub **Test and build** và **Cloudflare Pages**.
+Preview cố định: https://bc192756.tiktok-academy-live.pages.dev . Đã đối chiếu
+entrypoint trên alias preview với bản build cục bộ. PR #16 giữ nháp, chưa merge main.

@@ -195,5 +195,5 @@
 - [x] Embed timber normal/roughness, fix Blender pixel/color-space export and test decoded PBR channels.
 - [x] Keep 12 MB / 500k triangle budget, static shadow bake, existing routes/data and Vietnamese 9:16 UI.
 - [x] Final 106 tests/build/audit passed; 5 viewport smoke and pixel-accurate orbit/reset checks passed; screenshots updated.
-- [ ] Push visual refinement to draft PR #16 and verify CI/preview; do not merge production.
+- [x] Visual refinement commit 7e6258b pushed to draft PR #16; GitHub CI and Cloudflare Pages passed. Preview bc192756 verified; production remains unmerged.
 - [ ] Photoreal sculpted asset, detailed carvings/landscape, physical iPad performance and visual acceptance.
