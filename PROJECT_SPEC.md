@@ -1,3 +1,16 @@
+# Current increment — original 2D photo, 3D paused
+
+Owner requests switching to a still 2D image and waiting for further direction.
+Use the exact supplied sanctuary image, not a generated replacement. The landscape
+reference is visible in chat but its original file is not mounted in this workspace;
+only the old TikTok screenshot file is available, and must not be silently substituted.
+Prepare a 2D photo viewer with an iPad picker while waiting for the original file.
+Acceptance: original aspect/full image by default, optional explicit cover crop and
+9:16 frame, hideable controls, native fullscreen/fallback; persist chosen raster
+photo only in a separate device-local IndexedDB database. No uploads, WebGL/GLB on
+the default route, gameplay changes or effects. Keep 3D at ?experience=3d, LIVE at
+?experience=live and Academy at ?experience=academy. Do not merge production.
+
 # Sculpture rebuild — owner-approved reference study
 
 Replace the rejected blocky Buddha body with an original continuous-surface model.

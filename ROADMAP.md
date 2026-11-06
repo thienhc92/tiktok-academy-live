@@ -92,3 +92,9 @@ local seated-leg sculpt union, anatomically tapered hands/arms and a separately
 sampled editable source. Web mesh keeps the existing rendering budget; no connector
 or game changes. Acceptance remains visual comparison on iPad; higher mesh density
 alone does not certify photoreal quality.
+
+
+Owner pauses 3D and requests the original 2D reference. Default becomes a still
+photo viewer; 3D remains at ?experience=3d. Missing landscape source file is the
+remaining content blocker. Device-local photo selection provides an iPad path
+without uploading images. Await further product direction; no new gameplay.

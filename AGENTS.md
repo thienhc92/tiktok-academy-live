@@ -24,7 +24,7 @@ Use the existing isolated checkout; do not create worktrees unless requested. Pr
 
 - Keep game rules pure and separate from transport/presentation. Normalize and validate incoming events and saved data before use.
 - Use stable player IDs, never nicknames as identities. Academic XP and contribution are separate; gifts cannot buy academic promotion or appointments.
-- Preserve existing school code/local progress separately; the default Chùa Online experience is a true mesh-based 3D sanctuary. Keep the earlier 52-visitor LIVE simulation available separately at ?experience=live. Prefer procedural/local assets and bounded rendering/effect costs.
+- Preserve existing school code/local progress separately; the default Chùa Online experience is now a still 2D photo viewer using the owner’s exact image. Preserve the mesh-based 3D sanctuary at ?experience=3d. Never substitute generated artwork for a missing reference file. Keep the earlier 52-visitor LIVE simulation available separately at ?experience=live. Prefer procedural/local assets and bounded rendering/effect costs.
 - When networking is blocked, preserve completed work, run useful independent checks and report the exact blocker. Do not weaken TLS verification or change proxy/network policy to make commands pass. Use the supported permission flow when authorized.
 - Commit reviewable changes. Do not reset history, discard user work or claim a local commit is published without verifying the remote result.
 - Production requires server authority, authenticated admin access, durable transactions, replay protection and a data-retention policy. Browser storage is an MVP convenience, not a secure production source of truth.

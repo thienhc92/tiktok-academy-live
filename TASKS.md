@@ -206,3 +206,12 @@
 - [x] Inspect crossed-leg silhouette and front/side/close/portrait captures; 11.876.860 bytes / 461.600 triangles within existing budgets.
 - [x] 107 tests, production build, npm audit and 5-viewport browser smoke passed; prepare update to the existing draft PR #16, report remote CI/preview at handoff.
 - [ ] Owner visual acceptance, physical iPad performance, professional-level reference fidelity.
+
+
+## Switch to the owner's original 2D photo
+- [x] Pause 3D as default; preserve it at ?experience=3d and keep LIVE/Academy routes/data.
+- [x] Original-aspect photo viewer, explicit cover/9:16 options, hide controls and fullscreen fallback.
+- [x] iPad photo picker, bounded raster validation and isolated IndexedDB persistence; no server upload.
+- [x] 108 tests/build passed; browser verified persistence/reload, corrupt-image rejection, 5 viewports, controls/fullscreen/storage fallback and preserved routes/data. Prepare draft PR update; report remote checks at handoff.
+- [ ] Obtain the exact landscape reference file to bundle it as the default photo; no substitute artwork.
+- [ ] Await owner's next instructions; physical iPad validation remains pending.

@@ -5,7 +5,10 @@ if (new URLSearchParams(window.location.search).get('experience') === 'academy')
 else if (new URLSearchParams(window.location.search).get('experience') === 'live') {
     void import('./temple/bootstrap');
 }
-else {
+else if (new URLSearchParams(window.location.search).get('experience') === '3d') {
     void import('./shrine/bootstrap');
+}
+else {
+    void import('./photo/bootstrap');
 }
 export {};
