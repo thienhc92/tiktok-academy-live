@@ -85,3 +85,10 @@ state, wider central aisle, revised sculpture/lotus and baked timber PBR texture
 Static shadows and restrained exposure/reflection improve depth. Next visual gate:
 owner comparison on iPad; high-quality sculpted Buddha/wood carvings and detailed
 landscape assets remain needed for photoreal fidelity. Keep PR #16 draft.
+
+
+Owner-approved sculpture rebuild: original continuous facial/bust/drapery surfaces,
+local seated-leg sculpt union, anatomically tapered hands/arms and a separately
+sampled editable source. Web mesh keeps the existing rendering budget; no connector
+or game changes. Acceptance remains visual comparison on iPad; higher mesh density
+alone does not certify photoreal quality.

@@ -197,3 +197,12 @@
 - [x] Final 106 tests/build/audit passed; 5 viewport smoke and pixel-accurate orbit/reset checks passed; screenshots updated.
 - [x] Visual refinement commit 7e6258b pushed to draft PR #16; GitHub CI and Cloudflare Pages passed. Preview bc192756 verified; production remains unmerged.
 - [ ] Photoreal sculpted asset, detailed carvings/landscape, physical iPad performance and visual acceptance.
+
+
+## Owner-approved Buddha sculpture rebuild
+- [x] Replace old whole-body primitive/voxel assembly with authored facial, anatomical and cloth surfaces.
+- [x] Separate source-quality geometry from the web mesh; maintain UVs, normals and named sculpt regions.
+- [x] Refine ears/hair/eyes/lips, neck/shoulders, tapering limbs, fingers and robe clearance.
+- [x] Inspect crossed-leg silhouette and front/side/close/portrait captures; 11.876.860 bytes / 461.600 triangles within existing budgets.
+- [x] 107 tests, production build, npm audit and 5-viewport browser smoke passed; prepare update to the existing draft PR #16, report remote CI/preview at handoff.
+- [ ] Owner visual acceptance, physical iPad performance, professional-level reference fidelity.

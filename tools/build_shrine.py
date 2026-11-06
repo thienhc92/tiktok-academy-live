@@ -97,7 +97,7 @@ def box(name,loc,size,mat,bevel=0):
 def cylinder(name,loc,radius,height,mat,vertices=24):
  bpy.ops.mesh.primitive_cylinder_add(vertices=vertices,radius=radius,depth=height,location=p(loc));return finish(bpy.context.object,name,mat)
 def torus(name,loc,major,minor,mat,vertical=False):
- bpy.ops.mesh.primitive_torus_add(major_radius=major,minor_radius=minor,major_segments=40,minor_segments=8,location=p(loc));obj=bpy.context.object
+ bpy.ops.mesh.primitive_torus_add(major_radius=major,minor_radius=minor,major_segments=28,minor_segments=6,location=p(loc));obj=bpy.context.object
  if vertical:obj.rotation_euler.x=math.pi/2
  return finish(obj,name,mat)
 def line(name,points,radius,mat):
@@ -120,7 +120,7 @@ def lathe(name,loc,profile,mat,segments=32):
  mesh=bpy.data.meshes.new(name);mesh.from_pydata(verts,[],faces);mesh.update();obj=bpy.data.objects.new(name,mesh);bpy.context.collection.objects.link(obj);return finish(obj,name,mat)
 
 def petal(name,loc,width,height,depth,angle,mat,lean=0):
- verts=[];faces=[];N=12;M=8
+ verts=[];faces=[];N=12 if 'Carved lotus' in name else 8;M=8 if 'Carved lotus' in name else 6
  for side in [0,1]:
   for j in range(N+1):
    v=j/N
@@ -213,87 +213,12 @@ for ring in [1.5,1.95,2.35]:
   line('Floral branch',[h(-.1,-.16),h(.03,0),h(.04,.18)],.016,GOLD)
   for u,v,turn in [(-.08,-.06,-.55),(.10,.04,.6),(-.04,.12,-.45)]:
    leaf=sphere('Mandorla carved leaf',h(u,v),(.047,.105,.028),GOLD,12);leaf.rotation_euler.y=-a+turn
-# Cross-legged body: rounded volumes, robe folds and hands are real geometry.
+# Original continuous-surface sculpture, isolated from hall and gameplay.
 CATEGORY='SCULPT'
-sphere('Left draped knee',(-1.13,2.55,-2.69),(1.25,.60,.78),GOLD,32)
-sphere('Right draped knee',(1.13,2.55,-2.69),(1.25,.60,.78),GOLD,32)
-line('Crossed shin',[(-1.72,2.5,-2.1),(-.65,2.36,-1.82),(.65,2.43,-2.05),(1.65,2.7,-2.7)],.34,GOLD)
-line('Folded foot',[(1.65,2.75,-2.3),(.85,2.72,-2.02),(.25,2.8,-2.1)],.18,SKIN)
-# Robe torso is a smoothly varying elliptical lathe.
-profile=[(.86,0),(.82,.3),(.80,.62),(.90,.95),(1.02,1.22),(.98,1.45),(.70,1.68),(.42,1.82)]
-body=lathe('Draped torso',(0,2.87,-2.87),profile,GOLD,64)
-# Flatten body depth around its own center rather than global origin.
-for v in body.data.vertices:v.co.y=2.87+(v.co.y-2.87)*.66
-sphere('Upper chest',(0,4.55,-2.86),(.70,.46,.43),SKIN,28)
-cylinder('Neck',(0,4.97,-2.86),.30,.56,SKIN)
-# The head is not a billboard: anatomical surface with sculpted bridge, cheeks and mouth.
-sphere('Head',(0,5.86,-2.86),(.55,.71,.48),SKIN,48)
-verts=[];faces=[];NX=64;NY=72
-for j in range(NY+1):
- v=j/NY*2-1;y=5.86+.70*v
- for i in range(NX+1):
-  u=i/NX*2-1;xx=.52*u*math.sqrt(max(.001,1-v*v))
-  z=.45*math.sqrt(max(.001,1-(xx/.53)**2-v*v))
-  # Nose bridge and tip, cheekbones, recessed eyes, philtrum and chin.
-  z+=.08*math.exp(-((xx/.075)**2+((v-.02)/.35)**2))+.075*math.exp(-((xx/.09)**2+((v+.12)/.1)**2))
-  z+=.035*(math.exp(-(((xx-.24)/.15)**2+((v+.13)/.24)**2))+math.exp(-(((xx+.24)/.15)**2+((v+.13)/.24)**2)))
-  z-=.035*(math.exp(-(((xx-.22)/.13)**2+((v-.19)/.09)**2))+math.exp(-(((xx+.22)/.13)**2+((v-.19)/.09)**2)))
-  z+=.038*math.exp(-((xx/.19)**2+((v+.40)/.13)**2))
-  verts.append(p((xx,y,-2.86+z)))
-for j in range(NY):
- for i in range(NX):
-  a=j*(NX+1)+i;faces.append((a,a+1,a+NX+2,a+NX+1))
-mesh=bpy.data.meshes.new('Sculpted face');mesh.from_pydata(verts,[],faces);mesh.update();obj=bpy.data.objects.new('Face',mesh);bpy.context.collection.objects.link(obj);finish(obj,'Sculpted face',SKIN)
-for side in [-1,1]:
- sphere('Elongated ear',(side*.54,5.85,-2.86),(.12,.31,.10),SKIN,20)
- line('Ear fold',[(side*.56,6.02,-2.76),(side*.61,5.95,-2.72),(side*.58,5.65,-2.76)],.021,DARKGOLD)
- # Half-closed eyes and brows follow the surface of the golden face.
- line('Eyebrow',[(side*.09,6.06,-2.44),(side*.23,6.13,-2.46),(side*.35,6.06,-2.52)],.021,DARKGOLD)
- line('Upper eyelid',[(side*.10,5.99,-2.42),(side*.23,6.015,-2.435),(side*.34,5.98,-2.49)],.018,SKIN)
- line('Serene eye',[(side*.115,5.975,-2.417),(side*.23,5.96,-2.429),(side*.325,5.97,-2.482)],.011,EYE)
- sphere('Nostril',(side*.07,5.76,-2.30),(.028,.013,.016),DARKGOLD,12)
-line('Upper lip',[(-.15,5.61,-2.445),(-.06,5.63,-2.405),(0,5.615,-2.393),(.06,5.63,-2.405),(.15,5.61,-2.445)],.018,LIP)
-line('Lower lip',[(-.14,5.606,-2.445),(0,5.58,-2.39),(.14,5.606,-2.445)],.024,SKIN)
-sphere('Urna',(0,6.18,-2.435),(.025,.027,.018),EDGE,12)
-# Cap of tightly curled hair and ushnisha, individually sculpted bead clusters.
-sphere('Hair cap',(0,6.30,-2.90),(.52,.36,.44),HAIR,24)
-for rown in range(6):
- angle=.18+rown*.21;count=max(8,int(22*math.sin(angle+.3)))
- for i in range(count):
-  a=i*math.tau/count+rown*.13
-  sphere('Hair curl',(.50*math.sin(angle+.3)*math.cos(a),6.28+.34*math.cos(angle+.3),-2.90+.43*math.sin(angle+.3)*math.sin(a)),(.065,.062,.061),HAIR,8)
-sphere('Ushnisha',(0,6.66,-2.9),(.17,.21,.17),HAIR,16)
-# Right hand touches the knee, left palm rests upward in the lap.
-line('Bare right forearm',[(-.84,4.12,-2.6),(-1.1,3.72,-2.21),(-1.25,3.35,-1.92)],.21,SKIN)
-sphere('Right palm',(-1.25,3.12,-1.83),(.19,.27,.10),SKIN,24)
-for i in range(4):
- x=-1.40+i*.10;line('Right finger',[(x,3.06,-1.75),(x-.01,2.86,-1.72),(x,2.72+abs(i-1.5)*.025,-1.77)],.045,SKIN)
-line('Right thumb',[(-1.06,3.22,-1.79),(-1.02,3.06,-1.73),(-1.08,2.98,-1.72)],.055,SKIN)
-line('Left forearm',[(.98,3.85,-2.6),(.95,3.35,-2.08),(.38,3.22,-1.95)],.18,SKIN)
-sphere('Left palm',(.18,3.22,-1.89),(.30,.09,.17),SKIN,24)
-for i in range(4):line('Left finger',[(-.03,3.23,-1.98+i*.07),(-.18,3.25,-1.98+i*.07),(-.26,3.29,-1.99+i*.07)],.038,SKIN)
-line('Left thumb',[(.23,3.29,-1.78),(.01,3.36,-1.72),(-.12,3.32,-1.77)],.05,SKIN)
-# Robe sleeves and many softly highlighted fold ridges.
-line('Right sleeve',[(-.60,4.68,-2.82),(-.95,4.33,-2.75),(-1.1,3.89,-2.50)],.30,GOLD)
-line('Left sleeve',[(.62,4.67,-2.83),(1.0,4.18,-2.73),(1.05,3.7,-2.5)],.35,GOLD)
-verts=[];faces=[];N=44;M=36
-for j in range(N+1):
- v=j/N
- for i in range(M+1):
-  u=i/M;xx=-.86+1.72*u;top=4.22+.7*u;yy=3.06+(top-3.06)*v
-  width=.90 if yy>4.05 else .82
-  zz=-2.87+.54*math.sqrt(max(.12,1-(xx/width)**2))+.05+.045*math.sin(u*19+v*5)*(1-v*.25)
-  verts.append(p((xx,yy,zz)))
-for j in range(N):
- for i in range(M):
-  a=j*(M+1)+i;faces.append((a,a+1,a+M+2,a+M+1))
-mesh=bpy.data.meshes.new('Draped cloth');mesh.from_pydata(verts,[],faces);mesh.update();obj=bpy.data.objects.new('Drape',mesh);bpy.context.collection.objects.link(obj);finish(obj,'Draped front robe',GOLD)
-solid=obj.modifiers.new('Cloth thickness','SOLIDIFY');solid.thickness=.05
-line('Robe border',[(-.86,4.22,-2.50),(-.45,4.38,-2.32),(.1,4.62,-2.29),(.78,4.89,-2.61)],.035,EDGE)
-for side in [-1,1]:
- for i in range(10):
-  q=i*.07
-  line('Knee robe fold',[(side*(.70+q),2.99-q*.1,-2.48),(side*(1.46+q*.5),2.85-q*.33,-2.10),(side*(1.8-q*.10),2.58-q*.32,-2.18)],.022,GOLD if i%2 else EDGE)
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from sculpt_buddha import build_buddha
+sculpt_materials={'skin':SKIN,'robe':GOLD,'hair':HAIR,'dark':EYE,'lip':LIP}
+build_buddha(p,sculpt_materials,finish)
 # Altar furniture and offerings.
 CATEGORY='ALTAR'
 for x,y,z,w in [(0,.65,-.45,3.2),(-2.6,.55,-.8,1.25),(2.6,.55,-.8,1.25)]:
@@ -354,27 +279,15 @@ bpy.ops.object.select_all(action='DESELECT')
 objects=[o for o in bpy.context.scene.objects if o.type in {'MESH','CURVE'}]
 for o in objects:o.select_set(True)
 bpy.context.view_layer.objects.active=objects[0];bpy.ops.object.convert(target='MESH')
-sculpt=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.name.startswith('SCULPT__') and o.data.materials[0].name in [GOLD.name,SKIN.name,EDGE.name]]
-bpy.ops.object.select_all(action='DESELECT')
-for obj in sculpt:obj.select_set(True)
-bpy.context.view_layer.objects.active=sculpt[0];bpy.ops.object.join();obj=bpy.context.object;obj.name='SCULPT__Continuous_body'
-bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
-remesh=obj.modifiers.new('Continuous sculpt','REMESH');remesh.mode='VOXEL';remesh.voxel_size=.018;remesh.use_smooth_shade=True
-bpy.ops.object.modifier_apply(modifier=remesh.name)
-smooth=obj.modifiers.new('Soft sculpt','SMOOTH');smooth.factor=.45;smooth.iterations=3;bpy.ops.object.modifier_apply(modifier=smooth.name)
-obj.data.materials.clear();obj.data.materials.append(SKIN)
-for poly in obj.data.polygons:poly.material_index=0
-# Remove redundant coplanar detail without dropping the face or hand silhouette.
-dec=obj.modifiers.new('Mobile surface','DECIMATE');dec.ratio=.26;bpy.ops.object.modifier_apply(modifier=dec.name)
 groups=defaultdict(list)
 for obj in list(bpy.context.scene.objects):
- if obj.type=='MESH':groups[(obj.name.split('__')[0],obj.data.materials[0].name)].append(obj)
-for (category,mat),items in groups.items():
+ if obj.type=='MESH':groups[(obj.name.split('__')[0],obj.data.materials[0].name,obj.get('sculpt_region',''))].append(obj)
+for (category,mat,region),items in groups.items():
  bpy.ops.object.select_all(action='DESELECT')
  for obj in items:obj.select_set(True)
  bpy.context.view_layer.objects.active=items[0]
  if len(items)>1:bpy.ops.object.join()
- obj=bpy.context.object;obj.name=category+'__'+mat.replace(' ','_')
+ obj=bpy.context.object;obj.name=category+'__'+(region+'__' if region else '')+mat.replace(' ','_')
  for poly in obj.data.polygons:poly.material_index=0
  obj.data.validate(verbose=False);obj.data.update()
  # Tiny bevels keep wood edges from looking razor-sharp; all remaining geometry is authored mesh.
@@ -390,10 +303,22 @@ bpy.context.scene.world.color=(.22,.18,.12)
 for loc,energy,color,size in [((-6,-1,7),1800,(1,.75,.43),7),((5,-3,6),1400,(1,.84,.62),6),((0,-7,7),1800,(1,.90,.72),5)]:
  bpy.ops.object.light_add(type='AREA',location=loc);light=bpy.context.object;light.data.energy=energy;light.data.color=color;light.data.shape='DISK';light.data.size=size;light.rotation_euler=(Vector((0,2,3))-light.location).to_track_quat('-Z','Y').to_euler()
 scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=24;scene.render.resolution_x=1400;scene.render.resolution_y=900;scene.render.resolution_percentage=100
-if opts.blend:bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(opts.blend))
+# Save the editable master only after exporting the selected mobile meshes.
 os.makedirs(os.path.dirname(os.path.abspath(opts.output)),exist_ok=True)
 bpy.ops.object.select_all(action='DESELECT')
 for obj in bpy.context.scene.objects:
  if obj.type=='MESH':obj.select_set(True)
-bpy.ops.export_scene.gltf(filepath=os.path.abspath(opts.output),export_format='GLB',use_selection=True,export_cameras=False,export_lights=False,export_materials='EXPORT',export_yup=True,export_draco_mesh_compression_enable=False)
+bpy.ops.export_scene.gltf(filepath=os.path.abspath(opts.output),export_format='GLB',use_selection=True,export_extras=True,export_cameras=False,export_lights=False,export_materials='EXPORT',export_yup=True,export_draco_mesh_compression_enable=False)
 print('SANCTUARY_EXPORT',os.path.getsize(opts.output),'bytes',len([o for o in scene.objects if o.type=='MESH']),'mesh groups')
+
+if opts.blend:
+ CATEGORY='MASTER'
+ master=build_buddha(p,sculpt_materials,finish,quality=2)
+ collection=bpy.data.collections.new('Sculpt source - high resolution - unhide to edit')
+ scene.collection.children.link(collection)
+ for obj in master:
+  for parent in list(obj.users_collection):parent.objects.unlink(obj)
+  collection.objects.link(obj)
+  obj.matrix_world=Matrix.Translation(pivot) @ Matrix.Scale(1.12,4) @ Matrix.Translation(-pivot) @ obj.matrix_world
+ collection.hide_viewport=True;collection.hide_render=True
+ bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(opts.blend))

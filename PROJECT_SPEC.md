@@ -1,3 +1,16 @@
+# Sculpture rebuild — owner-approved reference study
+
+Replace the rejected blocky Buddha body with an original continuous-surface model.
+Acceptance: integrated facial relief and shorter anatomical neck/shoulders; tapered
+arms and articulated fingers; smoothly joined crossed legs; drapery that clears the
+body without the earlier penetrations; shared normals at periodic mesh seams;
+source geometry at higher sampling density kept separately from the web GLB.
+Validate front/side/close/portrait views, UV/normal data and the existing 12 MB /
+500k-triangle web budget. Preserve camera controls, legacy routes/storage and keep
+PR #16 draft until visual acceptance. This is digital geometry authored from the
+reference, not a scan, a professional artist's hand-sculpt claim or certified
+photoreal equivalence. See tools/sculpt_buddha.py and docs/TEMPLE_3D.md.
+
 # Current increment — reference-based 3D sanctuary
 
 The owner now requests a navigable 3D sanctuary based on the supplied landscape

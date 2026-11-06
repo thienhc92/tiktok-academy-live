@@ -8,7 +8,7 @@ Tượng/khuôn mặt, nếp áo và hoa văn còn đơn giản hơn ảnh tham 
 ## Thành phần
 
 - Tượng Phật ngồi, tay phải đặt trên đầu gối, tay trái ngửa trong lòng; hình đầu/mặt,
-  tóc xoắn, thân/áo/tay/chân là hình học thực. Phần thân được voxel-remesh để nối mặt.
+  tóc xoắn, thân/áo/tay/chân là hình học thực. Bản v2 dùng bề mặt liên tục; chỉ union cục bộ ở chân ngồi.
 - Tòa sen nhiều tầng, hào quang có cánh/đường chạm nổi và normal map hoa văn.
 - Cột gỗ có chân đế, xà/kèo/mái, lan can; hoa sen, bình sứ xanh trắng, bàn thờ, đĩa
   quả, đèn và lư hương có thân/chân/quai. Có cây hình học bên ngoài các khoảng mở.
@@ -32,14 +32,14 @@ Tượng/khuôn mặt, nếp áo và hoa văn còn đơn giản hơn ảnh tham 
 `tools/build_shrine.py` chứa hình học/vật liệu được tạo riêng cho dự án, dùng Blender
 4.3.2 hiện có. Không tải model thương mại hoặc tích hợp dịch vụ tạo 3D trả phí.
 Texture gỗ và hoa văn được sinh bằng công thức, đóng gói vào GLB. Tệp nguồn Blender
-được giữ ở `/workspace/chua-online-3d-refined.blend` để tải về/chỉnh sửa; không đưa file Blender
+được giữ ở `/workspace/chua-online-sculpt-v2.blend` để tải về/chỉnh sửa; không đưa file Blender
 lớn vào bundle trình duyệt. Chạy lại (cần Blender ở máy tác giả, **không cần trên iPad
 hoặc CI**):
 
 ```sh
 blender -b --factory-startup --python tools/build_shrine.py -- \
   --output public/temple3d/sanctuary.glb \
-  --blend /workspace/chua-online-3d-refined.blend
+  --blend /workspace/chua-online-sculpt-v2.blend
 ```
 
 Khi tái tạo cần kiểm tra log/GLB và chụp lại; Blender version khác có thể tạo topology
@@ -48,7 +48,7 @@ nén không tạo compressed extension nên viewer chủ động không tải de
 
 ## Giới hạn và kiểm chứng
 
-GLB khoảng 10,9 MiB, 48 nhóm mesh, 487.755 tam giác. Ngân sách kiểm thử vẫn dưới
+GLB hiện khoảng 11,3 MiB, 56 nhóm mesh, 461.600 tam giác. Ngân sách kiểm thử vẫn dưới
 12 triệu byte và 500 nghìn tam giác; dung lượng tải ban đầu vẫn đáng kể trên mạng chậm.
 Default DPR 1, shadow map 1024 được bake tĩnh; reflection 256, contact shadow chụp một lần.
 Chế độ chi tiết tăng DPR tối đa 1,5, reflection 512 và shadow map 2048; chuyển chất lượng
@@ -63,7 +63,7 @@ không tạo secret hoặc nối TikTok. PR hiện giữ draft để chủ sở 
 
 ## Kết quả kiểm tra cục bộ
 
-- `npm test`: 106 kiểm thử qua với quyền chạy runtime/socket cục bộ.
+- `npm test`: 107 kiểm thử qua với quyền chạy runtime/socket cục bộ.
 - `npm run build`: qua toàn bộ TypeScript frontend/local/backend và Vite production.
   Vite vẫn cảnh báo chunk Three.js trên 500 kB; scene được tải lazy theo route.
 - `npm audit --audit-level=high`: không phát hiện lỗ hổng.
@@ -110,3 +110,11 @@ manual/preset state, tải GLB, đổi chất lượng, 9:16 và route/storage c
 Bản tinh chỉnh `7e6258b` đã qua GitHub **Test and build** và **Cloudflare Pages**.
 Preview cố định: https://bc192756.tiktok-academy-live.pages.dev . Đã đối chiếu
 entrypoint trên alias preview với bản build cục bộ. PR #16 giữ nháp, chưa merge main.
+
+## Tượng dựng lại v2
+
+Chủ sở hữu duyệt dựng lại tượng sau khi so sánh ảnh cận với ảnh tham khảo. Đã thay
+mô hình thân cũ bằng bề mặt mặt/ngực/cổ/áo liên tục, chi thuôn/ngón có khớp, chân
+bắt chéo union riêng và source chi tiết tách khỏi web. Xem [SCULPTURE_V2.md](SCULPTURE_V2.md)
+để biết cách mở bản nguồn, ngân sách và giới hạn nghệ thuật. Chưa chứng nhận đạt
+mức chân thực ảnh gốc; không merge production trước chấp nhận thị giác.

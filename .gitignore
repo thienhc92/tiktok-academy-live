@@ -15,3 +15,7 @@ dist/
 .dev.vars.*
 .env
 .env.*
+
+# Blender authoring scripts
+__pycache__/
+*.py[cod]

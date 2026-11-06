@@ -106,3 +106,33 @@ test('embedded PBR normal and roughness pixels survive Blender export', () => {
     const roughness=means(wood.pbrMetallicRoughness.metallicRoughnessTexture.index)[1];
     assert.ok(roughness>70&&roughness<180,'lacquer must not export with mirror-like zero roughness');
 });
+
+test('rebuilt sculpture ships continuous face, anatomical bust and drapery with UVs; editable master stays out of web download', () => {
+    const bytes=readFileSync('public/temple3d/sanctuary.glb'), jsonLength=bytes.readUInt32LE(12);
+    const data=JSON.parse(bytes.toString('utf8',20,20+jsonLength)), binaryStart=28+jsonLength;
+    const sculpture=data.nodes.filter((n: {name?: string})=>n.name?.startsWith('SCULPT__'));
+    const regions=new Set(sculpture.map((n: {extras?: {sculpt_region?: string}})=>n.extras?.sculpt_region));
+    for(const region of ['face','bust','garment','hands','arms','hair','feet']) assert.ok(regions.has(region),region);
+    assert.ok(data.nodes.every((n: {name?: string})=>!n.name?.startsWith('MASTER__')));
+    for(const node of sculpture) {
+        assert.equal(node.extras.sculpt_revision,2);
+        assert.equal(node.extras.source_quality,1);
+        for(const primitive of data.meshes[node.mesh].primitives) {
+            assert.ok(Number.isInteger(primitive.attributes.NORMAL));
+            assert.ok(Number.isInteger(primitive.attributes.TEXCOORD_0));
+        }
+    }
+    const face=sculpture.find((n: {extras: {sculpt_region: string}})=>n.extras.sculpt_region==='face');
+    const primitive=data.meshes[face.mesh].primitives[0];
+    assert.ok(data.accessors[primitive.indices].count/3>25000,'preserve face silhouette and relief');
+    function vectors(accessorIndex: number): number[][] {
+        const a=data.accessors[accessorIndex], v=data.bufferViews[a.bufferView];
+        assert.equal(a.componentType,5126); assert.equal(a.type,'VEC3');
+        const offset=binaryStart+(v.byteOffset??0)+(a.byteOffset??0), stride=v.byteStride??12;
+        return Array.from({length:a.count},(_,i)=>[0,1,2].map(c=>bytes.readFloatLE(offset+i*stride+c*4)));
+    }
+    const positions=vectors(primitive.attributes.POSITION), normals=vectors(primitive.attributes.NORMAL);
+    const spans=[0,1,2].map(c=>Math.max(...positions.map(p=>p[c]))-Math.min(...positions.map(p=>p[c])));
+    assert.ok(spans.every(span=>span>.7&&span<2),'head must have real relief and balanced dimensions');
+    assert.ok(normals.every(n=>n.every(Number.isFinite)&&Math.abs(Math.hypot(...n)-1)<.001));
+});
