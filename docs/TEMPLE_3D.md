@@ -74,3 +74,7 @@ không tạo secret hoặc nối TikTok. PR hiện giữ draft để chủ sở 
   tải GLB, bốn tùy chọn, canvas 9:16, hai route cũ và sentinel localStorage giữ nguyên.
   Không có page error hoặc request ngoài origin. Đây không phải phép đo FPS iPad.
 - Ảnh khung dọc: `docs/previews/temple-3d-portrait.png`.
+
+Commit triển khai `b2c17f6` đã push; GitHub **Test and build** và **Cloudflare Pages**
+đều thành công. PR #16 tiếp tục là nháp, chưa merge main. Ảnh khung dọc dùng góc
+chính diện, đóng menu để kiểm tra trọn tượng. Thiết bị Safari thật vẫn cần kiểm thử.

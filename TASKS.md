@@ -185,5 +185,5 @@
 - [x] R3F viewer with orbit/zoom, front/left/right/close, reset, local lighting/reflection, quality and 9:16 options.
 - [x] Preserve LIVE and Academy at separate routes; no backend/credential/payment changes.
 - [x] 104 tests, complete production build/TypeScript and full npm audit passed. Chromium verified 5 viewports, real camera/orbit/reset, download, settings/9:16, legacy routes/storage, no external requests.
-- [ ] Update existing draft PR preview and verify remote checks; no production merge before visual acceptance.
+- [x] Draft PR #16 updated; implementation commit b2c17f6 passed GitHub CI and Cloudflare Pages preview. No production merge; owner visual acceptance pending.
 - [ ] Physical iPad Safari performance, visual feedback and higher-detail sculpture/ornament refinement.
