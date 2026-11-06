@@ -1,3 +1,18 @@
+# Current increment — reference-based 3D sanctuary
+
+The owner now requests a navigable 3D sanctuary based on the supplied landscape
+image: monumental seated golden Buddha/lotus/mandorla, carved timber hall, tiled
+reflective floor, altar, porcelain flower vases, lanterns and sunlight. The default
+experience is a real mesh-based glTF scene with orbit/zoom, front/side/close presets,
+mobile quality controls, a 9:16 frame option and downloadable GLB. Geometry and
+textures are generated locally with the versioned Blender script; this is a
+hand-authored procedural interpretation, not a photogrammetric copy of the image.
+Acceptance: camera movement reveals depth, model contains non-planar sculpture and
+architecture, no external asset/decoder requests, bounded mobile rendering costs,
+Vietnamese controls and unchanged legacy storage/backend. Preserve earlier LIVE
+simulation at ?experience=live and Academy at ?experience=academy. No TikTok or
+backend deployment in this increment. See docs/TEMPLE_3D.md.
+
 # Chùa Online — active product direction
 
 The owner has replaced the school direction with an online temple inspired by the supplied portrait livestream reference. The active MVP recreates the supplied livestream screenshot composition: a realistic generated temple/altar background, 52 gray-robed image-based 2.5D visitors, a large fortune-card overlay and mock LIVE header/chat/gift controls. A 720:1280 inner scene sits inside an 888:1280 reference frame, both scaled to fit. No desktop sidebars. All LIVE UI and values are synthetic; no TikTok requests or payments. The image and visitor assets are newly generated, not the original artwork; exact pixel identity cannot be certified from the screenshot alone.

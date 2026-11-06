@@ -1,3 +1,12 @@
+# New request — true 3D temple
+
+- Build actual sanctuary geometry and a downloadable GLB from the new reference.
+- Verify orbit/zoom, camera presets, portrait/landscape fit and local-only assets.
+- Refine sculpture, architectural carving and materials after the owner reviews
+  the model; physical iPad Safari performance remains an explicit validation task.
+
+The previous 2.5D LIVE simulation remains a separate route, not the default 3D scene.
+
 # Active direction — Chùa Online
 
 1. Portrait visual MVP inspired by the supplied temple reference: original local altar illustration, 52 layered realistic visitor sprites, reflection card, mock wishes and offerings.

@@ -178,3 +178,12 @@
 - [x] 102 tests, TypeScript/build and audit passed; browser verified 6 viewports, frame/card anchors, simulation interactions, reduced/hidden motion, no external calls and unchanged Academy save.
 - [ ] Draft PR/CI status: update existing PR #16; do not merge until owner accepts the revised visuals.
 - [ ] Exact-match certification blocked by absence of original artwork/models/fonts/icons; do not label this 100% identical.
+
+## True 3D sanctuary from the new landscape reference
+- [x] Versioned Blender generator, original sculpture, lotus/halo, hall/roof, altar, flowers, lamps and exterior geometry.
+- [x] Self-contained GLB and editable Blender source; no photo background used for the new 3D scene.
+- [x] R3F viewer with orbit/zoom, front/left/right/close, reset, local lighting/reflection, quality and 9:16 options.
+- [x] Preserve LIVE and Academy at separate routes; no backend/credential/payment changes.
+- [x] 104 tests, complete production build/TypeScript and full npm audit passed. Chromium verified 5 viewports, real camera/orbit/reset, download, settings/9:16, legacy routes/storage, no external requests.
+- [ ] Update existing draft PR preview and verify remote checks; no production merge before visual acceptance.
+- [ ] Physical iPad Safari performance, visual feedback and higher-detail sculpture/ornament refinement.
