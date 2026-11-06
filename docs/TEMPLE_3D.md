@@ -32,14 +32,14 @@ Tượng/khuôn mặt, nếp áo và hoa văn còn đơn giản hơn ảnh tham 
 `tools/build_shrine.py` chứa hình học/vật liệu được tạo riêng cho dự án, dùng Blender
 4.3.2 hiện có. Không tải model thương mại hoặc tích hợp dịch vụ tạo 3D trả phí.
 Texture gỗ và hoa văn được sinh bằng công thức, đóng gói vào GLB. Tệp nguồn Blender
-được giữ ở `/workspace/chua-online-3d.blend` để tải về/chỉnh sửa; không đưa file Blender
+được giữ ở `/workspace/chua-online-3d-refined.blend` để tải về/chỉnh sửa; không đưa file Blender
 lớn vào bundle trình duyệt. Chạy lại (cần Blender ở máy tác giả, **không cần trên iPad
 hoặc CI**):
 
 ```sh
 blender -b --factory-startup --python tools/build_shrine.py -- \
   --output public/temple3d/sanctuary.glb \
-  --blend /workspace/chua-online-3d.blend
+  --blend /workspace/chua-online-3d-refined.blend
 ```
 
 Khi tái tạo cần kiểm tra log/GLB và chụp lại; Blender version khác có thể tạo topology
@@ -48,10 +48,11 @@ nén không tạo compressed extension nên viewer chủ động không tải de
 
 ## Giới hạn và kiểm chứng
 
-GLB khoảng 9,4 MB, 47 nhóm mesh để giảm draw calls, khoảng 413 nghìn tam giác. Đây là
-bản đầu có hình học chi tiết; dung lượng tải ban đầu vẫn đáng kể trên mạng chậm.
-Default DPR 1, không shadow map động; reflection 256, contact shadow chụp một lần.
-Chế độ chi tiết tăng DPR tối đa 1,5, reflection 512 và shadow map 1024. Canvas dùng
+GLB khoảng 10,9 MiB, 48 nhóm mesh, 487.755 tam giác. Ngân sách kiểm thử vẫn dưới
+12 triệu byte và 500 nghìn tam giác; dung lượng tải ban đầu vẫn đáng kể trên mạng chậm.
+Default DPR 1, shadow map 1024 được bake tĩnh; reflection 256, contact shadow chụp một lần.
+Chế độ chi tiết tăng DPR tối đa 1,5, reflection 512 và shadow map 2048; chuyển chất lượng
+sẽ bake lại shadow. Canvas dùng
 demand rendering, ngừng tick khi tab ẩn; không có animation timer trong phòng.
 Không tuyên bố FPS iPad nếu chưa đo trên thiết bị thật.
 
@@ -62,11 +63,10 @@ không tạo secret hoặc nối TikTok. PR hiện giữ draft để chủ sở 
 
 ## Kết quả kiểm tra cục bộ
 
-- `npm test`: 104 kiểm thử qua với quyền chạy runtime/socket cục bộ. Lần chạy
-  sandbox hạn chế bị timeout khi Miniflare khởi tạo; không bỏ qua test đó.
+- `npm test`: 106 kiểm thử qua với quyền chạy runtime/socket cục bộ.
 - `npm run build`: qua toàn bộ TypeScript frontend/local/backend và Vite production.
   Vite vẫn cảnh báo chunk Three.js trên 500 kB; scene được tải lazy theo route.
-- `npm audit --omit=dev --audit-level=high`: không phát hiện lỗ hổng.
+- `npm audit --audit-level=high`: không phát hiện lỗ hổng.
 - Ảnh chính diện và góc trái: `docs/previews/temple-3d-front.png`,
   `docs/previews/temple-3d-left.png`.
 - Chromium (render phần mềm) xác minh 1440×900, 768×1024, 390×844, 320×568,
@@ -75,6 +75,34 @@ không tạo secret hoặc nối TikTok. PR hiện giữ draft để chủ sở 
   Không có page error hoặc request ngoài origin. Đây không phải phép đo FPS iPad.
 - Ảnh khung dọc: `docs/previews/temple-3d-portrait.png`.
 
-Commit triển khai `b2c17f6` đã push; GitHub **Test and build** và **Cloudflare Pages**
+Mốc triển khai trước `b2c17f6` đã push; GitHub **Test and build** và **Cloudflare Pages**
 đều thành công. PR #16 tiếp tục là nháp, chưa merge main. Ảnh khung dọc dùng góc
 chính diện, đóng menu để kiểm tra trọn tượng. Thiết bị Safari thật vẫn cần kiểm thử.
+
+## Sửa theo ảnh iPad của chủ sở hữu
+
+Tiêu chí: chính diện đối xứng và thấy trọn tượng/tòa sen/bàn thờ; lens nằm dưới xà;
+quỹ đạo không đi lên mái; preset không còn được chọn sau thao tác tay; reset khôi
+phục camera chính xác; không đổi gameplay/storage hay đưa ảnh phẳng vào cảnh 3D.
+
+- Thu hẹp orbit vào lối trung tâm (azimuth ±0,14 rad, polar 1,54–1,64 rad), bỏ quán
+  tính để preset/reset không bị dịch sau đó. Camera riêng theo aspect và preset.
+- Dời hàng cột trong ra ±4,6 m để lối giữa thoáng; chi tiết xà bớt dạng chữ U lớn.
+- Thân tượng được remesh mịn hơn trước decimation; điều chỉnh ngực/đầu, nếp vải,
+  cánh sen và thêm đường chạm. Đây vẫn là tượng thủ tục, không phải điêu khắc scan.
+- Vàng trầm hơn, exposure 0,92, bớt ambient; key light có bóng tĩnh. Phản chiếu sàn
+  và dải nắng nhẹ hơn. Vật liệu gỗ có normal/roughness nhúng và sắc gỗ nguyên bản.
+- Sửa lỗi Blender: phải đặt color space **trước** khi ghi pixel. Làm ngược đã xuất
+  normal đen và kênh roughness bằng 0. Test giải nén PNG và kiểm tra kênh thực tế.
+- Nền xanh xám thay nền nâu trống; cây vẫn là hình học đơn giản. Không có HDRI,
+  mesh điêu khắc chuyên nghiệp hay texture chạm khắc có độ chi tiết như ảnh gốc.
+
+Bản dựng hiện cải thiện bố cục/vật liệu; chưa đáp ứng độ chân thực của ảnh. Để nâng
+chất lượng tiếp, cần tượng điêu khắc PBR chuẩn (mặt/tay/áo và tòa sen) cùng bộ chạm
+khắc gỗ có license rõ ràng, tối ưu LOD cho Safari. Chưa chọn/tích hợp tài sản bên
+ngoài và không yêu cầu mua tài sản. Không tuyên bố giống 100% hay FPS trên iPad.
+
+Kiểm chứng bổ sung: Chromium so sánh pixel vùng tượng (loại UI), xác nhận hình
+thay đổi sau orbit và trở lại đúng từng pixel sau reset. Smoke kiểm tra 5 viewport,
+manual/preset state, tải GLB, đổi chất lượng, 9:16 và route/storage cũ đều qua.
+Ảnh trong `docs/previews/temple-3d-*.png` đã cập nhật theo bản tinh chỉnh này.

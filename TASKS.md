@@ -187,3 +187,13 @@
 - [x] 104 tests, complete production build/TypeScript and full npm audit passed. Chromium verified 5 viewports, real camera/orbit/reset, download, settings/9:16, legacy routes/storage, no external requests.
 - [x] Draft PR #16 updated; implementation commit b2c17f6 passed GitHub CI and Cloudflare Pages preview. No production merge; owner visual acceptance pending.
 - [ ] Physical iPad Safari performance, visual feedback and higher-detail sculpture/ornament refinement.
+
+
+## 3D refinement after owner iPad screenshot
+- [x] Fix roof-exposing orbit, central aisle framing, preset/manual selection and exact reset.
+- [x] Widen inner column spacing; refine statue/robe/lotus and restrained gold/wood lighting.
+- [x] Embed timber normal/roughness, fix Blender pixel/color-space export and test decoded PBR channels.
+- [x] Keep 12 MB / 500k triangle budget, static shadow bake, existing routes/data and Vietnamese 9:16 UI.
+- [x] Final 106 tests/build/audit passed; 5 viewport smoke and pixel-accurate orbit/reset checks passed; screenshots updated.
+- [ ] Push visual refinement to draft PR #16 and verify CI/preview; do not merge production.
+- [ ] Photoreal sculpted asset, detailed carvings/landscape, physical iPad performance and visual acceptance.

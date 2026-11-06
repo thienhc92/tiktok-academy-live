@@ -9,7 +9,9 @@ textures are generated locally with the versioned Blender script; this is a
 hand-authored procedural interpretation, not a photogrammetric copy of the image.
 Acceptance: camera movement reveals depth, model contains non-planar sculpture and
 architecture, no external asset/decoder requests, bounded mobile rendering costs,
-Vietnamese controls and unchanged legacy storage/backend. Preserve earlier LIVE
+Vietnamese controls and unchanged legacy storage/backend. Refinement acceptance: central
+aisle camera remains below crossbeams within bounded orbit; manual camera input clears
+selected preset; reset is exact; baked PBR texture pixels remain valid after export. Preserve earlier LIVE
 simulation at ?experience=live and Academy at ?experience=academy. No TikTok or
 backend deployment in this increment. See docs/TEMPLE_3D.md.
 

@@ -15,10 +15,10 @@ def material(name,color,metal=0,rough=.5,emission=0):
  m=bpy.data.materials.new(name);m.use_nodes=True;n=m.node_tree.nodes.get('Principled BSDF');n.inputs['Base Color'].default_value=(*color,1);n.inputs['Metallic'].default_value=metal;n.inputs['Roughness'].default_value=rough
  if emission:n.inputs['Emission Color'].default_value=(*color,1);n.inputs['Emission Strength'].default_value=emission
  return m
-GOLD=material('Polished gold',(.83,.49,.13),.84,.34)
-SKIN=material('Gold statue skin',(.88,.55,.19),.76,.34)
+GOLD=material('Polished gold',(.72,.38,.075),.88,.39)
+SKIN=material('Gold statue skin',(.76,.43,.12),.87,.38)
 DARKGOLD=material('Antique carved gold',(.43,.24,.065),.8,.34)
-EDGE=material('Gold highlights',(.96,.67,.25),.81,.32)
+EDGE=material('Gold highlights',(.78,.46,.13),.87,.37)
 HAIR=material('Bronze hair',(.11,.067,.022),.73,.34)
 EYE=material('Deep bronze details',(.12,.068,.019),.65,.4)
 LIP=material('Copper lips',(.40,.16,.055),.72,.35)
@@ -43,6 +43,23 @@ for y in range(512):
   pixels.extend((.32*v,.105*v,.037*v,1))
 image.pixels.foreach_set(pixels);image.pack()
 tex=WOOD.node_tree.nodes.new('ShaderNodeTexImage');tex.image=image;WOOD.node_tree.links.new(tex.outputs['Color'],WOOD.node_tree.nodes.get('Principled BSDF').inputs['Base Color'])
+# Tangent normal and roughness textures; no runtime procedural shader or CDN.
+woodnormal=bpy.data.images.new('Teak pores normal',width=128,height=512)
+woodrough=bpy.data.images.new('Teak uneven lacquer',width=128,height=512)
+normaldata=[];roughdata=[]
+for y in range(512):
+ for x in range(128):
+  grain=math.sin(x*.8+math.sin(y*.014)*2)+.25*math.sin(x*2.4+y*.013)
+  n=Vector((grain*.13,math.sin(y*.04+x*.1)*.025,1)).normalized()
+  normaldata.extend((n.x*.5+.5,n.y*.5+.5,n.z*.5+.5,1))
+  r=.43+.065*grain;roughdata.extend((r,r,r,1))
+for img,data in [(woodnormal,normaldata),(woodrough,roughdata)]:
+ img.colorspace_settings.name='Non-Color';img.pixels.foreach_set(data);img.update();img.pack()
+wn=WOOD.node_tree.nodes.new('ShaderNodeTexImage');wn.image=woodnormal
+nm=WOOD.node_tree.nodes.new('ShaderNodeNormalMap');nm.inputs['Strength'].default_value=.45
+WOOD.node_tree.links.new(wn.outputs['Color'],nm.inputs['Color']);WOOD.node_tree.links.new(nm.outputs['Normal'],WOOD.node_tree.nodes.get('Principled BSDF').inputs['Normal'])
+wr=WOOD.node_tree.nodes.new('ShaderNodeTexImage');wr.image=woodrough
+WOOD.node_tree.links.new(wr.outputs['Color'],WOOD.node_tree.nodes.get('Principled BSDF').inputs['Roughness'])
 HALO=material('Engraved mandorla gold',(.64,.37,.095),.82,.40)
 W=256
 height=[]
@@ -57,7 +74,7 @@ for yy in range(W):
   dx=height[yy*W+min(W-1,xx+1)]-height[yy*W+max(0,xx-1)]
   dy=height[min(W-1,yy+1)*W+xx]-height[max(0,yy-1)*W+xx]
   n=Vector((-dx*.7,-dy*.7,1)).normalized();normalpixels.extend((n.x*.5+.5,n.y*.5+.5,n.z*.5+.5,1))
-norm.pixels.foreach_set(normalpixels);norm.colorspace_settings.name='Non-Color';norm.pack()
+norm.colorspace_settings.name='Non-Color';norm.pixels.foreach_set(normalpixels);norm.update();norm.pack()
 tex=HALO.node_tree.nodes.new('ShaderNodeTexImage');tex.image=norm
 node=HALO.node_tree.nodes.new('ShaderNodeNormalMap');node.inputs['Strength'].default_value=.45;HALO.node_tree.links.new(tex.outputs['Color'],node.inputs['Color']);HALO.node_tree.links.new(node.outputs['Normal'],HALO.node_tree.nodes.get('Principled BSDF').inputs['Normal'])
 # All objects get an explicit category for efficient joins and inspection.
@@ -80,7 +97,7 @@ def box(name,loc,size,mat,bevel=0):
 def cylinder(name,loc,radius,height,mat,vertices=24):
  bpy.ops.mesh.primitive_cylinder_add(vertices=vertices,radius=radius,depth=height,location=p(loc));return finish(bpy.context.object,name,mat)
 def torus(name,loc,major,minor,mat,vertical=False):
- bpy.ops.mesh.primitive_torus_add(major_radius=major,minor_radius=minor,major_segments=48,minor_segments=8,location=p(loc));obj=bpy.context.object
+ bpy.ops.mesh.primitive_torus_add(major_radius=major,minor_radius=minor,major_segments=40,minor_segments=8,location=p(loc));obj=bpy.context.object
  if vertical:obj.rotation_euler.x=math.pi/2
  return finish(obj,name,mat)
 def line(name,points,radius,mat):
@@ -103,12 +120,12 @@ def lathe(name,loc,profile,mat,segments=32):
  mesh=bpy.data.meshes.new(name);mesh.from_pydata(verts,[],faces);mesh.update();obj=bpy.data.objects.new(name,mesh);bpy.context.collection.objects.link(obj);return finish(obj,name,mat)
 
 def petal(name,loc,width,height,depth,angle,mat,lean=0):
- verts=[];faces=[];N=8;M=6
+ verts=[];faces=[];N=12;M=8
  for side in [0,1]:
   for j in range(N+1):
    v=j/N
    for i in range(M+1):
-    u=i/M*2-1;w=width*math.sin(math.pi*v)**.72
+    u=i/M*2-1;w=width*math.sin(math.pi*v)**.52
     xx=u*w;yy=height*v;zz=depth*math.sin(v*math.pi*.7)+depth*.5*u*u*math.sin(math.pi*v)-side*.035+lean*yy
     # Sculpted vein down the center, not a flat polygon.
     zz+=.009*math.sin(v*40+abs(u)*7)*math.sin(math.pi*v)
@@ -124,7 +141,7 @@ def petal(name,loc,width,height,depth,angle,mat,lean=0):
 
 # Hall structure: real open sides and layered roof, no backdrop photograph.
 for depth in [-5.1,-1.0,3.8,8.0]:
- for x in [-6.1,-3.65,3.65,6.1]:
+ for x in [-6.1,-4.6,4.6,6.1]:
   cylinder('Teak column',(x,4.35,depth),.255,7.55,WOOD)
   lathe('Carved stone column foot',(x,0,depth),[(.4,0),(.44,.1),(.44,.23),(.35,.30),(.37,.52),(.43,.62),(.4,.72),(.29,.82)],STONE)
   for h in [.13,.26,.58,.7]:torus('Column base moulding',(x,h,depth),.4,.035,DARKGOLD)
@@ -134,10 +151,10 @@ for depth in [-5.1,-1.0,3.8,8.0]:
 for z in [-5.1,-1,3.8,8]:
  beam('Main crossbeam',(-6.5,7.8,z),(6.5,7.8,z),.40,.38,WOOD)
  for x in [-4.5,-2.5,0,2.5,4.5]:
-  line('Carved beam scroll',[(x-.7,7.7,z+.22),(x-.4,7.47,z+.24),(x,7.6,z+.25),(x+.3,7.8,z+.22)],.04,DARKGOLD)
- for x in [-6.1,-3.65,3.65,6.1]:
+  line('Carved beam scroll',[(x-.65,7.73,z+.22),(x-.3,7.68,z+.24),(x,7.75,z+.25),(x+.3,7.68,z+.24),(x+.65,7.73,z+.22)],.022,DARKGOLD)
+ for x in [-6.1,-4.6,4.6,6.1]:
   line('Bracket scroll',[(x,7.5,z),(x+(.65 if x<0 else -.65),7.35,z),(x+(.7 if x<0 else -.7),7.8,z)],.12,WOOD)
-for x in [-6.1,-3.65,3.65,6.1]:beam('Long roof bearer',(x,7.55,-6),(x,7.55,9),.28,.30,WOOD)
+for x in [-6.1,-4.6,4.6,6.1]:beam('Long roof bearer',(x,7.55,-6),(x,7.55,9),.28,.30,WOOD)
 for z in [-5.4+i*.85 for i in range(18)]:
  for side in [-1,1]:
   beam('Roof rafter',(0,9.05,z),(side*7.2,7.55,z),.16,.13,WOOD)
@@ -174,6 +191,10 @@ for y,r in [(.33,2.3),(.53,2.2),(.93,2.25),(1.17,2.45)]:torus('Throne ring',(0,y
 for radius,y,count,height in [(2.0,.7,18,1.0),(1.65,1.18,15,.95),(1.3,1.63,12,.75)]:
  for i in range(count):
   a=i*math.tau/count;petal('Carved lotus petal',(radius*math.sin(a),y,-3.05+radius*math.cos(a)),.47,height,.34,a,GOLD,lean=.12)
+for i in range(24):
+ a=i*math.tau/24
+ x=2.03*math.sin(a);z=-3.05+2.03*math.cos(a)
+ line('Lotus engraved vein',[(x*.96,.92,-3.05+(z+3.05)*.96),(x*1.02,1.22,-3.05+(z+3.05)*1.02),(x*.94,1.49,-3.05+(z+3.05)*.94)],.012,DARKGOLD)
 # Solid circular halo with actual radial relief and outer foliage.
 obj=cylinder('Halo disc',(0,4.23,-3.63),2.94,.13,HALO,96);obj.rotation_euler.x=math.pi/2
 for r in [2.5,2.65,2.88,3.00]:torus('Halo rim',(0,4.23,-3.49),r,.042,EDGE,True)
@@ -199,15 +220,15 @@ sphere('Right draped knee',(1.13,2.55,-2.69),(1.25,.60,.78),GOLD,32)
 line('Crossed shin',[(-1.72,2.5,-2.1),(-.65,2.36,-1.82),(.65,2.43,-2.05),(1.65,2.7,-2.7)],.34,GOLD)
 line('Folded foot',[(1.65,2.75,-2.3),(.85,2.72,-2.02),(.25,2.8,-2.1)],.18,SKIN)
 # Robe torso is a smoothly varying elliptical lathe.
-profile=[(.86,0),(.76,.3),(.70,.62),(.82,.95),(.98,1.22),(.95,1.45),(.66,1.68),(.41,1.82)]
+profile=[(.86,0),(.82,.3),(.80,.62),(.90,.95),(1.02,1.22),(.98,1.45),(.70,1.68),(.42,1.82)]
 body=lathe('Draped torso',(0,2.87,-2.87),profile,GOLD,64)
 # Flatten body depth around its own center rather than global origin.
 for v in body.data.vertices:v.co.y=2.87+(v.co.y-2.87)*.66
 sphere('Upper chest',(0,4.55,-2.86),(.70,.46,.43),SKIN,28)
 cylinder('Neck',(0,4.97,-2.86),.30,.56,SKIN)
 # The head is not a billboard: anatomical surface with sculpted bridge, cheeks and mouth.
-sphere('Head',(0,5.86,-2.86),(.52,.73,.47),SKIN,36)
-verts=[];faces=[];NX=48;NY=56
+sphere('Head',(0,5.86,-2.86),(.55,.71,.48),SKIN,48)
+verts=[];faces=[];NX=64;NY=72
 for j in range(NY+1):
  v=j/NY*2-1;y=5.86+.70*v
  for i in range(NX+1):
@@ -261,7 +282,7 @@ for j in range(N+1):
  for i in range(M+1):
   u=i/M;xx=-.86+1.72*u;top=4.22+.7*u;yy=3.06+(top-3.06)*v
   width=.90 if yy>4.05 else .82
-  zz=-2.87+.54*math.sqrt(max(.12,1-(xx/width)**2))+.05+.036*math.sin(u*30+v*7)*(1-v*.25)
+  zz=-2.87+.54*math.sqrt(max(.12,1-(xx/width)**2))+.05+.045*math.sin(u*19+v*5)*(1-v*.25)
   verts.append(p((xx,yy,zz)))
 for j in range(N):
  for i in range(M):
@@ -338,13 +359,13 @@ bpy.ops.object.select_all(action='DESELECT')
 for obj in sculpt:obj.select_set(True)
 bpy.context.view_layer.objects.active=sculpt[0];bpy.ops.object.join();obj=bpy.context.object;obj.name='SCULPT__Continuous_body'
 bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
-remesh=obj.modifiers.new('Continuous sculpt','REMESH');remesh.mode='VOXEL';remesh.voxel_size=.025;remesh.use_smooth_shade=True
+remesh=obj.modifiers.new('Continuous sculpt','REMESH');remesh.mode='VOXEL';remesh.voxel_size=.018;remesh.use_smooth_shade=True
 bpy.ops.object.modifier_apply(modifier=remesh.name)
 smooth=obj.modifiers.new('Soft sculpt','SMOOTH');smooth.factor=.45;smooth.iterations=3;bpy.ops.object.modifier_apply(modifier=smooth.name)
 obj.data.materials.clear();obj.data.materials.append(SKIN)
 for poly in obj.data.polygons:poly.material_index=0
 # Remove redundant coplanar detail without dropping the face or hand silhouette.
-dec=obj.modifiers.new('Mobile surface','DECIMATE');dec.ratio=.5;bpy.ops.object.modifier_apply(modifier=dec.name)
+dec=obj.modifiers.new('Mobile surface','DECIMATE');dec.ratio=.26;bpy.ops.object.modifier_apply(modifier=dec.name)
 groups=defaultdict(list)
 for obj in list(bpy.context.scene.objects):
  if obj.type=='MESH':groups[(obj.name.split('__')[0],obj.data.materials[0].name)].append(obj)

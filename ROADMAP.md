@@ -78,3 +78,10 @@ with realistic local imagery, 52 visitor sprites, calligraphy and mock LIVE chro
 The screenshot frame and overlay anchors are reproduced explicitly; this is not a
 claim of 100% identity. Original source assets/app URL remain necessary for exact
 matching. Existing draft PR #16 stays unmerged while the visual direction is reviewed.
+
+
+3D visual refinement: camera constrained below the roof with accurate manual/preset
+state, wider central aisle, revised sculpture/lotus and baked timber PBR textures.
+Static shadows and restrained exposure/reflection improve depth. Next visual gate:
+owner comparison on iPad; high-quality sculpted Buddha/wood carvings and detailed
+landscape assets remain needed for photoreal fidelity. Keep PR #16 draft.

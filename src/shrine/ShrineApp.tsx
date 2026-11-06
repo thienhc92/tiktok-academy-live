@@ -26,7 +26,7 @@ function Loading() {
     return <Html center><div className="shrine-loading"><Flower2 /><span>{t('Shrine loading')}</span><small>{Math.round(progress)}%</small></div></Html>;
 }
 export function ShrineApp() {
-    const [view, setView] = useState<ShrineView>('front'), [reset, setReset] = useState(0), [detail, setDetail] = useState(false), [sunbeams, setSunbeams] = useState(true), [smoke, setSmoke] = useState(true), [menu, setMenu] = useState(false), [visible, setVisible] = useState(!document.hidden), [message, setMessage] = useState(''), [portrait, setPortrait] = useState(false);
+    const [view, setView] = useState<ShrineView>('front'), [manual, setManual] = useState(false), [reset, setReset] = useState(0), [detail, setDetail] = useState(false), [sunbeams, setSunbeams] = useState(true), [smoke, setSmoke] = useState(true), [menu, setMenu] = useState(false), [visible, setVisible] = useState(!document.hidden), [message, setMessage] = useState(''), [portrait, setPortrait] = useState(false);
     const root = useRef<HTMLDivElement>(null);
     useEffect(() => {
         document.title = t('Shrine title');
@@ -45,15 +45,15 @@ export function ShrineApp() {
     }
     return <main className={`shrine-app ${portrait ? 'shrine-portrait' : ''}`} ref={root}>
  <header className="shrine-topbar"><a href="/" className="shrine-brand"><Flower2 /><span>{t('Temple title')}<small>{t('Shrine subtitle')}</small></span></a><div className="shrine-top-actions"><a className="shrine-download" href="/temple3d/sanctuary.glb" download="chua-online-3d.glb"><Download size={15}/><span>{t('Shrine download')}</span></a><button onClick={() => void full()} aria-label={t('Temple fullscreen')}><Expand size={18}/></button><button onClick={() => setMenu(v => !v)} aria-expanded={menu} aria-label={t('Shrine settings')}>{menu ? <X size={18}/> : <Menu size={18}/>}</button></div></header>
- <div className="shrine-canvas"><SceneBoundary><Canvas frameloop={visible ? 'demand' : 'never'} dpr={detail ? [1, 1.5] : 1} shadows={detail} camera={{ position: [0, 3.2, 11.2], fov: 42, near: .1, far: 100 }} gl={{ antialias: true, alpha: false, powerPreference: 'low-power' }} onCreated={({ gl }) => {
+ <div className="shrine-canvas"><SceneBoundary><Canvas frameloop={visible ? 'demand' : 'never'} dpr={detail ? [1, 1.5] : 1} shadows camera={{ position: [0, 3.95, 12.4], fov: 42, near: .1, far: 100 }} gl={{ antialias: true, alpha: false, powerPreference: 'low-power' }} onCreated={({ gl }) => {
         gl.toneMapping = ACESFilmicToneMapping;
-        gl.toneMappingExposure = 1.05;
-    }} fallback={<div className="shrine-fallback">{t('Shrine unavailable')}</div>}><Suspense fallback={<Loading />}><Sanctuary view={view} reset={reset} detail={detail} sunbeams={sunbeams} smoke={smoke}/></Suspense></Canvas></SceneBoundary></div>
+        gl.toneMappingExposure = .92;
+    }} fallback={<div className="shrine-fallback">{t('Shrine unavailable')}</div>}><Suspense fallback={<Loading />}><Sanctuary view={view} reset={reset} detail={detail} sunbeams={sunbeams} smoke={smoke} onManual={() => setManual(true)}/></Suspense></Canvas></SceneBoundary></div>
  <div className="shrine-caption"><span>{t('Shrine scene label')}</span><h1>{t('Shrine scene title')}</h1><p>{t('Shrine scene description')}</p></div>
- <nav className="shrine-view-controls" aria-label={t('Shrine views')}><button aria-pressed={view === 'left'} onClick={() => setView('left')}><ChevronLeft size={16}/>{t('Shrine left')}</button><button aria-pressed={view === 'front'} onClick={() => {
-        setView('front');
+ <nav className="shrine-view-controls" aria-label={t('Shrine views')}><button aria-pressed={!manual && view === 'left'} onClick={() => { setManual(false); setView('left'); setReset(r => r + 1); }}><ChevronLeft size={16}/>{t('Shrine left')}</button><button aria-pressed={!manual && view === 'front'} onClick={() => {
+        setManual(false); setView('front');
         setReset(r => r + 1);
-    }}><RotateCcw size={15}/>{t('Shrine front')}</button><button aria-pressed={view === 'right'} onClick={() => setView('right')}>{t('Shrine right')}<ChevronRight size={16}/></button><button aria-pressed={view === 'close'} onClick={() => setView('close')}><Focus size={16}/>{t('Shrine close')}</button></nav>
+    }}><RotateCcw size={15}/>{t('Shrine front')}</button><button aria-pressed={!manual && view === 'right'} onClick={() => { setManual(false); setView('right'); setReset(r => r + 1); }}>{t('Shrine right')}<ChevronRight size={16}/></button><button aria-pressed={!manual && view === 'close'} onClick={() => { setManual(false); setView('close'); setReset(r => r + 1); }}><Focus size={16}/>{t('Shrine close')}</button></nav>
  <p className="shrine-gesture">{t('Shrine gesture')}</p>
  {menu && <aside className="shrine-settings"><h2>{t('Shrine settings')}</h2><label><span><Sun size={16}/>{t('Shrine sunlight')}</span><input type="checkbox" checked={sunbeams} onChange={e => setSunbeams(e.target.checked)}/></label><label><span><Wind size={16}/>{t('Shrine incense')}</span><input type="checkbox" checked={smoke} onChange={e => setSmoke(e.target.checked)}/></label><label><span>{t('Shrine detail')}</span><input type="checkbox" checked={detail} onChange={e => setDetail(e.target.checked)}/></label><label><span>{t('Shrine portrait')}</span><input type="checkbox" checked={portrait} onChange={e => setPortrait(e.target.checked)}/></label><p>{t('Shrine performance help')}</p><a href="?experience=live">{t('Shrine live view')}</a></aside>}
  {message && <p className="shrine-status" role="status">{message}</p>}
