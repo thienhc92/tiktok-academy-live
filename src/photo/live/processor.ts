@@ -72,7 +72,7 @@ export function processTempleEvent(state:TempleState,input:unknown,now:number):T
     }
     let ritual:'bow'|'incense'|'flower'|undefined;
     let merit=0;
-    if(state.mode==='MOCK'){
+    if(state.mode==='MOCK'||(e.kind==='comment'&&isPrayerComment(e.text))){
         const limits=state.meritLimits[id]??emptyMeritLimits();
         const prayer=e.kind==='bow'||(e.kind==='comment'&&isPrayerComment(e.text));
         if(prayer){
