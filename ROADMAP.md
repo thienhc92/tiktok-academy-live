@@ -1,3 +1,12 @@
+# Current milestone — offline temple event foundation
+
+MOCK/LIVE adapter boundary, identity/profile processing, transactional browser
+persistence and stable seating are implemented. Full tests/build and local browser
+recovery checks passed. LIVE remains unconfigured; no account or backend connected.
+Next: verify an authorized provider and anonymized payload contract, then scope a
+separate temple server repository/ingest before requesting actual connection approval.
+See docs/TEMPLE_LIVE_FOUNDATION.md; PR/CI state reported at handoff.
+
 # Current review — Đại Hùng Điện
 
 Replace the active photo with the owner's new PNG and recalibrate 108 real

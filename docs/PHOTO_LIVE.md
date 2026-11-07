@@ -1,3 +1,10 @@
+# Current event source and persistence
+
+The temple now uses a validated MOCK/LIVE boundary and transactional local
+persistence. Refresh no longer resets all mock points. LIVE remains unconfigured;
+see [current architecture and connection gates](TEMPLE_LIVE_FOUNDATION.md).
+Historical session-only descriptions below are superseded.
+
 # Current default — Đại Hùng Điện
 
 The active background is now `476F2A78-424C-424C-8954-C43DFEC82BC7.png`, with a

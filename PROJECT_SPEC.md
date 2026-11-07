@@ -1,3 +1,23 @@
+# Current increment — temple event foundation, no real TikTok
+
+Keep the Đại Hùng Điện PNG and 108 calibrated seats unchanged. Add a transport-
+independent, validated temple event path for join/comment/like/gift/leave and mock
+incense/flower using existing adapter/envelope and contribution rules. Profiles
+use stable string userId, nickname and avatar metadata; do not use names as keys.
+MOCK works normally; unconfigured LIVE must stay disconnected and retain MOCK.
+
+Acceptance: persistent scores/receipts/counters in one IndexedDB transaction,
+refresh/replay without duplicate contribution, safe missing identity/gift streak/
+cumulative likes and out-of-order presence. Leave frees a seat without deleting
+points. Vacancies fill immediately; contribution ranking coalesces to <=1 update
+per five seconds. Preserve all controls/layout/game rules, show Vietnamese source
+and storage diagnostics in simulator, validate full tests/build and browser DB/
+refresh scenarios. Research current public TikTok options with sources; no SDK,
+credentials, paid service, backend deploy or actual TikTok connection. Create PR.
+See docs/TEMPLE_LIVE_FOUNDATION.md for remaining approval/integration gates.
+
+# Previous visual milestone
+
 # Current increment — Đại Hùng Điện PNG and complete names
 
 Use the owner's exact `public/images/476F2A78-424C-424C-8954-C43DFEC82BC7.png`
