@@ -16,27 +16,11 @@ từ `3821EC21-C34F-4B9D-9C8B-278D76987EC7.png` sang
 - ☰ mở điều khiển: bật/tắt LIVE, khung 9:16 tùy chọn, fullscreen theo khả năng
   trình duyệt và ẩn điều khiển. Mặc định dùng toàn vùng ứng dụng, phù hợp iPad 3:4.
 
-## Vị trí Phật tử
+## Vị trí Phật tử và đóng góp — phiên bản hiện tại
 
-`liveModel.ts` lưu 24 điểm đệm được đo trực tiếp từ PNG gốc; đây là sức chứa của
-roster hiện có, không phải toàn bộ số đệm trong ảnh. Mặc định giữ 20 khách và thêm
-được 4 khách bằng mô phỏng. Chủ sở hữu không còn yêu cầu cố định 20 người.
-
-Mỗi hàng gồm ba cặp trái/phải; x dưới đây là tâm đệm, y là điểm tiếp xúc chân:
-
-| y (pixel gốc) | Cặp x trái/phải | Chiều cao nhân vật (pixel gốc) |
-| --- | --- | --- |
-| 909 | 435/654, 362/733, 287/809 | 56 |
-| 974 | 405/687, 305/783, 209/880 | 62 |
-| 1058 | 362/725, 250/837, 141/948 | 70 |
-| 1122 | 345/752, 218/881, 86/1014 | 78 |
-
-Chuẩn hóa x/1086 và y/1448. Với frame W×H, scale là
-`min(W/1086,H/1448)`, offset là `((W-1086*scale)/2,(H-1448*scale)/2)`.
-Điểm chân = offset + điểm gốc × scale; chiều cao cũng scale theo ảnh. Footer và
-letterbox không tự di chuyển hàng người. Bảng tên nằm ngay dưới điểm chân; hình
-nhân vật, sway animation, reduced motion và stable viewer ID được giữ nguyên.
-Khu bàn thờ phía trên y=800 và thảm đỏ không có chỗ ngồi.
+Đã thay 24 chỗ giới hạn bằng **108 tâm đệm thực tế**, xếp theo điểm đóng góp
+mô phỏng. Xem [bản đồ, công thức và kiểm chứng](PHOTO_SEATING.md).
+Phép chiếu contain và ảnh gốc giữ nguyên; không còn giới hạn 20/24 người.
 
 ## Tương tác và dữ liệu
 
@@ -45,11 +29,11 @@ Có top 3 tương tác phiên, hai lời nhắn gần nhất, thông báo 3 giâ
 icon hiệu ứng. ☰ cho chọn/thêm khách, bật/tắt tự động (mặc định tắt, mỗi 6,5 giây,
 dừng khi tab ẩn). Tắt LIVE/bật lại hoặc reload bắt đầu phiên mô phỏng mới.
 
-Reducer giữ nguyên: action/ID/text hợp lệ, chống trùng trong 256 ID gần nhất,
+Quy tắc cũ tiếp tục áp dụng: action/ID/text hợp lệ, chống trùng trong 256 ID gần nhất,
 ≤3 bình luận trong state, bộ đếm ≤999999. Không nối TikTok, thanh toán, XP hay
 backend; không đổi dữ liệu học viện. Các route 3D/LIVE/Academy cũ được giữ riêng.
 
-## Kiểm chứng của lần thay ảnh chính thức
+## Kiểm chứng lịch sử của lần thay ảnh chính thức
 
 - 5 kiểm thử Photo LIVE và 3 kiểm thử tiếng Việt qua.
 - `npm run build` qua toàn bộ TypeScript frontend/local/backend và Vite. Còn
@@ -63,5 +47,5 @@ backend; không đổi dữ liệu học viện. Các route 3D/LIVE/Academy cũ 
 - Không chạy lặp toàn bộ suite cục bộ cho thay đổi presentation này; CI bắt buộc
   tiếp tục chạy npm test, audit và build. Chưa kiểm Safari trên iPad vật lý.
 
-PR #16 giữ nháp theo yêu cầu chờ duyệt hình ảnh; không merge production hoặc
-triển khai backend. Không thay dependency, proxy, credentials hoặc Cloudflare Pages.
+PR #16 đã được chủ sở hữu chấp thuận và merge. Thay đổi xếp chỗ tiếp tục qua PR/CI;
+không triển khai backend. Không thay dependency, proxy, credentials hoặc Cloudflare Pages.
