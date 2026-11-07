@@ -6,6 +6,6 @@
 
 
 
-.pl-source-status{overflow-wrap:anywhere}.pl-source-status strong,.pl-source-status span{display:block;margin-top:3px;font-weight:400}.pl-source-status strong{color:#ffd69b}.pl-storage-warning{position:absolute;left:4%;top:19%;padding:4px 7px;background:#28170fe8;border-radius:5px;font-size:9px;z-index:60}.photo-live .pl-visitor{transition:left .65s ease,top .65s ease}.pl-name{transition:left .65s ease,top .65s ease}@media(prefers-reduced-motion:reduce){.photo-live .pl-visitor,.pl-name{transition:none}}
+.pl-source-status{overflow-wrap:anywhere}.pl-source-status strong,.pl-source-status span{display:block;margin-top:3px;font-weight:400}.pl-source-status strong{color:#ffd69b}.pl-storage-warning{position:absolute;left:4%;top:19%;padding:4px 7px;background:#28170fe8;border-radius:5px;font-size:9px;z-index:60}.photo-live .pl-visitor{transition:left .65s ease,top .65s ease,width .65s ease,height .65s ease}.pl-name{transition:left .65s ease,top .65s ease}@media(prefers-reduced-motion:reduce){.photo-live .pl-visitor,.pl-name{transition:none}}
 
 .pl-actions{grid-template-columns:repeat(4,minmax(0,1fr))}.photo-live .pl-actions button{gap:4px;font-size:clamp(10px,2.2cqw,13px)}

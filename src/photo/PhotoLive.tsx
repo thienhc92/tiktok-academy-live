@@ -68,6 +68,7 @@ export function PhotoLive({onControls,operator,photoAspect,initialVisitors}:{onC
     const labels=layoutSeatLabels(seating.seated.map(({seat})=>projected.get(seat.id)!),bounds.width,{bottom:bounds.height-bounds.footer-3,blocked:[bounds.chat]});
     const leaders=topContributors(participants);
     const selectedPerson=participants.find(p=>p.id===selected);
+    const highlighted=new Set(session.progress.map(c=>c.userId));
     const promoted=new Set(session.progress.filter(c=>c.rankLevel).map(c=>c.userId));
     const next=LIVE_ROSTER.find(p=>!state.visitors.includes(p.id));
     return <div ref={root} className="photo-live" data-hidden={hidden} style={{'--pl-footer-height':`${bounds.footer}px` } as React.CSSProperties}>
@@ -78,7 +79,7 @@ export function PhotoLive({onControls,operator,photoAspect,initialVisitors}:{onC
         <section className="pl-congregation" aria-label={t('Photo LIVE congregation')}>{seating.seated.map(({user:person,seat},index)=>{
             const slot=projected.get(seat.id)!;
             const pose=session.rituals.find(c=>c.userId===person.id&&c.kind==='bow')??session.rituals.find(c=>c.userId===person.id&&c.kind==='incense');
-            return <button key={person.id} className="pl-visitor" data-viewer-id={person.id} data-seat-id={seat.id} data-score={person.contributionScore} data-merit={person.meritScore} data-rank={person.rank} data-ritual={pose?.kind} aria-label={t('Photo LIVE choose person',person.name)} title={t('Photo LIVE person score',person.name,person.contributionScore)} aria-pressed={selected===person.id} onClick={()=>setSelected(person.id)} style={{left:`${slot.x}px`,top:`${slot.y}px`,height:`${slot.height}px`,width:`${slot.width}px`,zIndex:10+seat.row,animationDelay:`${index%7*-.8}s`} as React.CSSProperties}>
+            return <button key={person.id} className="pl-visitor" data-viewer-id={person.id} data-seat-id={seat.id} data-score={person.contributionScore} data-merit={person.meritScore} data-rank={person.rank} data-ritual={pose?.kind} data-highlighted={highlighted.has(person.id)} aria-label={t('Photo LIVE choose person',person.name)} title={t('Photo LIVE person score',person.name,person.contributionScore)} aria-pressed={selected===person.id} onClick={()=>setSelected(person.id)} style={{left:`${slot.x}px`,top:`${slot.y}px`,height:`${slot.height}px`,width:`${slot.width}px`,zIndex:10+seat.row,animationDelay:`${index%7*-.8}s`} as React.CSSProperties}>
                 <img src="/temple/devotee-realistic.webp" alt="" draggable={false}/>{pose&&<span className="pl-prayer-mark" key={pose.id} aria-hidden="true">🙏</span>}
             </button>;
         })}<div className="pl-name-layer">{seating.seated.map(({user:person,seat})=>{
@@ -90,7 +91,7 @@ export function PhotoLive({onControls,operator,photoAspect,initialVisitors}:{onC
         <aside className="pl-ranking" aria-label={t('Temple contribution ranking')}>
             <button className="pl-ranking-toggle" aria-expanded={rankingOpen} aria-controls="temple-contribution-top" onClick={()=>setRankingOpen(v=>!v)}>{t('Temple contribution ranking')}<span aria-hidden="true">{rankingOpen?'⌃':'⌄'}</span></button>
             {selectedPerson&&<div className="pl-selected-contribution" aria-label={t('Temple selected contribution')}><span>{selectedPerson.name}</span><b>{t('Temple contribution rank '+selectedPerson.rank)} · {t('Temple contribution points',selectedPerson.contributionScore)}</b></div>}
-            {rankingOpen&&<ol id="temple-contribution-top" className="pl-contribution-top">{leaders.map(person=><li key={person.id} data-viewer-id={person.id}><span>{person.name}</span><small>{t('Temple contribution rank '+person.rank)} · {t('Temple contribution points',person.contributionScore)}</small></li>)}</ol>}
+            {rankingOpen&&<ol id="temple-contribution-top" className="pl-contribution-top">{leaders.map((person,index)=><li key={person.id} data-place={index+1} data-viewer-id={person.id}><span>{person.name}</span><small>{t('Temple contribution rank '+person.rank)} · {t('Temple contribution points',person.contributionScore)}</small></li>)}</ol>}
         </aside>
         {notice&&<div className={`pl-notice pl-notice-${notice.kind}`} key={notice.id} role="status"><span aria-hidden="true">{({join:'🪷',like:'♥',incense:'🪔',flower:'🌸',wish:'✨',gift:'🎁',bow:'🙏'})[notice.kind]}</span><b>{t('Photo LIVE notice '+notice.kind,notice.name)}</b></div>}
         {notice&&notice.kind==='like'&&<div key={'effect-'+notice.id} className="pl-reactions" aria-hidden="true">{Array.from({length:6},(_,index)=><span key={index} style={{left:`${15+index*14}%`,animationDelay:`${index*.08}s`}}>{notice.kind==='like'?'♥':'🌸'}</span>)}</div>}
