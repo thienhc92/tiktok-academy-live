@@ -1,3 +1,10 @@
+# Current visual milestone — official background
+
+Use the owner's bundled portrait PNG with full-image contain sizing and measured
+cushion coordinates; preserve local mock interactions. Implementation and local
+portrait/landscape verification complete; see docs/PHOTO_LIVE.md and screenshots.
+Next: owner reviews iPad Safari composition; keep draft PR #16 unmerged meanwhile.
+
 # New request — true 3D temple
 
 - Build actual sanctuary geometry and a downloadable GLB from the new reference.

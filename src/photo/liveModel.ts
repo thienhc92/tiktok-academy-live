@@ -35,36 +35,34 @@ export function applyPhotoLive(state:PhotoLiveState, input:unknown):PhotoLiveSta
         notice:{id:event.id,kind:event.kind,viewerId:person.id,name:person.name,text},
     };
 }
-/** Seats calibrated to the portrait hall: two groups, with the red carpet clear. */
+/** Cushion centers measured on the unmodified official 1086 × 1448 PNG.
+ * Each pair is an actual left/right cushion, not an assumed symmetric grid.
+ * y is the devotee's floor contact point; the altar ends above source y=800.
+ */
+const CUSHION_ROWS = [
+    {feet:909, height:56, width:50, pairs:[[435,654],[362,733],[287,809]]},
+    {feet:974, height:62, width:60, pairs:[[405,687],[305,783],[209,880]]},
+    {feet:1058,height:70, width:70, pairs:[[362,725],[250,837],[141,948]]},
+    {feet:1122,height:78, width:80, pairs:[[345,752],[218,881],[86,1014]]},
+] as const;
 export function liveSlot(index:number) {
     if (!Number.isInteger(index)||index<0||index>=24) throw Error('Invalid photo LIVE slot');
-    const row=Math.floor(index/6), local=index%6, column=Math.floor(local/2), right=local%2===1;
-    const left=[[.43,.365,.30],[.405,.32,.235],[.38,.28,.18],[.355,.24,.125]][row][column];
-    const height=[.040,.044,.048,.052][row], feet=[.595,.665,.735,.805][row];
-    return {x:right?1-left:left,y:feet-height,height,width:[.05,.065,.08,.09][row],row,column,right};
+    const row=Math.floor(index/6), column=Math.floor(index%6/2), right=index%2===1;
+    const seat=CUSHION_ROWS[row];
+    const height=seat.height/1448;
+    return {x:seat.pairs[column][right?1:0]/1086,y:seat.feet/1448-height,
+        feet:seat.feet/1448,height,width:seat.width/1086,row,column,right};
 }
-/** Match the browser's centered object-fit transform, then keep all seats visible. */
-export function projectLiveSlots(width:number,height:number,aspect:number,cover:boolean,footerHeight=124) {
-    if (![width,height,aspect].every(n=>Number.isFinite(n)&&n>0)||!Number.isFinite(footerHeight)||footerHeight<0) throw Error('Invalid photo bounds');
-    const imageHeight=cover?Math.max(height,width/aspect):Math.min(height,width/aspect);
-    const imageWidth=imageHeight*aspect, left=(width-imageWidth)/2, top=(height-imageHeight)/2;
-    const nameHeight=14, gap=4;
-    const floorTop=Math.max(top+.55*imageHeight,120);
-    const floorBottom=Math.min(top+.86*imageHeight,height-footerHeight-nameHeight-6);
-    const first=top+.595*imageHeight, last=top+.805*imageHeight;
-    const compressed=first-.04*imageHeight<floorTop||last>floorBottom;
-    const start=compressed?Math.min(floorBottom-54,floorTop+Math.min(24,.04*imageHeight)):first;
-    const end=compressed?floorBottom:last, step=Math.max(18,(end-start)/3);
+/** The same centered contain transform as the image. UI never moves the seats. */
+export function projectLiveSlots(width:number,height:number,aspect:number) {
+    if (![width,height,aspect].every(n=>Number.isFinite(n)&&n>0)) throw Error('Invalid photo bounds');
+    const imageHeight=Math.min(height,width/aspect), imageWidth=imageHeight*aspect;
+    const left=(width-imageWidth)/2, top=(height-imageHeight)/2;
+    const nameHeight=Math.min(14,Math.max(9,imageWidth*.014));
     return Array.from({length:24},(_,index)=>{
-        const slot=liveSlot(index), aisle=[.455,.425,.395,.36][slot.row];
-        const edge=[.27,.20,.14,.08][slot.row];
-        const leftOuter=Math.max(4,left+edge*imageWidth), rightOuter=Math.min(width-4,left+(1-edge)*imageWidth);
-        const leftInner=Math.max(leftOuter+24,left+aisle*imageWidth-gap);
-        const rightInner=Math.min(rightOuter-24,left+(1-aisle)*imageWidth+gap);
-        const band=Math.max(24,slot.right?rightOuter-rightInner:leftInner-leftOuter), cell=band/3;
-        const seatWidth=Math.max(4,Math.min(slot.width*imageWidth,cell-gap));
-        const x=slot.right?rightInner+cell*(slot.column+.5):leftInner-cell*(slot.column+.5);
-        const figureHeight=Math.max(4,Math.min(slot.height*imageHeight,step-nameHeight-3));
-        return {x,y:start+slot.row*step-figureHeight,width:seatWidth,height:figureHeight+nameHeight,nameHeight,row:slot.row};
+        const slot=liveSlot(index);
+        return {x:left+slot.x*imageWidth,y:top+slot.y*imageHeight,
+            width:slot.width*imageWidth,height:slot.height*imageHeight+nameHeight,
+            nameHeight,row:slot.row};
     });
 }

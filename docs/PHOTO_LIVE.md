@@ -1,92 +1,67 @@
-# Chùa Online LIVE 2D trên ảnh đã chọn
+# Phật Tâm Live — ảnh chính thức và khách mô phỏng
 
-Chủ sở hữu đã chọn ảnh chính điện trên iPad và yêu cầu tiếp tục theo giao diện
-chùa trực tuyến trong ảnh TikTok tham khảo. Bản này dùng lại ảnh từ IndexedDB
-`chua-online-photo-v1`, không đổi schema/blob và không upload ảnh. Không cần gửi
-lại ảnh để dùng overlay trên cùng thiết bị và cùng URL preview.
+## Ảnh gốc
 
-## Bố cục và thao tác
+Ảnh chủ sở hữu tải lên main trong commit `04aa81a` đã được chuyển, không chỉnh sửa,
+từ `3821EC21-C34F-4B9D-9C8B-278D76987EC7.png` sang
+`public/images/phat-tam-live-background-ipad.png`.
 
-- Mặc định ảnh nền phủ toàn cửa sổ với `object-fit: cover`, giữ tỉ lệ và căn giữa;
-  có thể cắt mép. Khung 9:16 và contain là tùy chọn. Không còn tách ảnh phía trên
-  hoặc nối sàn. Tắt **Phủ kín khung** nếu cần nhìn trọn ảnh; tệp ảnh không bị sửa.
-- 20 khách mô phỏng ban đầu, tối đa 24, dùng roster ID và sprite có sẵn từ mô phỏng
-  cũ; bốn hàng tên cách nhau, không tràn ngang/đè hàng nút. Các sprite là artwork
-  được tạo ở mốc trước, không phải người thật trong ảnh chủ sở hữu.
-- Chạm nhân vật để chọn; dâng hương, dâng hoa, thả tim, gửi lời chúc tối đa 120 ký tự.
-  Hiển thị số tương tác phiên, ba khách tương tác và hai lời nhắn gần nhất.
-- Thông báo tham gia/hương/hoa/tim/lời chúc gọn, tự tắt sau 3 giây; tối đa sáu icon
-  hiệu ứng. Không có banner lớn hoặc âm thanh tự phát.
-- Nút ☰ phía trên mở điều khiển ảnh và bảng mô phỏng: chọn khách, thêm khách,
-  chạy/dừng tương tác tự động. Tự động mặc định **tắt**, chu kỳ 6,5 giây khi bật,
-  dừng timer khi tab ẩn. Chuyển động CSS tôn trọng reduced motion/hidden tab.
-- Tắt **Giao diện chùa LIVE** để về ảnh tĩnh. Bật lại mở phiên mô phỏng mới.
-  Reload cũng đặt lại số liệu mô phỏng; ảnh đã chọn vẫn giữ nguyên.
+- PNG 1086×1448; 3.119.937 byte.
+- Git blob: `1e49772a39e5297dc586820f2205f3ff5793fc4a`.
+- SHA256: `c5d875bd5b01e2e5c9c99ccb0025aaa67604f1bdf19e1f5329ce58601a9947a9`.
+- Mặc định chỉ render một ảnh này bằng `object-fit: contain`, căn giữa. Không
+  cover, zoom, ghép sàn hoặc kéo giãn. Khác tỷ lệ màn hình dùng nền nâu trống.
+- Không đọc ảnh IndexedDB cũ và không có ảnh thay thế khi lỗi. Không xóa dữ liệu
+  IndexedDB/localStorage cũ. Thiếu ảnh chính thức sẽ hiện lỗi đường dẫn cụ thể.
+- ☰ mở điều khiển: bật/tắt LIVE, khung 9:16 tùy chọn, fullscreen theo khả năng
+  trình duyệt và ẩn điều khiển. Mặc định dùng toàn vùng ứng dụng, phù hợp iPad 3:4.
 
-## Ranh giới mô phỏng
+## Vị trí Phật tử
 
-Tất cả khách/tim/hương/hoa/số liệu là giả lập và có nhãn rõ. Không có coin/giá tiền,
-thanh toán, điểm công đức hoặc hứa hẹn tâm linh. Bảng hoạt động chỉ đếm tương tác
-phiên, không đo lòng thành. Không nối TikTok hoặc các luồng XP/tiến trình học thuật.
+`liveModel.ts` lưu 24 điểm đệm được đo trực tiếp từ PNG gốc; đây là sức chứa của
+roster hiện có, không phải toàn bộ số đệm trong ảnh. Mặc định giữ 20 khách và thêm
+được 4 khách bằng mô phỏng. Chủ sở hữu không còn yêu cầu cố định 20 người.
 
-`liveModel.ts` là reducer thuần, xác thực action/ID/text trước cập nhật. Dùng ID
-ổn định từ roster, không dùng biệt danh làm khóa. Danh sách khách ≤24, lời nhắn ≤3
-trong state (UI hiển thị ≤2), hiệu ứng ≤6, bộ nhớ ID gần nhất ≤256, bộ đếm ≤999999.
-Chống trùng chỉ trong cửa sổ phiên gần nhất; không phải bảo đảm idempotency bền
-vững của backend. Không tiếp nhận event mạng, không lưu số liệu vào game hoặc DB ảnh.
+Mỗi hàng gồm ba cặp trái/phải; x dưới đây là tâm đệm, y là điểm tiếp xúc chân:
 
-## Kiểm chứng
+| y (pixel gốc) | Cặp x trái/phải | Chiều cao nhân vật (pixel gốc) |
+| --- | --- | --- |
+| 909 | 435/654, 362/733, 287/809 | 56 |
+| 974 | 405/687, 305/783, 209/880 | 62 |
+| 1058 | 362/725, 250/837, 141/948 | 70 |
+| 1122 | 345/752, 218/881, 86/1014 | 78 |
 
-- 114 kiểm thử qua; `npm run build` qua TypeScript frontend/local/backend và Vite.
-- Browser Chromium: mọi action, hết hạn notice/effect, bình luận có chuỗi HTML chỉ
-  hiển thị chữ, 20→24 khách/cap, simulator/hidden-tab pause, đổi chế độ ảnh tĩnh.
-- 768×1024, 390×844, 320×568, 1024×768, 1440×900: không cuộn ngang, các hộp tên
-  không chồng nhau hoặc đè footer, khung đúng 9:16. Kiểm cả nguồn ảnh dọc/ngang.
-- Reload giữ ảnh IndexedDB, không đổi sentinel localStorage cũ; không WebGL/GLB,
-  request ngoài origin hoặc page error. Fixtures QA **không phải ảnh của chủ sở hữu**
-  và không được đưa làm ảnh nền mặc định. Chưa đo FPS hoặc test Safari vật lý.
-- Vite vẫn cảnh báo chunk 3D >500 kB ở các route cũ; không tắt cảnh báo.
+Chuẩn hóa x/1086 và y/1448. Với frame W×H, scale là
+`min(W/1086,H/1448)`, offset là `((W-1086*scale)/2,(H-1448*scale)/2)`.
+Điểm chân = offset + điểm gốc × scale; chiều cao cũng scale theo ảnh. Footer và
+letterbox không tự di chuyển hàng người. Bảng tên nằm ngay dưới điểm chân; hình
+nhân vật, sway animation, reduced motion và stable viewer ID được giữ nguyên.
+Khu bàn thờ phía trên y=800 và thảm đỏ không có chỗ ngồi.
 
-PR #16 tiếp tục nháp, chưa merge production. Truy cập cùng alias preview để giữ
-ảnh đã chọn trên iPad; mở host preview mới sẽ có storage riêng và cần chọn lại ảnh.
-Các route `?experience=3d`, `?experience=live`, `?experience=academy` và dữ liệu cũ
-được giữ. Không dependency/dịch vụ trả phí hoặc backend deployment mới.
+## Tương tác và dữ liệu
 
-## Lịch sử: nối sàn 2D (đã thay bằng ảnh nền toàn màn hình)
+Chạm khách để chọn; dâng hương, dâng hoa, thả tim và gửi lời chúc tối đa 120 ký tự.
+Có top 3 tương tác phiên, hai lời nhắn gần nhất, thông báo 3 giây và tối đa sáu
+icon hiệu ứng. ☰ cho chọn/thêm khách, bật/tắt tự động (mặc định tắt, mỗi 6,5 giây,
+dừng khi tab ẩn). Tắt LIVE/bật lại hoặc reload bắt đầu phiên mô phỏng mới.
 
-Ảnh iPad của chủ sở hữu cho thấy mảng sàn nâu tách rời chính điện. Đã thay mảng này
-bằng chính Blob ảnh đang hiển thị, cắt lấy 8% dưới cùng trong CSS và kéo dài phần
-sàn đó xuống vùng khách. Điểm nối được tính từ tỉ lệ ảnh vừa decode, tương ứng đúng
-hàng pixel bắt đầu phần sàn trong ảnh (contain/cover có công thức riêng). Không
-resize/ghi lại ảnh, không tạo artwork mới hoặc upload. Chỉ sàn nối dài bị biến đổi
-hiển thị; tượng Phật và phần chính ảnh giữ tỉ lệ cũ.
+Reducer giữ nguyên: action/ID/text hợp lệ, chống trùng trong 256 ID gần nhất,
+≤3 bình luận trong state, bộ đếm ≤999999. Không nối TikTok, thanh toán, XP hay
+backend; không đổi dữ liệu học viện. Các route 3D/LIVE/Academy cũ được giữ riêng.
 
-Hàng xa nhỏ/hẹp và gần bàn thờ hơn; hàng gần lớn/rộng. Khách mới ở hàng trước điền
-vào giữa trước, vị trí khách cũ không nhảy khi thêm người. Mô phỏng/counter/comment,
-IndexedDB, các mode cũ và 3-second notice giữ nguyên.
+## Kiểm chứng của lần thay ảnh chính thức
 
-Browser QA: cùng URL Blob ở ảnh và nền sàn; điểm nối đúng vị trí 8% đáy, tất cả
-figure nằm trong vùng sàn ảnh, xa nhỏ/gần lớn, nhãn không chồng/footer ở 5 viewport.
-Kiểm thêm ảnh dọc/ngang, cover, reload và các tương tác. Fixture thử không phải ảnh
-chủ sở hữu. Cần xem đường nối thực tế trên iPad với ảnh đã chọn; ảnh khác có vùng
-sàn khác vị trí có thể cần chỉnh vùng cắt. Đây là nối dài sàn 2D, không tái tạo 3D.
+- 5 kiểm thử Photo LIVE và 3 kiểm thử tiếng Việt qua.
+- `npm run build` qua toàn bộ TypeScript frontend/local/backend và Vite. Còn
+  cảnh báo chunk >500 kB của route 3D lưu trữ; không tắt cảnh báo.
+- Chromium 768×1024 và 1024×768: HTTP 200; SHA256 bytes phục vụ khớp PNG gốc;
+  đúng một background contain, không canvas, không tràn ngang hoặc page error.
+  Kiểm tọa độ chân của cả 24 khách khớp phép chiếu sau resize/letterboxing.
+- Thử hương/hoa/tim/lời chúc, thêm đủ 24 khách, hết hạn thông báo; đều qua.
+- Đã xem screenshot thực tế với chính ảnh gốc tại
+  `docs/previews/phat-tam-live-ipad.png` và `phat-tam-live-landscape.png`.
+- Không chạy lặp toàn bộ suite cục bộ cho thay đổi presentation này; CI bắt buộc
+  tiếp tục chạy npm test, audit và build. Chưa kiểm Safari trên iPad vật lý.
 
-## Hiện tại: ảnh dọc phủ toàn cửa sổ
-
-Theo ảnh dọc mới của chủ sở hữu, bỏ toàn bộ lớp nối sàn. Một `img` duy nhất phủ
-viewport, căn giữa, cover mặc định; không kéo méo ảnh. Ảnh vẫn là Blob người dùng
-chọn trên iPad và không bị ghi lại/upload. Vì ảnh trong chat không có tệp workspace,
-người dùng đổi sang ảnh dọc mới bằng **Chọn ảnh chính điện**; không tự thay ảnh cũ.
-
-Bỏ dòng chữ trang trí giữa ảnh để giữ tượng rõ. Vị trí khách chia 4 hàng × 6 chỗ,
-hai bên thảm đỏ; phối cảnh xa/gần. `projectLiveSlots` khớp phép biến đổi cover/contain
-và vùng crop thực tế, chừa bình luận/footer. ResizeObserver theo dõi frame/footer,
-bỏ qua kích thước bằng 0 khi ẩn/đổi hướng; có fallback resize. Metadata ảnh lấy từ
-naturalWidth/Height, không đổi nội dung ảnh. Khi không đủ chỗ ở màn hình thấp, giảm
-kích thước nhân vật để giữ bảng tên không chồng; bố cục ưu tiên iPad dọc.
-
-Kiểm chứng Chromium: ảnh/phần khung trùng toàn viewport ở 5 kích thước, không có
-lớp sàn ghép, 24 bảng tên ở hai bên lối giữa không chồng/đè bình luận, 9:16/contain/
-photo-only vẫn dùng được; tương tác/thông báo/lưu-reload ảnh và storage cũ qua.
-Fixtures chỉ dùng QA, không thay ảnh chủ sở hữu. Chưa xác minh crop/keyboard/browser
-chrome trên iPad thật. Giữ cùng URL alias để dùng lại ảnh, mở ☰ để chọn ảnh dọc mới.
+PR #16 giữ nháp theo yêu cầu chờ duyệt hình ảnh; không merge production hoặc
+triển khai backend. Không thay dependency, proxy, credentials hoặc Cloudflare Pages.

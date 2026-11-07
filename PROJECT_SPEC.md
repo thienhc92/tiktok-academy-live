@@ -1,3 +1,23 @@
+# Current increment — official Phật Tâm Live background
+
+Bundle the owner's exact 1086×1448 PNG, uploaded on main as
+`3821EC21-C34F-4B9D-9C8B-278D76987EC7.png`, unchanged at
+`public/images/phat-tam-live-background-ipad.png`. This supersedes cover and
+local-photo selection for the default experience. Never render the old persisted
+photo or silently substitute another asset; leave stored data intact.
+
+Acceptance: one centered object-fit:contain image, full roof/altar/cushions visible,
+no crop/zoom/stretch or decorative frame. Warm letterboxing is permitted.
+Calibrate actual cushion contact points in normalized source coordinates and use
+the exact contain transform including offsets. Preserve devotee sprites, animation,
+stable identities and all session-only mock controls; no altar/carpet seating.
+The owner no longer requires exactly 20 visible people: use the existing bounded
+roster and available cushion positions. Verify HTTP 200, source integrity, portrait
+768×1024 plus landscape placement, interactions, targeted tests and final build;
+provide an actual screenshot. Keep PR #16 draft until visual acceptance.
+
+# Previous full-window background (superseded)
+
 # Current increment — one full-window portrait background
 
 Owner supplies a portrait temple photo with cushions and a red central aisle and

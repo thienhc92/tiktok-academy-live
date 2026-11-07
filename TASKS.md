@@ -239,3 +239,10 @@
 - [x] Project visitors into two perspective groups around the red carpet using image aspect/frame/footer bounds.
 - [x] 114 tests/build passed; browser verifies full-window cover, 24 labels/clear aisle at 5 sizes, 9:16/contain, interaction/photo persistence and zero-size observer recovery. Prepare draft PR update; remote checks reported at handoff.
 - [ ] Owner chooses the new portrait photo on iPad and checks real Safari appearance; no production merge.
+
+## Official Phật Tâm Live PNG and measured cushion seating
+- [x] Merge the owner's main upload without losing feature history; rename exact PNG into public/images (blob hash unchanged).
+- [x] Replace default local-photo/cover source with one official centered contain image; explicit missing-file error and no fallback. Preserve old storage.
+- [x] Measure 24 real cushion positions and project normalized floor contacts with contain letterbox offsets; preserve existing 20 initial/24 maximum mock roster and all controls.
+- [x] 5 Photo LIVE + 3 Vietnamese tests and full production/TypeScript build passed. Chromium HTTP 200/hash, 24 contacts, actions/joins/notice checks passed at 768×1024 and 1024×768; screenshots inspected.
+- [ ] Physical iPad Safari review and owner visual acceptance; PR #16 stays draft with no production merge. Required CI status reported at handoff.

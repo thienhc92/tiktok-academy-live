@@ -4,7 +4,7 @@ import { LIVE_ROSTER, LIVE_NOTICE_MS, applyPhotoLive, initialPhotoLive, projectL
 import type { LiveAction, LiveEvent } from './liveModel';
 import './live.css';
 
-export function PhotoLive({onControls,operator,photoAspect,cover}:{onControls:()=>void;operator:boolean;photoAspect:number;cover:boolean}) {
+export function PhotoLive({onControls,operator,photoAspect}:{onControls:()=>void;operator:boolean;photoAspect:number}) {
     const root=useRef<HTMLDivElement>(null), footer=useRef<HTMLElement>(null);
     const [bounds,setBounds]=useState({width:window.innerWidth,height:window.innerHeight,footer:124});
     useEffect(()=>{
@@ -13,7 +13,7 @@ export function PhotoLive({onControls,operator,photoAspect,cover}:{onControls:()
         if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(update);if(root.current)observer.observe(root.current);if(footer.current)observer.observe(footer.current);return ()=>observer.disconnect();}
         window.addEventListener('resize',update);return ()=>window.removeEventListener('resize',update);
     },[]);
-    const slots=projectLiveSlots(bounds.width,bounds.height,photoAspect,cover,bounds.footer+(bounds.height<650?28:52));
+    const slots=projectLiveSlots(bounds.width,bounds.height,photoAspect);
     const [state,setState]=useState(initialPhotoLive);
     const [selected,setSelected]=useState(LIVE_ROSTER[0].id);
     const [text,setText]=useState('');
@@ -60,7 +60,7 @@ export function PhotoLive({onControls,operator,photoAspect,cover}:{onControls:()
         <section className="pl-stats" aria-label={t('Photo LIVE activity')}><div><span>🪔 {t('Photo LIVE incense')}</span><b>{state.incense}</b></div><div><span>🌸 {t('Temple flowers')}</span><b>{state.flowers}</b></div></section>
         <section className="pl-congregation" aria-label={t('Photo LIVE congregation')}>{participants.map((person,index)=>{
             const slot=slots[index];
-            return <button key={person.id} className="pl-visitor" data-viewer-id={person.id} aria-label={t('Photo LIVE choose person',person.name)} aria-pressed={selected===person.id} onClick={()=>setSelected(person.id)} style={{left:`${slot.x}px`,top:`${slot.y}px`,height:`${slot.height}px`,width:`${slot.width}px`,zIndex:10+index,animationDelay:`${index%7*-.8}s`}}>
+            return <button key={person.id} className="pl-visitor" data-viewer-id={person.id} aria-label={t('Photo LIVE choose person',person.name)} aria-pressed={selected===person.id} onClick={()=>setSelected(person.id)} style={{'--pl-name-height':`${slot.nameHeight}px`,left:`${slot.x}px`,top:`${slot.y}px`,height:`${slot.height}px`,width:`${slot.width}px`,zIndex:10+index,animationDelay:`${index%7*-.8}s`} as React.CSSProperties}>
                 <img src="/temple/devotee-realistic.webp" alt="" draggable={false}/><span className="pl-name">{person.name}</span>
             </button>;
         })}</section>
