@@ -1,35 +1,77 @@
-# Engineering instructions
+# Engineering instructions — FAST DEVELOPMENT
 
-Use the existing isolated checkout; do not create worktrees unless requested. Preserve user changes and existing commits.
+Use the existing isolated checkout; do not create worktrees unless requested.
+Preserve user changes and existing commits.
 
-## Focused development workflow
+## Default workflow
 
-1. Before coding, read AGENTS.md and the relevant specification sections. Consult ROADMAP.md and TASKS.md for the requested milestone, and inspect only related source, tests and configuration.
-2. Prefer small, focused implementation tasks. Avoid unrelated refactoring or rewriting existing components.
-3. Reuse existing game engine rules, UI components, TypeScript types and utilities.
-4. Define concise, verifiable acceptance criteria before implementation.
-5. Implement the simplest maintainable solution that satisfies those criteria and preserves existing functionality/data.
-6. During development, run only targeted checks for affected behavior. Do not add tests for reversible cosmetic changes or tests that merely mirror the implementation.
-7. Scale local verification to the change using the table below. Run a production build once after the final application changes, rather than after every adjustment. Let required CI run the complete test suite for routine UI work; do not duplicate it locally without a concrete regression concern. After a fix, rerun failed or invalidated checks, not every previously passed check.
-8. Never skip type checking, relevant security validation or required CI checks. Keep passed, failed, blocked and unrun checks distinct; never claim unverified browser/device behavior works.
-9. Avoid unnecessary package installations, repeated full builds/audits, excessive logging and repetitive research. Reuse valid results until a change or failure justifies another run. Do not repeat the whole browser viewport matrix for a small CSS adjustment; check representative affected sizes.
-10. Add dependencies only when necessary; prefer existing or built-in capabilities and lockfile-based installs.
-11. Keep all visible UI text in natural Vietnamese using the central translation catalog. The active product is Chùa Online; keep the previous TikTok Academy implementation and data isolated for reference. Preserve portrait 9:16 presentation; optimize for iPad Safari, safe areas, reduced motion and user-initiated audio.
-12. For routine changes, use a focused feature branch and PR without requiring manual code review. Reuse an existing open feature PR when continuing the same work. Batch the finished implementation, verification and necessary documentation into one push. Enable auto-merge only after all required checks pass and within existing release authorization; preserve the current product-preview hold. Never bypass failures, force-push or merge an unverified head; verify the actual merge outcome. If auto-merge is unavailable, report why.
-13. Do not wait indefinitely for CI. Normally inspect status once after pushing and report pending/blocked checks without a polling loop. Do not rerun unchanged jobs or weaken protections to work around a runner queue. Do not create follow-up documentation commits merely to record CI results; use the PR status and handoff report. Leave pending or unauthorized releases unmerged.
-14. Obtain approval before introducing paid services, credentials, destructive or breaking changes, production security changes, or real TikTok connectivity. Default to mock mode. Preserve existing authorization for routine actions and the approved Cloudflare deployment workflow; new public deployment or hosting requires approval. Never put credentials in repository files, logs or chat.
-15. Finish with a concise Vietnamese report: changes, verification, commit/PR, actual release status and any blocker. Update specifications/roadmap/tasks when requirements or a meaningful milestone change; routine cosmetic fixes need only a concise PR/handoff note. Instructions-only tasks should not trigger application edits or unrelated documentation churn.
+Quick analysis → focused implementation → relevant tests → one final production
+build → commit → Pull Request → concise Vietnamese report.
+
+1. Read AGENTS.md and only the specification/source/tests needed for the request.
+   Define brief acceptance criteria. Inspect unrelated files only when a concrete
+   dependency or failure requires it.
+2. Combine related tasks into one run, branch and PR. Do not split cohesive work
+   into unnecessary milestones, intermediate PRs or repeated verification.
+3. Implement exactly the requested scope with the smallest maintainable changes.
+   Reuse existing engine rules, components, types and utilities. Do not refactor,
+   rewrite components or change architecture unless necessary for the request.
+4. Record unrelated defects for later; fix them now only if they directly block
+   the requested functionality. Do not add adjacent features.
+5. Run targeted unit tests during development. Run one final production build for
+   application changes. After an actual failure or fix that invalidates evidence,
+   rerun only necessary affected checks/build; do not repeat successful checks
+   without a concrete reason. Documentation-only exceptions are in the table below.
+6. Keep type checking, relevant security validation and all required CI checks.
+   For high-risk changes, add necessary persistence/authentication/integration or
+   full regression checks based on affected behavior; speed never justifies
+   skipping a necessary check or weakening a test/CI requirement.
+7. Capture screenshots only for UI changes. Default to iPad portrait 768×1024;
+   use other viewports only when requested or necessary for an affected behavior.
+   Do not run a broad viewport matrix or repeat cosmetic CSS/screenshot cycles
+   to tune minor details.
+8. Test time-dependent behavior with fake timers, explicit test clocks or mock
+   data. Never wait through real cooldowns, countdowns, animation TTLs or simulated
+   long runs. Synchronize on DOM/transaction readiness instead of adding sleeps;
+   advance/freeze the relevant animation frame for visual checks.
+9. Avoid unnecessary installs, dependencies, repeated full builds/audits, verbose
+   logs and repetitive research. Reuse valid evidence until changed code or a
+   concrete failure invalidates it. Prefer installed/free tools.
+10. Keep visible UI text in Vietnamese. Preserve the current Chùa Online portrait
+    experience, full-image contain rendering, 108 calibrated seats and existing
+    9:16 Broadcast option. No application changes in instructions-only tasks.
+11. Add/update documentation only when requested or necessary for a changed
+    contract, migration, setup or material operational risk. Do not automatically
+    expand specs/roadmaps/tasks or write long reports for routine changes.
+12. Use a focused feature branch and PR; reuse an existing open PR for the same
+    work. Batch finished code and verification into one push. Do not merge, enable
+    auto-merge or deploy production without explicit owner approval for that
+    release and its connected deployment side effects. Never bypass failing checks,
+    force-push or reset history. Keep requested review/preview holds intact.
+13. Inspect CI once after pushing; report queued/blocked checks accurately instead
+    of polling or waiting indefinitely. Do not rerun unchanged jobs or create
+    documentation-only commits merely to record CI results. Provide a verified
+    preview link when available; label pending/unavailable previews honestly.
+14. Obtain approval for paid services, credentials, destructive/breaking changes,
+    production security changes or real TikTok connectivity. Keep LIVE locked and
+    MOCK working until specifically approved. Never put secrets in Git, UI or logs.
+15. Final report, in Vietnamese, includes only: completed tasks; changed files;
+    test/build results; PR and preview links if available; unresolved issues if any.
+    Keep status concise and distinguish passed, failed, pending and unrun checks.
 
 ## Local verification by change type
 
 | Change | Necessary local checks |
 | --- | --- |
-| Instructions/documentation only | `git diff --check` and review the changed scope. No application tests, build or browser run. |
-| CSS, spacing, imagery or copy without behavior changes | Inspect the affected UI in one representative portrait and one landscape size when relevant; exercise only affected controls. Build once at the end. No full local regression suite or new cosmetic unit tests. |
-| Component behavior or isolated game rule | Run the relevant existing tests and a focused browser flow if needed; build once at the end. Full regression runs in required CI. |
-| Shared game engine, persistence, authentication, dependencies or CI configuration | Run full `npm test` and the final build locally, plus security/integration checks relevant to the risk. |
+| Instructions/documentation only | Review scope and `git diff --check`; no application tests, build, browser or screenshot. |
+| UI/CSS/copy/imagery | Relevant behavior tests if needed, one 768×1024 visual check/screenshot, one final build. |
+| Isolated component/game rule | Relevant unit tests, focused browser flow only if needed, one final build; screenshot only if UI changed. |
+| Persistence/authentication/shared engine/dependencies/CI | Relevant unit plus necessary security/integration/regression checks; run the full suite when risk warrants it, then one final build. |
 
-Explicit task requirements and concrete failures can justify broader checks. Never skip required CI, type checking or relevant security validation, and never describe an unrun check as passed.
+Explicit task requirements and concrete failures can justify additional checks.
+Never claim physical iPad Safari behavior or a deployment was verified without
+successful evidence. Required GitHub CI remains mandatory even when local checks
+are targeted.
 
 ## Architecture and safety invariants
 
