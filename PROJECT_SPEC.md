@@ -1,3 +1,27 @@
+# Current increment — contribution-ranked cushion seating
+
+Keep the exact official PNG and centered contain rendering unchanged. Replace
+24 reserved slots with all 108 cushion centers visible inside the source image:
+14 rows, with the last two rows containing six usable centers each. Two tiny
+edge fragments with off-image centers are not seats. Every seat has stable id,
+normalized x/y contact, normalized scale, zone and rankPriority.
+
+Acceptance: user scores come only from validated session mock actions: incense 5,
+flower 8, like 1, gift coins ×10 (configurable). Join/wish score zero. Keep academic
+XP separate. Sort descending score with stable arrival-order ties, then assign
+seats descending priority: front rows dominate, center wins within each row.
+Capacity comes from the map; excess users wait and can displace lower scores;
+fewer users leave seats empty. Keep sprites/animation and all previous controls,
+comments and activity counters. Hide only colliding name labels; tapping/selecting
+prioritizes that name. Validate identity/gift amounts/duplicate deliveries, seat
+priority, under/over-capacity, projection and labels; build and inspect actual
+768×1024 screenshot. No new dependency, real TikTok, paid gifts or backend.
+
+PR #16 was accepted by the owner, merged as 9eb8fdb and deployed successfully.
+Use the existing safe routine PR/CI workflow for this feature.
+
+# Previous official-background milestone
+
 # Current increment — official Phật Tâm Live background
 
 Bundle the owner's exact 1086×1448 PNG, uploaded on main as

@@ -1,3 +1,17 @@
+# Current milestone — contribution-ranked seating
+
+Map the full official cushion floor, derive capacity from the map, assign by mock
+contribution and keep overflow guests waiting. Implementation, targeted tests,
+production build and iPad/landscape browser verification complete. See
+`docs/PHOTO_SEATING.md`; required CI/PR status is reported at handoff.
+Next: inspect real iPad readability with a full congregation, then tune label
+visibility if needed. No real connector or production player-data changes.
+
+# Completed release
+
+Owner accepted the official-image presentation; PR #16 merged as 9eb8fdb and
+Cloudflare deployment passed. Historical preview-hold notes below are superseded.
+
 # Current visual milestone — official background
 
 Use the owner's bundled portrait PNG with full-image contain sizing and measured

@@ -246,3 +246,12 @@
 - [x] Measure 24 real cushion positions and project normalized floor contacts with contain letterbox offsets; preserve existing 20 initial/24 maximum mock roster and all controls.
 - [x] 5 Photo LIVE + 3 Vietnamese tests and full production/TypeScript build passed. Chromium HTTP 200/hash, 24 contacts, actions/joins/notice checks passed at 768×1024 and 1024×768; screenshots inspected.
 - [ ] Physical iPad Safari review and owner visual acceptance; PR #16 stays draft with no production merge. Required CI status reported at handoff.
+
+
+## Full cushion map and contribution-ranked seating
+- [x] Map 108 usable source-image cushion centers across 14 rows, with stable IDs, normalized contacts/scale, zones and row-first/center-first priority. Exclude only two off-image-center fragments.
+- [x] Replace fixed 20/24 capacity with seat-derived mock occupancy; preserve roster identities and create extra anonymous fixtures for waitlist testing.
+- [x] Validated session scores: incense 5, flower 8, like 1, mock coin 10; no academic XP changes. Preserve all action counters, comments and bounded duplicate receipts.
+- [x] Stable descending-score allocation, empty seats, overflow waiting/replacement; collision-aware names and perspective sprites.
+- [x] 11 Photo LIVE + 3 Vietnamese tests passed; production/TypeScript build passed. Chromium 108 floor contacts, waitlist displacement, score calculation, label collisions and existing actions passed at 768×1024 and 1024×768. Screenshots inspected.
+- [ ] Required CI/PR/merge reported at handoff; physical iPad Safari crowd-readability verification remains pending.
