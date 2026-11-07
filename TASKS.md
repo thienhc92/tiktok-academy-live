@@ -274,3 +274,12 @@
 - [x] Review official TikTok products/webhook events and current unofficial connector README/license boundaries; document permissions, identity uncertainty, hosting and approval gates.
 - [x] 131 full tests and production/TypeScript build passed; Miniflare required elevated localhost execution. Browser: refresh/leave/rejoin, no external requests, 30 concurrent IndexedDB transactions, rollback/replay/corrupt preservation and storage failure passed.
 - [ ] Required PR checks/merge state reported at handoff. Real provider, server integration, production persistence/retention, physical iPad verification and actual TikTok connection remain unimplemented/unapproved.
+
+
+## MOCK rituals / activity merit / stable seat changes
+- [x] Bow button and exact prayer-comment recognition, per-person anchored 2D gesture and finite incense/lotus effects. Max 6 cues, 2 smoke puffs; compact notices avoid all Buddha faces.
+- [x] Separate merit 2/5/10/1 from contribution/XP; persistent heart quotas and bow cooldown, mock gift tiers 1/5/10/30 with no merit purchase. User projection includes merit/rank/seatId.
+- [x] Snapshot v2 migration retains old balances/profiles/receipts. Quota/score/receipt share one transaction; transient cues never replay.
+- [x] Rebalance only meaningful contribution changes after cooldown, wait for rituals to end, preserve 108 seats/waitlist and existing sprite/background assets.
+- [x] 143 full tests + final TypeScript/production build passed. Browser isolated effects/anchors/spam/refresh/cleanup/LIVE lock passed; real IndexedDB migration/rollback/108 simultaneous actions/replay passed. Simulated >66-minute run bounded; screenshots inspected.
+- [ ] Draft PR/preview and CI reported at handoff. Owner visual review and physical iPad Safari/FPS pending; no auto-merge or production deploy.

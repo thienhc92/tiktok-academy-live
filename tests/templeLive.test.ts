@@ -47,9 +47,9 @@ test('cumulative likes survive restart, establish baseline, and ignore smaller/r
     let s=seed();const e=event('l1','like');
     const cumulative=(eventId:string,total:number,scope:'viewer'|'room'='viewer')=>({...e,eventId,likes:{mode:'cumulative',counterId:'stable-counter',total,scope}});
     s=apply(s,cumulative('1',100));assert.equal(s.game.likes,0);
-    s=JSON.parse(JSON.stringify(s));s=apply(s,cumulative('2',107));assert.equal(s.game.likes,7);
+    s=JSON.parse(JSON.stringify(s));s=apply(s,cumulative('2',107));assert.equal(s.game.likes,1);
     s=apply(s,cumulative('3',104));s=apply(s,cumulative('4',107));s=apply(s,cumulative('5',999,'room'));
-    assert.equal(s.game.likes,7);assert.equal(s.game.contributionScore[e.viewer.id!],7);
+    assert.equal(s.game.likes,1);assert.equal(s.game.contributionScore[e.viewer.id!],1);
 });
 test('gift streak final pays once across new message IDs/restart, checks consistent valuation',()=>{
     let s=seed();const e=event('g1','gift');assert.equal(e.kind,'gift');
@@ -61,8 +61,8 @@ test('gift streak final pays once across new message IDs/restart, checks consist
 });
 test('parallel repository updates serialize without losing points; MOCK/LIVE snapshots remain separate',async()=>{
     const repo=new MemoryTempleRepository(),initial=seed();
-    await Promise.all(Array.from({length:30},(_,i)=>repo.transact('MOCK',initial,s=>processTempleEvent(s,event('parallel-'+i,'like'),now))));
-    const r=await repo.transact('MOCK',initial,s=>({state:s,outcome:'processed'}));assert.equal(r.state.game.likes,30);
+    await Promise.all(Array.from({length:30},(_,i)=>repo.transact('MOCK',initial,s=>processTempleEvent(s,event('parallel-'+i,'flower'),now))));
+    const r=await repo.transact('MOCK',initial,s=>({state:s,outcome:'processed'}));assert.equal(r.state.game.flowers,30);
     const live=createTempleState('LIVE','live-session');
     const l=await repo.transact('LIVE',live,s=>({state:s,outcome:'processed'}));assert.equal(l.state.game.visitors.length,0);assert.equal(l.state.game.likes,0);
 });
