@@ -1,0 +1,10 @@
+# Chính điện 3D
+
+`sanctuary.glb` được dựng riêng bằng `tools/build_shrine.py`, tham khảo bố cục
+ảnh người dùng. Không chứa ảnh tham khảo, model bên thứ ba hay texture từ CDN.
+Mesh và texture thủ tục được nhúng trong GLB 2.0; trục Y hướng lên, đơn vị mét.
+
+Tệp khoảng 11,3 MiB, 56 nhóm mesh, khoảng 462 nghìn tam giác. Không dùng Draco.
+Xem hướng dẫn tái tạo, giới hạn hình ảnh và hiệu năng tại `docs/TEMPLE_3D.md`.
+
+Phần tượng v2: `tools/sculpt_buddha.py`; xem `docs/SCULPTURE_V2.md` cho bản nguồn chi tiết.

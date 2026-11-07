@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 850" fill="none">
+<defs>
+ <linearGradient id="bg" x2="0" y2="850" gradientUnits="userSpaceOnUse"><stop stop-color="#170f0a"/><stop offset=".5" stop-color="#694124"/><stop offset="1" stop-color="#352014"/></linearGradient>
+ <linearGradient id="gold" x1="260" y1="140" x2="530" y2="600" gradientUnits="userSpaceOnUse"><stop stop-color="#fff3ba"/><stop offset=".3" stop-color="#eac16b"/><stop offset=".6" stop-color="#b67d2d"/><stop offset=".85" stop-color="#f0cc7b"/><stop offset="1" stop-color="#8d561e"/></linearGradient>
+ <linearGradient id="robe" x1="300" y1="250" x2="510" y2="550" gradientUnits="userSpaceOnUse"><stop stop-color="#f5d681"/><stop offset=".55" stop-color="#b77b2e"/><stop offset="1" stop-color="#f4ce76"/></linearGradient>
+ <linearGradient id="wood"><stop stop-color="#271309"/><stop offset=".45" stop-color="#98663a"/><stop offset=".7" stop-color="#623b20"/><stop offset="1" stop-color="#26140b"/></linearGradient>
+ <linearGradient id="lotus" x2="0" y2="1"><stop stop-color="#fff2cc"/><stop offset=".5" stop-color="#d1a051"/><stop offset="1" stop-color="#6f4019"/></linearGradient>
+ <radialGradient id="halo"><stop stop-color="#fff6bc" stop-opacity=".65"/><stop offset=".6" stop-color="#edc671" stop-opacity=".16"/><stop offset=".93" stop-color="#d8ac50" stop-opacity=".35"/><stop offset="1" stop-color="#d8ac50" stop-opacity="0"/></radialGradient>
+ <radialGradient id="glow"><stop stop-color="#ffeaa6" stop-opacity=".5"/><stop offset="1" stop-color="#ffeaa6" stop-opacity="0"/></radialGradient>
+ <pattern id="wall" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M20 0 40 20 20 40 0 20Z" stroke="#b8904a" stroke-opacity=".12"/><circle cx="20" cy="20" r="5" stroke="#b8904a" stroke-opacity=".12"/></pattern>
+ <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r="2" fill="#e5c27e" fill-opacity=".45"/></pattern>
+ <g id="flower"><path d="M0 20C-38 7-37-18-17-12-20-42 4-45 8-15 33-39 48-18 24-1 56-5 51 22 24 22Z" fill="#b98a7f"/><path d="M0 20C-20-6-6-16 8 2 18-20 33-6 17 18" fill="#e1b3a0"/><path d="M8 20 6 94" stroke="#798169" stroke-width="3"/><path d="M7 61C-39 28-47 59 7 74M7 74C46 35 57 65 7 84" fill="#64745b"/></g>
+ <g id="leaf"><path d="M0 0Q-44-52-27-73 3-59 0 0Z" fill="#687355"/><path d="M0 0Q26-84 50-65 50-24 0 0Z" fill="#87916b"/></g>
+</defs>
+<path fill="url(#bg)" d="M0 0h800v850H0z"/><path fill="url(#wall)" d="M0 0h800v850H0z"/>
+<!-- Carved timber columns and crossbeam -->
+<path d="M0 18h800v28H0zM0 65h800v10H0z" fill="url(#wood)" stroke="#b28a4c"/>
+<path d="M23 0h65v780H23zM712 0h65v780h-65z" fill="url(#wood)" stroke="#b28a4c"/>
+<path d="M38 35v720M72 35v720M728 35v720M761 35v720" stroke="#d2ae6a" stroke-opacity=".4"/>
+<path d="M0 754h800v18H0zM0 786h800v18H0zM0 827h800v23H0z" fill="url(#wood)" stroke="#b38c55"/>
+<!-- Halo -->
+<circle cx="400" cy="317" r="255" fill="url(#halo)"/>
+<circle cx="400" cy="317" r="229" stroke="#d4af64" stroke-opacity=".6"/>
+<circle cx="400" cy="317" r="218" stroke="#e9c67c" stroke-width="2" stroke-dasharray="1 9"/>
+<circle cx="400" cy="317" r="207" stroke="#d4af64" stroke-opacity=".3"/>
+<g stroke="#e2bc6d" stroke-opacity=".3"><path d="M400 75v28M400 531v28M158 317h28M614 317h28M230 147l20 20M550 467l20 20M230 487l20-20M550 167l20-20"/><path d="M306 94l10 26M484 514l10 26M177 223l26 10M597 401l26 10M177 411l26-10M597 233l26-10M306 540l10-26M484 120l10-26"/></g>
+<!-- Bells -->
+<g stroke="#ba9251"><path d="M142 76v98M658 76v98"/><path d="M121 174q21-20 42 0l12 93q-33 22-66 0Z" fill="url(#gold)"/><path d="M637 174q21-20 42 0l12 93q-33 22-66 0Z" fill="url(#gold)"/><path d="M112 252q30 15 60 0M628 252q30 15 60 0"/><circle cx="142" cy="283" r="4" fill="#d9b16c"/><circle cx="658" cy="283" r="4" fill="#d9b16c"/></g>
+<!-- Seated Buddha, original stylized illustration -->
+<ellipse cx="400" cy="600" rx="182" ry="49" fill="url(#glow)"/>
+<path d="M337 314q-29 24-36 91l-69 98q-31 48 56 54l112-15 112 15q87-6 56-54l-69-98q-7-67-36-91Z" fill="url(#robe)" stroke="#f8df9e" stroke-opacity=".65" stroke-width="2"/>
+<path d="M375 297v29q25 22 50 0v-29" fill="url(#gold)"/>
+<path d="M356 233q-10-34 7-55 36-38 73 0 18 24 8 55l-4 48q-8 31-40 35-32-4-40-35Z" fill="url(#gold)"/>
+<path d="M355 231q-19-18-13 15 2 17 15 21M445 231q19-18 13 15-2 17-15 21" fill="url(#gold)" stroke="#c28e3f"/>
+<path d="M355 217q-6-49 12-63 5-16 20-19-1-32 13-38 14 6 13 38 15 3 20 19 18 14 12 63-16-8-20-32-23 23-48 0-4 24-22 32Z" fill="#624323"/>
+<path d="M355 217q-6-49 12-63 5-16 20-19-1-32 13-38 14 6 13 38 15 3 20 19 18 14 12 63" fill="url(#dots)"/>
+<path d="M369 237q10-8 22-2M409 235q12-6 22 2M371 246q10 7 19 0M410 246q9 7 19 0" stroke="#805629" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M400 242v21l-6 3M389 283q11 8 22 0" stroke="#a27436" stroke-width="2" stroke-linecap="round"/>
+<circle cx="400" cy="223" r="3" fill="#fff0bc"/>
+<path d="M369 322q-18 47-47 77M431 322q12 43 45 80M361 340q17 29 45 52M360 365q-2 39 13 68M437 351q-13 56-11 88M348 426q46 21 103 0" stroke="#8e5a25" stroke-opacity=".65" stroke-width="3"/>
+<path d="M318 399q2 39 41 67l46 7q15-7 1-17l-37-11-28-54M482 399q-2 39-41 67l-46 7q-15-7-1-17l37-11 28-54" fill="url(#gold)" stroke="#ca9a49" stroke-width="2"/>
+<path d="M260 509q72-27 140 4 68-31 140-4M280 532q55-19 112-4M408 528q57-15 112 4" stroke="#fff0b5" stroke-opacity=".6" stroke-width="3"/>
+<!-- Lotus throne -->
+<path d="M261 573q139 45 278 0l-19 50H280Z" fill="url(#gold)"/>
+<g fill="url(#lotus)" stroke="#d2a85e"><path d="M400 603q-55-49 0-81 55 32 0 81Z"/><path d="M388 604q-73-27-69-72 64 0 69 72Z"/><path d="M412 604q73-27 69-72-64 0-69 72Z"/><path d="M363 601q-83-4-91-41 58-18 91 41Z"/><path d="M437 601q83-4 91-41-58-18-91 41Z"/><path d="M337 604q-72 18-95-19 53-23 95 19Z"/><path d="M463 604q72 18 95-19-53-23-95 19Z"/></g>
+<ellipse cx="400" cy="627" rx="137" ry="17" fill="url(#gold)" stroke="#f4d48e"/>
+<!-- Flowers -->
+<g opacity=".95"><use href="#leaf" x="156" y="698"/><use href="#leaf" x="645" y="698"/><use href="#flower" x="126" y="584"/><use href="#flower" x="182" y="609"/><use href="#flower" x="94" y="645"/><use href="#flower" x="216" y="655"/><use href="#flower" x="666" y="584"/><use href="#flower" x="610" y="609"/><use href="#flower" x="701" y="645"/><use href="#flower" x="578" y="655"/></g>
+<path d="M104 709h118l-15 43h-87ZM578 709h118l-16 43h-87Z" fill="url(#gold)" stroke="#e9c377"/>
+<!-- Candles and altar -->
+<g fill="#edcf94"><rect x="266" y="641" width="11" height="63" rx="3"/><rect x="523" y="641" width="11" height="63" rx="3"/></g>
+<path d="M272 644q-13-13 0-29 13 16 0 29M528 644q-13-13 0-29 13 16 0 29" fill="#fff1b3"/>
+<circle cx="272" cy="633" r="40" fill="url(#glow)"/><circle cx="528" cy="633" r="40" fill="url(#glow)"/>
+<path d="M252 705h40v8h-40zM508 705h40v8h-40z" fill="url(#gold)"/>
+<path d="M320 691h160l-18 58H338Z" fill="url(#gold)" stroke="#e8c078"/>
+<path d="M353 694v-54M375 694v-65M400 694v-72M425 694v-65M447 694v-54" stroke="#e9ba77" stroke-width="3"/>
+<path d="M375 629q-18-37 0-69t0-63M425 629q18-37 0-69t0-63" stroke="#e2d6bc" stroke-opacity=".18" stroke-width="3"/>
+<path d="M89 752h622v17H89z" fill="url(#gold)"/><path d="M108 769h584v29H108z" fill="url(#wood)" stroke="#ba9251"/>
+</svg>

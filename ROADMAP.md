@@ -1,3 +1,27 @@
+# Current visual milestone — official background
+
+Use the owner's bundled portrait PNG with full-image contain sizing and measured
+cushion coordinates; preserve local mock interactions. Implementation and local
+portrait/landscape verification complete; see docs/PHOTO_LIVE.md and screenshots.
+Next: owner reviews iPad Safari composition; keep draft PR #16 unmerged meanwhile.
+
+# New request — true 3D temple
+
+- Build actual sanctuary geometry and a downloadable GLB from the new reference.
+- Verify orbit/zoom, camera presets, portrait/landscape fit and local-only assets.
+- Refine sculpture, architectural carving and materials after the owner reviews
+  the model; physical iPad Safari performance remains an explicit validation task.
+
+The previous 2.5D LIVE simulation remains a separate route, not the default 3D scene.
+
+# Active direction — Chùa Online
+
+1. Portrait visual MVP inspired by the supplied temple reference: original local altar illustration, 52 layered realistic visitor sprites, reflection card, mock wishes and offerings.
+2. Review the visual direction on iPad; refine artwork, robe detail, camera and readable names based on the owner's feedback.
+3. Agree temple-specific interaction rules before designing persistence or backend integration. No real TikTok or public backend deployment in this stage.
+
+Existing school implementation and progress are retained independently. TASK-021 school staging deployment is paused by the owner's change of product direction. Earlier roadmap entries below are historical context.
+
 # Development roadmap
 
 Each milestone ends with updated TASKS.md, verification evidence, a reviewable commit and remaining risks. Implementation does not imply browser validation.
@@ -55,3 +79,46 @@ origin Pages chính xác, ingress đóng; hướng dẫn Secrets/rollback từ S
 và ngân sách/quota. Chưa triển khai, chưa xác minh account Cloudflare. Triển khai
 kín và mở endpoint cần hai phê duyệt riêng. Compaction và thử tải dài hạn vẫn ở
 backlog hardening; xem docs/CLOUDFLARE_STAGING.md.
+
+Reference-fidelity refinement replaces the rejected flat illustration/regular grid
+with realistic local imagery, 52 visitor sprites, calligraphy and mock LIVE chrome.
+The screenshot frame and overlay anchors are reproduced explicitly; this is not a
+claim of 100% identity. Original source assets/app URL remain necessary for exact
+matching. Existing draft PR #16 stays unmerged while the visual direction is reviewed.
+
+
+3D visual refinement: camera constrained below the roof with accurate manual/preset
+state, wider central aisle, revised sculpture/lotus and baked timber PBR textures.
+Static shadows and restrained exposure/reflection improve depth. Next visual gate:
+owner comparison on iPad; high-quality sculpted Buddha/wood carvings and detailed
+landscape assets remain needed for photoreal fidelity. Keep PR #16 draft.
+
+
+Owner-approved sculpture rebuild: original continuous facial/bust/drapery surfaces,
+local seated-leg sculpt union, anatomically tapered hands/arms and a separately
+sampled editable source. Web mesh keeps the existing rendering budget; no connector
+or game changes. Acceptance remains visual comparison on iPad; higher mesh density
+alone does not certify photoreal quality.
+
+
+Owner pauses 3D and requests the original 2D reference. Default becomes a still
+photo viewer; 3D remains at ?experience=3d. Missing landscape source file is the
+remaining content blocker. Device-local photo selection provides an iPad path
+without uploading images. Await further product direction; no new gameplay.
+
+
+New owner direction: compose a 2D temple LIVE simulation over the already-selected
+local photo. Reuse roster/sprites, bounded mock interactions and comments; no connector
+or payment. Preserve photo-only/3D/LIVE/Academy modes. Next gate: owner iPad visual
+review of the 9:16 arrangement, then follow-up product direction.
+
+
+Layout correction after iPad review: replace detached brown floor with a source-photo
+floor continuation, align the seam and arrange seated visitors in perspective. No
+new game rules. Next: review the seam/placement on owner's iPad, keep PR #16 draft.
+
+
+New portrait reference supersedes the floor-stitching layout: one full-window image,
+cover by default, optional contain/9:16; projected seats flank the central carpet.
+No new gameplay. Next: owner selects this portrait image through the existing local
+picker and reviews the framing on iPad; keep PR #16 draft.

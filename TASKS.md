@@ -158,3 +158,91 @@
 - [x] 99 kiểm thử qua (22 realtime/staging), TypeScript frontend/local/backend và production build qua; audit 0 lỗ hổng.
 - [ ] CI/PR/merge: xem kết quả GitHub khi xuất bản, chỉ merge khi checks đạt.
 - [x] Không triển khai; không tạo/cấp/đổi secret, endpoint hoặc dịch vụ trả phí; Pages settings và mã ứng dụng giữ nguyên.
+
+## Product pivot — Chùa Online visual MVP
+- [x] Default temple experience; preserve Academy implementation at a separate legacy URL and leave its storage untouched.
+- [x] Original local golden altar SVG, 28 procedural gray-robed visitors and stable nickname labels.
+- [x] Portrait 9:16, compact mock interactions, three-second notices, reflection cards and wish composer.
+- [x] Vietnamese catalog, optional synthesized bell, operator controls, fullscreen fallback, reduced motion/hidden-tab rendering.
+- [x] 101 tests and production build passed; Chromium verified 5 viewports, non-overlapping labels, interactions and preservation of existing storage.
+- [ ] Draft PR/CI verification; no automatic production merge for this product pivot.
+- [ ] Owner review of the new product direction before merging the default experience into production.
+- [ ] Physical iPad Safari and real screen-sharing validation.
+- Paused: TASK-021 school backend deployment. No Cloudflare deployment, credentials or live TikTok connection added.
+
+## Reference-fidelity refinement (owner requests exact screenshot match)
+- [x] Replace flat temple/low-poly people with local generated realistic artwork and two visitor sprites.
+- [x] Reproduce 888×1280 capture, 720×1280 inner scene, fortune overlay anchors, calligraphy, clustered crowd/foreground and mock LIVE chrome.
+- [x] 52 stable IDs, local mock follow/like/gift/wish/card interactions; no external requests or saved Academy data changes.
+- [x] Charm font self-hosted with OFL; no dependency/service added.
+- [x] 102 tests, TypeScript/build and audit passed; browser verified 6 viewports, frame/card anchors, simulation interactions, reduced/hidden motion, no external calls and unchanged Academy save.
+- [ ] Draft PR/CI status: update existing PR #16; do not merge until owner accepts the revised visuals.
+- [ ] Exact-match certification blocked by absence of original artwork/models/fonts/icons; do not label this 100% identical.
+
+## True 3D sanctuary from the new landscape reference
+- [x] Versioned Blender generator, original sculpture, lotus/halo, hall/roof, altar, flowers, lamps and exterior geometry.
+- [x] Self-contained GLB and editable Blender source; no photo background used for the new 3D scene.
+- [x] R3F viewer with orbit/zoom, front/left/right/close, reset, local lighting/reflection, quality and 9:16 options.
+- [x] Preserve LIVE and Academy at separate routes; no backend/credential/payment changes.
+- [x] 104 tests, complete production build/TypeScript and full npm audit passed. Chromium verified 5 viewports, real camera/orbit/reset, download, settings/9:16, legacy routes/storage, no external requests.
+- [x] Draft PR #16 updated; implementation commit b2c17f6 passed GitHub CI and Cloudflare Pages preview. No production merge; owner visual acceptance pending.
+- [ ] Physical iPad Safari performance, visual feedback and higher-detail sculpture/ornament refinement.
+
+
+## 3D refinement after owner iPad screenshot
+- [x] Fix roof-exposing orbit, central aisle framing, preset/manual selection and exact reset.
+- [x] Widen inner column spacing; refine statue/robe/lotus and restrained gold/wood lighting.
+- [x] Embed timber normal/roughness, fix Blender pixel/color-space export and test decoded PBR channels.
+- [x] Keep 12 MB / 500k triangle budget, static shadow bake, existing routes/data and Vietnamese 9:16 UI.
+- [x] Final 106 tests/build/audit passed; 5 viewport smoke and pixel-accurate orbit/reset checks passed; screenshots updated.
+- [x] Visual refinement commit 7e6258b pushed to draft PR #16; GitHub CI and Cloudflare Pages passed. Preview bc192756 verified; production remains unmerged.
+- [ ] Photoreal sculpted asset, detailed carvings/landscape, physical iPad performance and visual acceptance.
+
+
+## Owner-approved Buddha sculpture rebuild
+- [x] Replace old whole-body primitive/voxel assembly with authored facial, anatomical and cloth surfaces.
+- [x] Separate source-quality geometry from the web mesh; maintain UVs, normals and named sculpt regions.
+- [x] Refine ears/hair/eyes/lips, neck/shoulders, tapering limbs, fingers and robe clearance.
+- [x] Inspect crossed-leg silhouette and front/side/close/portrait captures; 11.876.860 bytes / 461.600 triangles within existing budgets.
+- [x] 107 tests, production build, npm audit and 5-viewport browser smoke passed; prepare update to the existing draft PR #16, report remote CI/preview at handoff.
+- [ ] Owner visual acceptance, physical iPad performance, professional-level reference fidelity.
+
+
+## Switch to the owner's original 2D photo
+- [x] Pause 3D as default; preserve it at ?experience=3d and keep LIVE/Academy routes/data.
+- [x] Original-aspect photo viewer, explicit cover/9:16 options, hide controls and fullscreen fallback.
+- [x] iPad photo picker, bounded raster validation and isolated IndexedDB persistence; no server upload.
+- [x] 108 tests/build passed; browser verified persistence/reload, corrupt-image rejection, 5 viewports, controls/fullscreen/storage fallback and preserved routes/data. Prepare draft PR update; report remote checks at handoff.
+- [ ] Obtain the exact landscape reference file to bundle it as the default photo; no substitute artwork.
+- [ ] Await owner's next instructions; physical iPad validation remains pending.
+
+
+## Photo-based temple LIVE simulation
+- [x] Preserve owner-selected IndexedDB photo; add a separate 9:16 LIVE overlay and photo-only toggle.
+- [x] Reuse stable roster and 2D visitor assets: 20 initial/24 max, separated nickname slots.
+- [x] Session-only mock joins/likes/incense/flowers/wishes, bounded comments/activity/receipts and 3-second notices.
+- [x] Explicit simulation label, automatic simulation opt-in/hidden-tab pause, reduced-motion CSS.
+- [x] 112 tests/build passed; browser verified all actions, 3s notices, hidden pause, 5 layouts without name/footer overlap, original photo persistence and no external requests. Prepare existing draft PR update; remote checks reported at handoff.
+- [ ] Owner iPad visual acceptance; no merge or real TikTok connection.
+
+
+## Place devotees within the sanctuary composition
+- [x] Replace separate brown stage with a bottom-8% crop of the exact selected local photo.
+- [x] Align seam to decoded image aspect; perspective rows and center-first foreground seats; preserve original image/game state.
+- [x] 113 tests/build passed; browser verifies source binding, indoor-floor bounds, label/footer separation at 5 sizes and interaction/photo persistence regressions.
+- [x] Prepare existing draft PR update; remote CI/preview reported at handoff.
+- [ ] Physical iPad seam review; keep production unmerged.
+
+
+## Full-window portrait sanctuary background
+- [x] Default to centered full-window cover, remove the upper image panel and stitched floor; keep optional 9:16/contain.
+- [x] Project visitors into two perspective groups around the red carpet using image aspect/frame/footer bounds.
+- [x] 114 tests/build passed; browser verifies full-window cover, 24 labels/clear aisle at 5 sizes, 9:16/contain, interaction/photo persistence and zero-size observer recovery. Prepare draft PR update; remote checks reported at handoff.
+- [ ] Owner chooses the new portrait photo on iPad and checks real Safari appearance; no production merge.
+
+## Official Phật Tâm Live PNG and measured cushion seating
+- [x] Merge the owner's main upload without losing feature history; rename exact PNG into public/images (blob hash unchanged).
+- [x] Replace default local-photo/cover source with one official centered contain image; explicit missing-file error and no fallback. Preserve old storage.
+- [x] Measure 24 real cushion positions and project normalized floor contacts with contain letterbox offsets; preserve existing 20 initial/24 maximum mock roster and all controls.
+- [x] 5 Photo LIVE + 3 Vietnamese tests and full production/TypeScript build passed. Chromium HTTP 200/hash, 24 contacts, actions/joins/notice checks passed at 768×1024 and 1024×768; screenshots inspected.
+- [ ] Physical iPad Safari review and owner visual acceptance; PR #16 stays draft with no production merge. Required CI status reported at handoff.

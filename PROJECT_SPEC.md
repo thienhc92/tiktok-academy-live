@@ -1,3 +1,119 @@
+# Current increment — official Phật Tâm Live background
+
+Bundle the owner's exact 1086×1448 PNG, uploaded on main as
+`3821EC21-C34F-4B9D-9C8B-278D76987EC7.png`, unchanged at
+`public/images/phat-tam-live-background-ipad.png`. This supersedes cover and
+local-photo selection for the default experience. Never render the old persisted
+photo or silently substitute another asset; leave stored data intact.
+
+Acceptance: one centered object-fit:contain image, full roof/altar/cushions visible,
+no crop/zoom/stretch or decorative frame. Warm letterboxing is permitted.
+Calibrate actual cushion contact points in normalized source coordinates and use
+the exact contain transform including offsets. Preserve devotee sprites, animation,
+stable identities and all session-only mock controls; no altar/carpet seating.
+The owner no longer requires exactly 20 visible people: use the existing bounded
+roster and available cushion positions. Verify HTTP 200, source integrity, portrait
+768×1024 plus landscape placement, interactions, targeted tests and final build;
+provide an actual screenshot. Keep PR #16 draft until visual acceptance.
+
+# Previous full-window background (superseded)
+
+# Current increment — one full-window portrait background
+
+Owner supplies a portrait temple photo with cushions and a red central aisle and
+requests it as the fullscreen background. Use the selected image as one centered,
+aspect-preserving `cover` image across the entire viewport by default. Remove floor
+sampling/stitching and the separate upper photo panel. Keep contain/photo-only and
+optional 9:16 framing available; native fullscreen remains capability-based.
+The new image must be chosen in the existing iPad picker; do not silently overwrite
+the device-local photo or claim the chat image has been bundled when no file exists.
+
+Seat 20–24 mock visitors on two sides of the red carpet, using the decoded image
+aspect and actual object-fit bounds. Adapt their scale/rows to keep names clear of
+comments/footer on portrait and landscape. Preserve source Blob, storage, all
+simulation behavior and legacy modes. Acceptance: one image spans the full viewport,
+no stitched floor, no name overlap/overflow, clear center aisle, 9:16/contain options
+still work, full tests/build and browser checks pass. Keep PR #16 draft.
+
+# Previous layout — photo floor continuation (superseded)
+
+Owner iPad screenshot shows visitors on a separate brown floor outside the temple
+photo. Replace that stage with a continuation of the selected photo's bottom 8%,
+anchored at the corresponding source-image row using the decoded aspect ratio.
+Keep the original Blob unchanged and all interactions untouched. Move the crowd
+closer to the altar; rows narrow/shrink toward the altar and grow toward the viewer.
+Foreground arrivals fill the center first without moving earlier guests.
+Acceptance: floor and hero use the same local image URL, source seam aligns in
+contain/cover, every visitor stays on that photographic floor, labels do not overlap
+or hit footer on 5 portrait/landscape viewports; tests/build and regression pass.
+No new gameplay, dependency, TikTok connection or production merge.
+
+# Current increment — 2D temple LIVE simulation on the selected photo
+
+Owner has selected the reference photo locally on iPad and now requests a temple
+LIVE presentation inspired by the supplied TikTok trend. Keep that exact device-local
+photo/database and never silently substitute a generated background. Default to a
+9:16 composition with the full photo in an upper altar area, a floor continuation sampled from the selected photo below, 20 initial/24 maximum 2D visitors with stable IDs, compact nicknames, session
+activity top 3, comments, incense/flower/heart actions and 3-second notices. Reuse
+existing visitor assets/roster, add no dependencies, paid gifts, divination promises
+or real TikTok connectivity. Simulation is explicit, opt-in automatic playback,
+paused in hidden tabs; reduced motion honored. The image-only viewer remains a toggle.
+Acceptance: local photo survives updates/reload, composition does not cover the
+central Buddha with large banners, responsive slots keep labels separated, actions
+and comments work, bounded session memory, no academic XP/storage mutation, full
+tests/build and portrait browser checks pass. Keep PR #16 draft and production unchanged.
+
+# Current increment — original 2D photo, 3D paused
+
+Owner requests switching to a still 2D image and waiting for further direction.
+Use the exact supplied sanctuary image, not a generated replacement. The landscape
+reference is visible in chat but its original file is not mounted in this workspace;
+only the old TikTok screenshot file is available, and must not be silently substituted.
+Prepare a 2D photo viewer with an iPad picker while waiting for the original file.
+Acceptance: original aspect/full image by default, optional explicit cover crop and
+9:16 frame, hideable controls, native fullscreen/fallback; persist chosen raster
+photo only in a separate device-local IndexedDB database. No uploads, WebGL/GLB on
+the default route, gameplay changes or effects. Keep 3D at ?experience=3d, LIVE at
+?experience=live and Academy at ?experience=academy. Do not merge production.
+
+# Sculpture rebuild — owner-approved reference study
+
+Replace the rejected blocky Buddha body with an original continuous-surface model.
+Acceptance: integrated facial relief and shorter anatomical neck/shoulders; tapered
+arms and articulated fingers; smoothly joined crossed legs; drapery that clears the
+body without the earlier penetrations; shared normals at periodic mesh seams;
+source geometry at higher sampling density kept separately from the web GLB.
+Validate front/side/close/portrait views, UV/normal data and the existing 12 MB /
+500k-triangle web budget. Preserve camera controls, legacy routes/storage and keep
+PR #16 draft until visual acceptance. This is digital geometry authored from the
+reference, not a scan, a professional artist's hand-sculpt claim or certified
+photoreal equivalence. See tools/sculpt_buddha.py and docs/TEMPLE_3D.md.
+
+# Current increment — reference-based 3D sanctuary
+
+The owner now requests a navigable 3D sanctuary based on the supplied landscape
+image: monumental seated golden Buddha/lotus/mandorla, carved timber hall, tiled
+reflective floor, altar, porcelain flower vases, lanterns and sunlight. The default
+experience is a real mesh-based glTF scene with orbit/zoom, front/side/close presets,
+mobile quality controls, a 9:16 frame option and downloadable GLB. Geometry and
+textures are generated locally with the versioned Blender script; this is a
+hand-authored procedural interpretation, not a photogrammetric copy of the image.
+Acceptance: camera movement reveals depth, model contains non-planar sculpture and
+architecture, no external asset/decoder requests, bounded mobile rendering costs,
+Vietnamese controls and unchanged legacy storage/backend. Refinement acceptance: central
+aisle camera remains below crossbeams within bounded orbit; manual camera input clears
+selected preset; reset is exact; baked PBR texture pixels remain valid after export. Preserve earlier LIVE
+simulation at ?experience=live and Academy at ?experience=academy. No TikTok or
+backend deployment in this increment. See docs/TEMPLE_3D.md.
+
+# Chùa Online — active product direction
+
+The owner has replaced the school direction with an online temple inspired by the supplied portrait livestream reference. The active MVP recreates the supplied livestream screenshot composition: a realistic generated temple/altar background, 52 gray-robed image-based 2.5D visitors, a large fortune-card overlay and mock LIVE header/chat/gift controls. A 720:1280 inner scene sits inside an 888:1280 reference frame, both scaled to fit. No desktop sidebars. All LIVE UI and values are synthetic; no TikTok requests or payments. The image and visitor assets are newly generated, not the original artwork; exact pixel identity cannot be certified from the screenshot alone.
+
+Acceptance: no horizontal overflow; all 52 mock visitor slots use bounded reference coordinates; short notifications expire after three seconds; wishes/cards/operator controls work; sound requires an explicit gesture; reduced motion and hidden-tab throttling remain available. No payments, real TikTok connection or real religious merit scores are introduced; fortune labels and gift values are entertainment-only mock presentation. Academy progress is neither read nor modified by the temple UI. The former experience remains isolated at `?experience=academy` to preserve previous work. The earlier Cloudflare backend deployment task is paused; no backend is deployed for this pivot. See docs/TEMPLE.md.
+
+The following specification records the previous school implementation for reference.
+
 # TikTok Academy Live — project specification
 
 ## Goal and scope
