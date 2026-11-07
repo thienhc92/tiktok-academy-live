@@ -1,3 +1,11 @@
+# Current review — MOCK merit and rituals
+
+Activity-only merit, bow/incense/lotus effects and stable seat changes implemented
+in focused modules. Old progress migrates to snapshot v2; LIVE remains locked.
+Full tests and portrait browser verification completed; create PR/preview and wait
+for owner review. Physical iPad Safari performance and animation acceptance remain
+next steps, before any real connector. See docs/MOCK_RITUALS.md.
+
 # Current milestone — offline temple event foundation
 
 MOCK/LIVE adapter boundary, identity/profile processing, transactional browser

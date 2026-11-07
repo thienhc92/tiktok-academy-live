@@ -1,3 +1,10 @@
+# Current MOCK activity milestone
+
+Snapshot v2 now adds separate merit/quota state with safe v1 migration, finite
+ritual effects and significant-change seat scheduling. See [current rules and
+verification](MOCK_RITUALS.md). LIVE remains unconfigured. The v1 snapshot and
+unlimited-heart details below describe the previous milestone.
+
 # Chùa Online — chuẩn bị LIVE, hiện chỉ MOCK
 
 ## Kiến trúc đã triển khai

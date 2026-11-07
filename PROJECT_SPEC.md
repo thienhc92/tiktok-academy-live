@@ -1,3 +1,22 @@
+# Current increment — MOCK rituals and separate activity merit
+
+Base latest main after 4a92bcb. Preserve Đại Hùng Điện PNG/108 seats and avatar
+artwork; add local bow/prayer-comment, incense and lotus effects. Separate merit
+(bow 2, incense 5, flower 10, eligible heart 1) from existing contribution/XP; gifts
+have MOCK tiers 1/5/10/30 and award no merit. Profiles expose rank and displayed
+seatId. Persist merit, quotas and receipts atomically, migrate v1 without losing
+balances. Cap effects/TTL and heart rewards, keep foot anchors during gestures,
+and rebalance contribution seats only on meaningful changes after cooldown.
+
+Acceptance: single/concurrent 108-user actions; prayer matching, duplicate/spam,
+refresh and old-snapshot recovery; bounded effects over simulated long runtime;
+no effect/ritual notice over Buddha faces, no avatar moved mid-pose; full tests,
+build and portrait screenshots. LIVE remains locked, no paid service/real account.
+Create a draft PR and verified preview for owner review; no auto-merge/production
+publication. See docs/MOCK_RITUALS.md for rules, 2D animation limits and evidence.
+
+# Previous event-foundation milestone
+
 # Current increment — temple event foundation, no real TikTok
 
 Keep the Đại Hùng Điện PNG and 108 calibrated seats unchanged. Add a transport-

@@ -9,6 +9,8 @@ import type {TempleResult} from './processor';
 import {IndexedTempleRepository,MemoryTempleRepository} from './repository';
 import type {TempleRepository} from './repository';
 import {MockTempleSource,UnconfiguredLiveSource,mockTempleEvent} from './sources';
+import {enqueueRitual} from './rituals';
+import type {RitualCue} from './rituals';
 import {initialSeatPlan,updateSeatPlan} from './seating';
 export function useTempleSession(initialVisitors?:string[]) {
     const [snapshot,setSnapshot]=useState(()=>createTempleState('MOCK',crypto.randomUUID(),initialVisitors));
@@ -18,6 +20,7 @@ export function useTempleSession(initialVisitors?:string[]) {
     const source=useRef(new MockTempleSource());
     const [ready,setReady]=useState(false),[persistent,setPersistent]=useState(!initialVisitors);
     const [connection,setConnection]=useState<ConnectionState>('disconnected');
+    const [rituals,setRituals]=useState<RitualCue[]>([]);
     const [message,setMessage]=useState(''),[outcome,setOutcome]=useState('');
     const queue=useRef<Promise<unknown>>(Promise.resolve()),loaded=useRef<Promise<unknown>>(Promise.resolve());
     const mounted=useRef(false),readyFlag=useRef(false);
@@ -41,7 +44,7 @@ export function useTempleSession(initialVisitors?:string[]) {
                 repository.current=new MemoryTempleRepository();setPersistent(false);setMessage(t('Temple storage unavailable'));
                 result=await repository.current.transact('MOCK',current.current,change);
             }
-            if(mounted.current){current.current=result.state;setSnapshot(result.state);setOutcome(t('Temple event '+result.outcome));}
+            if(mounted.current){current.current=result.state;setSnapshot(result.state);setOutcome(t('Temple event '+result.outcome));if(result.cue&&!document.hidden)setRituals(previous=>enqueueRitual(previous,result.cue!,Date.now()));}
         }).catch(()=>{if(mounted.current)setMessage(t('Temple processing error'));});
     },[]);
     useEffect(()=>{
@@ -49,6 +52,12 @@ export function useTempleSession(initialVisitors?:string[]) {
         adapter.start({event:consume,connection:setConnection,error:()=>setMessage(t('Temple processing error'))});
         return ()=>adapter.stop();
     },[consume]);
+    useEffect(()=>{
+        if(!rituals.length)return;
+        const timer=setTimeout(()=>setRituals(previous=>previous.filter(c=>c.expiresAt>Date.now())),Math.max(20,Math.min(...rituals.map(c=>c.expiresAt))-Date.now()+10));
+        return ()=>clearTimeout(timer);
+    },[rituals]);
+    useEffect(()=>{const hide=()=>{if(document.hidden)setRituals([]);};document.addEventListener('visibilitychange',hide);return ()=>document.removeEventListener('visibilitychange',hide);},[]);
     const send=useCallback((kind:LiveAction|'leave',viewerId:string,text?:string,coins?:number)=>{
         if(!viewerId||!readyFlag.current)return;
         const s=current.current,p=s.profiles[viewerId],fixture=LIVE_ROSTER.find(p=>p.id===viewerId);
@@ -59,14 +68,15 @@ export function useTempleSession(initialVisitors?:string[]) {
     const participants=useMemo(()=>templeParticipants(snapshot),[snapshot]);
     const [plan,setPlan]=useState(()=>initialSeatPlan(participants,Date.now()));
     useEffect(()=>{
-        const update=()=>setPlan(previous=>updateSeatPlan(previous,participants,Date.now()));
+        const update=()=>setPlan(previous=>updateSeatPlan(previous,participants,Date.now(),Math.max(0,...rituals.map(c=>c.expiresAt))));
         update();const timer=setInterval(update,1000);return ()=>clearInterval(timer);
-    },[participants]);
+    },[participants,rituals]);
+    const displayedParticipants=useMemo(()=>participants.map(p=>({...p,seatId:plan.assigned.find(a=>a.userId===p.id)?.seatId??null})),[participants,plan]);
     const seating=useMemo(()=>{
-        const users=new Map(participants.map(p=>[p.id,p]));
+        const users=new Map(displayedParticipants.map(p=>[p.id,p]));
         const seated=plan.assigned.flatMap(a=>{const user=users.get(a.userId),seat=SEAT_MAP.find(s=>s.id===a.seatId);return user&&seat?[{user,seat}]:[];});
         const ids=new Set(seated.map(a=>a.user.id));
-        return {seated,waiting:participants.filter(p=>!ids.has(p.id))};
-    },[plan,participants]);
-    return {snapshot,state:snapshot.game,participants,seating,send,requestLive,ready,persistent,connection,message,outcome,pending:plan.pending};
+        return {seated,waiting:displayedParticipants.filter(p=>!ids.has(p.id))};
+    },[plan,displayedParticipants]);
+    return {snapshot,state:snapshot.game,participants:displayedParticipants,seating,rituals,send,requestLive,ready,persistent,connection,message,outcome,pending:plan.pending};
 }

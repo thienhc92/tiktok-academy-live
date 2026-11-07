@@ -5,13 +5,13 @@ export const LIVE_ROSTER = [...TEMPLE_PEOPLE,...Array.from({length:Math.max(0,
     SEAT_MAP.length+Math.ceil(SEAT_MAP.length*.15)-TEMPLE_PEOPLE.length)},(_,i)=>({
         id:`photo-guest-${i+1}`,name:`${TEMPLE_PEOPLE[i%TEMPLE_PEOPLE.length].name} ${i+2}`,
     }))];
-export const CONTRIBUTION_WEIGHTS = Object.freeze({join:0,wish:0,like:1,incense:5,flower:8,giftCoin:10});
+export const CONTRIBUTION_WEIGHTS = Object.freeze({join:0,wish:0,bow:0,like:1,incense:5,flower:8,giftCoin:10});
 const MAX_SCORE = 999999;
 export function contributionReward(event:Pick<LiveEvent,'kind'|'coins'|'count'>):number {
     return event.kind==='like'?CONTRIBUTION_WEIGHTS.like*(event.count??1):event.kind==='gift'?CONTRIBUTION_WEIGHTS.giftCoin*(event.coins??0):CONTRIBUTION_WEIGHTS[event.kind];
 }
 export const LIVE_NOTICE_MS = 3000;
-export const LIVE_ACTIONS = ['join','like','incense','flower','wish','gift'] as const;
+export const LIVE_ACTIONS = ['join','like','incense','flower','wish','gift','bow'] as const;
 export type LiveAction = typeof LIVE_ACTIONS[number];
 export type LiveEvent = {id:string; kind:LiveAction; viewerId:string; text?:string; coins?:number; count?:number};
 export type LiveNotice = LiveEvent & {name:string};
