@@ -215,3 +215,12 @@
 - [x] 108 tests/build passed; browser verified persistence/reload, corrupt-image rejection, 5 viewports, controls/fullscreen/storage fallback and preserved routes/data. Prepare draft PR update; report remote checks at handoff.
 - [ ] Obtain the exact landscape reference file to bundle it as the default photo; no substitute artwork.
 - [ ] Await owner's next instructions; physical iPad validation remains pending.
+
+
+## Photo-based temple LIVE simulation
+- [x] Preserve owner-selected IndexedDB photo; add a separate 9:16 LIVE overlay and photo-only toggle.
+- [x] Reuse stable roster and 2D visitor assets: 20 initial/24 max, separated nickname slots.
+- [x] Session-only mock joins/likes/incense/flowers/wishes, bounded comments/activity/receipts and 3-second notices.
+- [x] Explicit simulation label, automatic simulation opt-in/hidden-tab pause, reduced-motion CSS.
+- [x] 112 tests/build passed; browser verified all actions, 3s notices, hidden pause, 5 layouts without name/footer overlap, original photo persistence and no external requests. Prepare existing draft PR update; remote checks reported at handoff.
+- [ ] Owner iPad visual acceptance; no merge or real TikTok connection.

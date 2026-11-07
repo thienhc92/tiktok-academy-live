@@ -1,5 +1,8 @@
 # Chùa Online — ảnh 2D nguyên bản
 
+Giao diện LIVE mới trên ảnh này được mô tả tại [PHOTO_LIVE.md](PHOTO_LIVE.md).
+Ảnh và database bên dưới vẫn giữ nguyên.
+
 Chủ sở hữu tạm dừng dựng 3D, muốn dùng nguyên ảnh chính điện đã chia sẻ và sẽ gửi
 hướng dẫn tiếp. Trang mặc định chuyển sang viewer ảnh, không chạy canvas/WebGL,
 không tải GLB hoặc dựng thêm hiệu ứng/nhân vật.
@@ -34,7 +37,7 @@ Object URL tạm và URL cũ được thu hồi. Ảnh chưa được chỉnh s�
 - `?experience=academy`: game trường học cũ.
 
 Không deploy backend, nối TikTok, thêm dependency/dịch vụ trả phí hoặc thay production.
-PR #16 vẫn nháp. Dừng thêm tính năng cho đến hướng dẫn tiếp theo của chủ sở hữu.
+PR #16 vẫn nháp. Chủ sở hữu đã cho phép bổ sung mô phỏng LIVE 2D; xem tài liệu mới phía trên.
 
 ## Kiểm chứng
 

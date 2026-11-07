@@ -98,3 +98,9 @@ Owner pauses 3D and requests the original 2D reference. Default becomes a still
 photo viewer; 3D remains at ?experience=3d. Missing landscape source file is the
 remaining content blocker. Device-local photo selection provides an iPad path
 without uploading images. Await further product direction; no new gameplay.
+
+
+New owner direction: compose a 2D temple LIVE simulation over the already-selected
+local photo. Reuse roster/sprites, bounded mock interactions and comments; no connector
+or payment. Preserve photo-only/3D/LIVE/Academy modes. Next gate: owner iPad visual
+review of the 9:16 arrangement, then follow-up product direction.

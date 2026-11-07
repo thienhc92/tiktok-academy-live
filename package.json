@@ -7,7 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && tsc -p tsconfig.local.json && tsc -p tsconfig.backend.json && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "node tests/engine.test.ts && node tests/broadcast.test.ts && node tests/progression.test.ts && node tests/qa.test.ts && node tests/i18n.test.ts && node tests/layout.test.ts && node tests/missions.test.ts && node tests/events.test.ts && node tests/durable.test.ts && node tests/realtime.test.ts && node tests/temple.test.ts && node tests/shrine.test.ts && node tests/photo.test.ts"
+    "test": "node tests/engine.test.ts && node tests/broadcast.test.ts && node tests/progression.test.ts && node tests/qa.test.ts && node tests/i18n.test.ts && node tests/layout.test.ts && node tests/missions.test.ts && node tests/events.test.ts && node tests/durable.test.ts && node tests/realtime.test.ts && node tests/temple.test.ts && node tests/shrine.test.ts && node tests/photo.test.ts && node tests/photoLive.test.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",

@@ -1,3 +1,19 @@
+# Current increment — 2D temple LIVE simulation on the selected photo
+
+Owner has selected the reference photo locally on iPad and now requests a temple
+LIVE presentation inspired by the supplied TikTok trend. Keep that exact device-local
+photo/database and never silently substitute a generated background. Default to a
+9:16 composition with the full photo in an upper altar area, a CSS floor extension
+below, 20 initial/24 maximum 2D visitors with stable IDs, compact nicknames, session
+activity top 3, comments, incense/flower/heart actions and 3-second notices. Reuse
+existing visitor assets/roster, add no dependencies, paid gifts, divination promises
+or real TikTok connectivity. Simulation is explicit, opt-in automatic playback,
+paused in hidden tabs; reduced motion honored. The image-only viewer remains a toggle.
+Acceptance: local photo survives updates/reload, composition does not cover the
+central Buddha with large banners, responsive slots keep labels separated, actions
+and comments work, bounded session memory, no academic XP/storage mutation, full
+tests/build and portrait browser checks pass. Keep PR #16 draft and production unchanged.
+
 # Current increment — original 2D photo, 3D paused
 
 Owner requests switching to a still 2D image and waiting for further direction.
