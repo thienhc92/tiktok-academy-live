@@ -39,5 +39,9 @@ export function liveSlot(index:number) {
     if (!Number.isInteger(index)||index<0||index>=24) throw Error('Invalid photo LIVE slot');
     const row=index<4?0:index<10?1:index<17?2:3;
     const start=[0,4,10,17][row], count=[4,6,7,7][row];
-    return {x:count===4?.2+(index-start)*.2:.08+(index-start)*(.84/(count-1)),y:row*.25,height:.23,width:.12};
+    const edge=[.28,.16,.10,.08][row];
+    // Front-row arrivals fill the middle first without moving existing guests.
+    const front=[.50,.36,.64,.22,.78,.08,.92];
+    const x=row===3?front[index-start]:edge+(index-start)*(1-2*edge)/(count-1);
+    return {x,y:[0,.22,.45,.70][row],height:[.17,.20,.23,.26][row],width:[.11,.115,.12,.125][row]};
 }

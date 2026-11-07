@@ -7,8 +7,7 @@ lại ảnh để dùng overlay trên cùng thiết bị và cùng URL preview.
 
 ## Bố cục và thao tác
 
-- Mặc định khung 9:16: ảnh chính điện nguyên tỉ lệ trong vùng trên, phần sàn CSS
-  màu gỗ mở rộng phía dưới. Ảnh không được chỉnh sửa nội dung. Tùy chọn phủ kín
+- Mặc định khung 9:16: ảnh chính điện nguyên tỉ lệ trong vùng trên, phần sàn lấy từ chính ảnh được nối dài phía dưới. Ảnh không được chỉnh sửa nội dung. Tùy chọn phủ kín
   cũ vẫn là thao tác rõ ràng có cảnh báo cắt mép.
 - 20 khách mô phỏng ban đầu, tối đa 24, dùng roster ID và sprite có sẵn từ mô phỏng
   cũ; bốn hàng tên cách nhau, không tràn ngang/đè hàng nút. Các sprite là artwork
@@ -37,7 +36,7 @@ vững của backend. Không tiếp nhận event mạng, không lưu số liệu
 
 ## Kiểm chứng
 
-- 112 kiểm thử qua; `npm run build` qua TypeScript frontend/local/backend và Vite.
+- 113 kiểm thử qua; `npm run build` qua TypeScript frontend/local/backend và Vite.
 - Browser Chromium: mọi action, hết hạn notice/effect, bình luận có chuỗi HTML chỉ
   hiển thị chữ, 20→24 khách/cap, simulator/hidden-tab pause, đổi chế độ ảnh tĩnh.
 - 768×1024, 390×844, 320×568, 1024×768, 1440×900: không cuộn ngang, các hộp tên
@@ -51,3 +50,22 @@ PR #16 tiếp tục nháp, chưa merge production. Truy cập cùng alias previe
 ảnh đã chọn trên iPad; mở host preview mới sẽ có storage riêng và cần chọn lại ảnh.
 Các route `?experience=3d`, `?experience=live`, `?experience=academy` và dữ liệu cũ
 được giữ. Không dependency/dịch vụ trả phí hoặc backend deployment mới.
+
+## Sửa bố cục: Phật tử ở trong điện
+
+Ảnh iPad của chủ sở hữu cho thấy mảng sàn nâu tách rời chính điện. Đã thay mảng này
+bằng chính Blob ảnh đang hiển thị, cắt lấy 8% dưới cùng trong CSS và kéo dài phần
+sàn đó xuống vùng khách. Điểm nối được tính từ tỉ lệ ảnh vừa decode, tương ứng đúng
+hàng pixel bắt đầu phần sàn trong ảnh (contain/cover có công thức riêng). Không
+resize/ghi lại ảnh, không tạo artwork mới hoặc upload. Chỉ sàn nối dài bị biến đổi
+hiển thị; tượng Phật và phần chính ảnh giữ tỉ lệ cũ.
+
+Hàng xa nhỏ/hẹp và gần bàn thờ hơn; hàng gần lớn/rộng. Khách mới ở hàng trước điền
+vào giữa trước, vị trí khách cũ không nhảy khi thêm người. Mô phỏng/counter/comment,
+IndexedDB, các mode cũ và 3-second notice giữ nguyên.
+
+Browser QA: cùng URL Blob ở ảnh và nền sàn; điểm nối đúng vị trí 8% đáy, tất cả
+figure nằm trong vùng sàn ảnh, xa nhỏ/gần lớn, nhãn không chồng/footer ở 5 viewport.
+Kiểm thêm ảnh dọc/ngang, cover, reload và các tương tác. Fixture thử không phải ảnh
+chủ sở hữu. Cần xem đường nối thực tế trên iPad với ảnh đã chọn; ảnh khác có vùng
+sàn khác vị trí có thể cần chỉnh vùng cắt. Đây là nối dài sàn 2D, không tái tạo 3D.

@@ -224,3 +224,11 @@
 - [x] Explicit simulation label, automatic simulation opt-in/hidden-tab pause, reduced-motion CSS.
 - [x] 112 tests/build passed; browser verified all actions, 3s notices, hidden pause, 5 layouts without name/footer overlap, original photo persistence and no external requests. Prepare existing draft PR update; remote checks reported at handoff.
 - [ ] Owner iPad visual acceptance; no merge or real TikTok connection.
+
+
+## Place devotees within the sanctuary composition
+- [x] Replace separate brown stage with a bottom-8% crop of the exact selected local photo.
+- [x] Align seam to decoded image aspect; perspective rows and center-first foreground seats; preserve original image/game state.
+- [x] 113 tests/build passed; browser verifies source binding, indoor-floor bounds, label/footer separation at 5 sizes and interaction/photo persistence regressions.
+- [x] Prepare existing draft PR update; remote CI/preview reported at handoff.
+- [ ] Physical iPad seam review; keep production unmerged.

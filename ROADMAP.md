@@ -104,3 +104,8 @@ New owner direction: compose a 2D temple LIVE simulation over the already-select
 local photo. Reuse roster/sprites, bounded mock interactions and comments; no connector
 or payment. Preserve photo-only/3D/LIVE/Academy modes. Next gate: owner iPad visual
 review of the 9:16 arrangement, then follow-up product direction.
+
+
+Layout correction after iPad review: replace detached brown floor with a source-photo
+floor continuation, align the seam and arrange seated visitors in perspective. No
+new game rules. Next: review the seam/placement on owner's iPad, keep PR #16 draft.

@@ -36,3 +36,15 @@ test('24 floor slots keep nickname boxes apart and preserve central altar; notic
     for(const kind of ['join','like','incense','flower','wish']) assert.ok(vi['Photo LIVE notice '+kind]);
     assert.match(vi['Photo LIVE disclaimer'],/Mô phỏng|mô phỏng/);
 });
+
+test('interior rows follow perspective and new foreground guests fill the center without shifting others',()=>{
+    const back=liveSlot(0),middle=liveSlot(10),front=liveSlot(17);
+    assert.ok(back.height<middle.height&&middle.height<front.height);
+    assert.ok(back.width<middle.width&&middle.width<front.width);
+    assert.ok(back.x>liveSlot(10).x,'distant rows cluster toward the altar center');
+    assert.equal(front.x,.5);assert.equal((liveSlot(18).x+liveSlot(19).x)/2,.5);
+    for(let i=0;i<24;i++) for(let j=i+1;j<24;j++) {
+        const a=liveSlot(i), b=liveSlot(j);
+        if(a.y!==b.y) assert.ok(a.y+a.height<=b.y,'rows must not collide vertically');
+    }
+});

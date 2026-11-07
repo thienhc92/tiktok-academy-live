@@ -1,10 +1,22 @@
+# Current layout correction — guests inside one continuous sanctuary
+
+Owner iPad screenshot shows visitors on a separate brown floor outside the temple
+photo. Replace that stage with a continuation of the selected photo's bottom 8%,
+anchored at the corresponding source-image row using the decoded aspect ratio.
+Keep the original Blob unchanged and all interactions untouched. Move the crowd
+closer to the altar; rows narrow/shrink toward the altar and grow toward the viewer.
+Foreground arrivals fill the center first without moving earlier guests.
+Acceptance: floor and hero use the same local image URL, source seam aligns in
+contain/cover, every visitor stays on that photographic floor, labels do not overlap
+or hit footer on 5 portrait/landscape viewports; tests/build and regression pass.
+No new gameplay, dependency, TikTok connection or production merge.
+
 # Current increment — 2D temple LIVE simulation on the selected photo
 
 Owner has selected the reference photo locally on iPad and now requests a temple
 LIVE presentation inspired by the supplied TikTok trend. Keep that exact device-local
 photo/database and never silently substitute a generated background. Default to a
-9:16 composition with the full photo in an upper altar area, a CSS floor extension
-below, 20 initial/24 maximum 2D visitors with stable IDs, compact nicknames, session
+9:16 composition with the full photo in an upper altar area, a floor continuation sampled from the selected photo below, 20 initial/24 maximum 2D visitors with stable IDs, compact nicknames, session
 activity top 3, comments, incense/flower/heart actions and 3-second notices. Reuse
 existing visitor assets/roster, add no dependencies, paid gifts, divination promises
 or real TikTok connectivity. Simulation is explicit, opt-in automatic playback,

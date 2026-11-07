@@ -4,7 +4,7 @@ import { LIVE_ROSTER, LIVE_NOTICE_MS, applyPhotoLive, initialPhotoLive, liveSlot
 import type { LiveAction, LiveEvent } from './liveModel';
 import './live.css';
 
-export function PhotoLive({onControls,operator}:{onControls:()=>void;operator:boolean}) {
+export function PhotoLive({onControls,operator,photoUrl}:{onControls:()=>void;operator:boolean;photoUrl:string}) {
     const [state,setState]=useState(initialPhotoLive);
     const [selected,setSelected]=useState(LIVE_ROSTER[0].id);
     const [text,setText]=useState('');
@@ -46,7 +46,7 @@ export function PhotoLive({onControls,operator}:{onControls:()=>void;operator:bo
     const leaders=[...participants].sort((a,b)=>(state.activity[b.id]??0)-(state.activity[a.id]??0)||a.id.localeCompare(b.id)).slice(0,3);
     const next=LIVE_ROSTER.find(p=>!state.visitors.includes(p.id));
     return <div className="photo-live" data-hidden={hidden}>
-        <div className="pl-floor" aria-hidden="true" />
+        <div className="pl-floor" data-floor-source="selected-photo" style={{backgroundImage:`url("${photoUrl}")`}} aria-hidden="true" />
         <header className="pl-header"><div className="pl-brand"><span aria-hidden="true">🪷</span><div><b>{t('Temple title')}</b><small>{t('Photo LIVE subtitle')}</small></div></div><button className="pl-settings" onClick={onControls} aria-label={t('Photo LIVE settings')}>☰</button></header>
         <div className="pl-session"><span className="pl-badge">{t('Photo LIVE badge')}</span><span>{t('Photo LIVE visitors',state.visitors.length)}</span><span>♥ {state.likes}</span></div>
         <div className="pl-invitation"><span>{t('Photo LIVE invitation')}</span><b>{t('Photo LIVE message')}</b></div>
