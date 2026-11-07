@@ -37,8 +37,8 @@ export const vi: Record<string,string> = {
 
 "Photo title":"Chùa Online · Ảnh chính điện",
 "Photo stage":"Ảnh chính điện",
-"Photo official description":"Đại điện Phật Tâm Live với các hàng đệm hai bên thảm đỏ",
-"Photo official missing":"Không tải được ảnh chính thức: /images/phat-tam-live-background-ipad.png. Không sử dụng ảnh thay thế.",
+"Photo official description":"Đại Hùng Điện với ba tượng Phật và các hàng đệm đỏ dát vàng",
+"Photo official missing":"Không tải được ảnh chính thức: /images/476F2A78-424C-424C-8954-C43DFEC82BC7.png. Không sử dụng ảnh thay thế.",
 "Photo description":"Ảnh chính điện do bạn chọn",
 "Photo choose":"Chọn ảnh chính điện",
 "Photo choose help":"Chọn ảnh chính điện từ Ảnh hoặc Tệp trên thiết bị để bắt đầu.",

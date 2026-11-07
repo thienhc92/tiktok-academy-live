@@ -1,22 +1,18 @@
-/** Measured cushion contact points on the owner's unchanged 1086×1448 PNG.
- * Tiny fragments whose cushion centers lie outside the image are not usable seats.
- */
-export const SEAT_IMAGE = {width:1086,height:1448} as const;
+/** Measured lotus centers on each real red/gold cushion of the owner's new PNG. */
+export const SEAT_IMAGE = {width:1086,height:1448,
+    src:'/images/476F2A78-424C-424C-8954-C43DFEC82BC7.png'} as const;
 const ROWS = [
-    {y:794, height:16, xs:[324,375,425,475,611,662,713,764]},
-    {y:807, height:17, xs:[310,365,420,473,617,674,730,786]},
-    {y:820, height:19, xs:[294,352,410,467,624,684,744,804]},
-    {y:834, height:21, xs:[275,337,400,461,631,696,759,825]},
-    {y:850, height:24, xs:[255,322,390,455,638,708,776,844]},
-    {y:867, height:28, xs:[232,305,377,446,646,721,791,861]},
-    {y:888, height:32, xs:[207,286,362,436,654,733,809,882]},
-    {y:912, height:36, xs:[179,265,345,424,665,748,829,909]},
-    {y:939, height:41, xs:[144,236,325,413,676,765,853,941]},
-    {y:972, height:47, xs:[110,210,305,399,688,783,877,974]},
-    {y:1012,height:54, xs:[69,174,278,382,707,814,918,1026]},
-    {y:1058,height:61, xs:[26,140,252,364,724,837,948,1060]},
-    {y:1114,height:70, xs:[87,216,345,752,881,1014]},
-    {y:1186,height:80, xs:[40,182,322,758,909,1054]},
+    {y:842, height:22, xs:[272,322,372,424,472,612,662,712,763,815]},
+    {y:864, height:25, xs:[250,304,357,411,465,621,675,729,784,837]},
+    {y:888, height:28, xs:[226,285,342,401,459,629,687,746,803,860]},
+    {y:912, height:31, xs:[202,265,329,392,453,636,699,762,825,887]},
+    {y:940, height:35, xs:[177,245,313,381,448,641,709,778,845,913]},
+    {y:976, height:39, xs:[149,222,295,368,441,646,720,793,866,940]},
+    {y:1015,height:44, xs:[122,198,275,353,429,656,735,813,891,969]},
+    {y:1058,height:50, xs:[95,176,258,341,420,663,745,828,911,994]},
+    {y:1108,height:57, xs:[66,153,240,328,414,672,760,848,933,1022]},
+    {y:1164,height:64, xs:[40,132,225,315,402,680,771,863,957,1048]},
+    {y:1224,height:73, xs:[114,213,309,393,690,781,882,980]},
 ] as const;
 export type Seat = Readonly<{
     id:string; x:number; y:number; scale:number; width:number; row:number;
@@ -50,23 +46,55 @@ export function projectSeats(width:number,height:number,aspect:number) {
     if(![width,height,aspect].every(n=>Number.isFinite(n)&&n>0)) throw Error('Invalid photo bounds');
     const imageHeight=Math.min(height,width/aspect),imageWidth=imageHeight*aspect;
     const left=(width-imageWidth)/2,top=(height-imageHeight)/2;
-    return SEAT_MAP.map(seat=>({...seat,x:left+seat.x*imageWidth,y:top+(seat.y-seat.scale)*imageHeight,
+    return SEAT_MAP.map(seat=>({...seat,imageWidth,x:left+seat.x*imageWidth,y:top+(seat.y-seat.scale)*imageHeight,
         width:seat.width*imageWidth,height:seat.scale*imageHeight,
         labelWidth:Math.min(64,Math.max(38,seat.width*imageWidth+12))}));
 }
 export type ProjectedSeat = ReturnType<typeof projectSeats>[number];
-/** Show noncolliding labels; selected user first, then contribution ranking.
- * Other names remain available on tap/hover and in the simulator's selector.
+export type LabelObstacle = {left:number;right:number;top:number;bottom:number};
+/** Every occupied seat gets a name. Pack rows around existing chat/footer UI,
+ * never hide names or move avatars. Stable physical ordering survives score changes.
  */
-export function visibleSeatLabels(seats:readonly ProjectedSeat[],selectedId:string|undefined,frameWidth:number) {
-    const labels=new Map<string,{x:number;width:number}>();
-    const rectangles:{left:number;right:number;top:number;bottom:number}[]=[];
-    const ordered=[...seats].sort((a,b)=>Number(b.id===selectedId)-Number(a.id===selectedId));
-    for(const seat of ordered) {
-        const x=Math.max(seat.labelWidth/2+2,Math.min(frameWidth-seat.labelWidth/2-2,seat.x));
-        const rect={left:x-seat.labelWidth/2-2,right:x+seat.labelWidth/2+2,top:seat.y+seat.height,bottom:seat.y+seat.height+12};
-        if(rectangles.some(r=>rect.left<r.right&&rect.right>r.left&&rect.top<r.bottom&&rect.bottom>r.top)) continue;
-        labels.set(seat.id,{x,width:seat.labelWidth});rectangles.push(rect);
+export function layoutSeatLabels(seats:readonly ProjectedSeat[],frameWidth:number,
+    options:{bottom?:number;blocked?:readonly LabelObstacle[]}={}) {
+    const labels=new Map<string,{x:number;y:number;width:number;height:number;fontSize:number}>();
+    const rows=[...new Set(seats.map(s=>s.row))].sort((a,b)=>b-a);
+    const compact=(seats[0]?.imageWidth??frameWidth)<600;
+    const height=compact?10:12,fontSize=compact?8:9,gap=3;
+    const blocked=options.blocked??[];
+    let nextTop=options.bottom??Infinity;
+    for(const row of rows) {
+        const members=seats.filter(s=>s.row===row);
+        let y=Math.min(Math.min(...members.map(s=>s.y+s.height))+1,nextTop-height-2);
+        const groups=(['left','right'] as const).map(side=>({side,seats:members.filter(s=>s.zone.endsWith(side)).sort((a,b)=>a.x-b.x)}));
+        const bandsFor=(side:'left'|'right')=>{
+            let bands=side==='left'?[[2,frameWidth/2-3]]:[[frameWidth/2+3,frameWidth-2]];
+            for(const box of blocked.filter(b=>y<b.bottom&&y+height>b.top)) {
+                bands=bands.flatMap(([l,r])=>box.right<=l||box.left>=r?[[l,r]]:
+                    [[l,Math.min(r,box.left-3)],[Math.max(l,box.right+3),r]].filter(([a,b])=>b>a));
+            }
+            return bands;
+        };
+        // A full-width long comment can require the label row to move above it.
+        for(let attempt=0;attempt<=blocked.length;attempt++) {
+            if(groups.every(g=>!g.seats.length||bandsFor(g.side).some(([l,r])=>r-l>=g.seats.length*28+(g.seats.length-1)*gap))) break;
+            const active=blocked.filter(b=>y<b.bottom&&y+height>b.top);
+            if(!active.length) break;
+            y=Math.min(...active.map(b=>b.top))-height-2;
+        }
+        nextTop=y;
+        for(const {side,seats:group} of groups) {
+            if(!group.length) continue;
+            const center=group.reduce((sum,s)=>sum+s.x,0)/group.length;
+            const bands=bandsFor(side).filter(([l,r])=>r-l>=group.length*28+(group.length-1)*gap);
+            const [l,r]=bands.sort((a,b)=>Math.abs((a[0]+a[1])/2-center)-Math.abs((b[0]+b[1])/2-center))[0]??(side==='left'?[2,frameWidth/2-3]:[frameWidth/2+3,frameWidth-2]);
+            const nearestGap=group.length>1?Math.min(...group.slice(1).map((s,i)=>s.x-group[i].x)):Infinity;
+            const width=Math.min(64,Math.max(28,nearestGap-gap),Math.min(...group.map(s=>s.labelWidth)),(r-l-gap*(group.length-1))/group.length);
+            const positions:number[]=[];
+            for(const [i,seat] of group.entries()) positions.push(Math.max(l+width/2,seat.x,i?positions[i-1]+width+gap:-Infinity));
+            for(let i=positions.length-1;i>=0;i--) positions[i]=Math.min(positions[i],r-width/2,i<positions.length-1?positions[i+1]-width-gap:Infinity);
+            for(const [i,seat] of group.entries()) labels.set(seat.id,{x:positions[i],y,width,height,fontSize});
+        }
     }
     return labels;
 }

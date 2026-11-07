@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { LIVE_ROSTER, LIVE_NOTICE_MS, CONTRIBUTION_WEIGHTS, applyPhotoLive, initialPhotoLive } from '../src/photo/liveModel.ts';
-import { SEAT_MAP, SEAT_IMAGE, assignSeats, projectSeats, visibleSeatLabels } from '../src/photo/seatMap.ts';
+import { SEAT_MAP, SEAT_IMAGE, assignSeats, projectSeats, layoutSeatLabels } from '../src/photo/seatMap.ts';
 import { vi } from '../src/i18n/vi.ts';
 
 test('capacity derives from photographed seats; joins can exceed capacity without losing identities',()=>{
@@ -47,12 +47,12 @@ test('comments, receipt memory and activity stay bounded; joins/comments do not 
     for(const kind of ['join','like','incense','flower','wish','gift']) assert.ok(vi['Photo LIVE notice '+kind]);
 });
 test('full seat map has unique IDs, floor contacts, increasing perspective and a clear carpet',()=>{
-    // Visually measured: 12 rows of 8 + 2 foreground rows of 6.
+    // New red/gold cushions: 10 rows of 10 + the last row of 8.
     assert.equal(SEAT_MAP.length,108);assert.equal(new Set(SEAT_MAP.map(s=>s.id)).size,SEAT_MAP.length);
     for(const s of SEAT_MAP) {
         assert.ok(s.x-s.width/2>=0&&s.x+s.width/2<=1);
-        assert.ok(s.y>=794/1448&&s.y<=1186/1448);
-        assert.ok(s.y-s.scale>=778/1448);
+        assert.ok(s.y>=842/1448&&s.y<=1224/1448);
+        assert.ok(s.y-s.scale>=820/1448);
         assert.ok(s.zone.endsWith('left')?s.x+s.width/2<.46:s.x-s.width/2>.55);
         assert.ok(s.scale>0&&Number.isFinite(s.rankPriority));
     }
@@ -103,16 +103,52 @@ test('contain projection preserves all cushion contacts across portrait, landsca
     }
     for(const invalid of [0,NaN,Infinity,-1])assert.throws(()=>projectSeats(768,1024,invalid));
 });
-test('label selection prioritizes selected users and avoids overlap without moving avatars',()=>{
-    for(const [width,height] of [[768,1024],[390,844],[1024,768]]) {
-        const slots=projectSeats(width,height,3/4),selected=slots.at(-1)!;
-        const labels=visibleSeatLabels(slots,selected.id,width);
-        assert.ok(labels.has(selected.id));assert.ok(labels.size<slots.length);
-        const rects=[...labels].map(([id,label])=>{const slot=slots.find(s=>s.id===id)!;return {left:label.x-label.width/2,right:label.x+label.width/2,top:slot.y+slot.height,bottom:slot.y+slot.height+12};});
-        for(const r of rects)assert.ok(r.left>=0&&r.right<=width);
-        for(let i=0;i<rects.length;i++)for(let j=i+1;j<rects.length;j++) {
-            const a=rects[i],b=rects[j];
-            assert.ok(!(a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));
+test('every occupied cushion has a readable bounded label, including front rows and lower corners',()=>{
+    for(const [width,height] of [[768,1024],[390,844],[320,568],[1024,768]]) {
+        const slots=projectSeats(width,height,3/4);
+        for(const occupancy of [20,108]) {
+            const chosen=assignSeats(LIVE_ROSTER.slice(0,occupancy).map(p=>({...p,contributionScore:0}))).seated;
+            const occupied=chosen.map(({seat})=>slots.find(s=>s.id===seat.id)!);
+            const labels=layoutSeatLabels(occupied,width);
+            assert.equal(labels.size,occupancy);
+            const rects=[...labels.values()].map(label=>{
+                assert.ok(label.fontSize>=8);
+                return {left:label.x-label.width/2,right:label.x+label.width/2,top:label.y,bottom:label.y+label.height};
+            });
+            for(const r of rects)assert.ok(r.left>=0&&r.right<=width&&r.top>=0&&r.bottom<=height);
+            for(let i=0;i<rects.length;i++)for(let j=i+1;j<rects.length;j++) {
+                const a=rects[i],b=rects[j];
+                assert.ok(!(a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));
+            }
+        }
+    }
+});
+test('red cushion landmarks, exact image source and safe lower corners match the new PNG',()=>{
+    assert.equal(SEAT_IMAGE.src,'/images/476F2A78-424C-424C-8954-C43DFEC82BC7.png');
+    const rowSizes=Array.from({length:11},(_,row)=>SEAT_MAP.filter(s=>s.row===row).length);
+    assert.deepEqual(rowSizes,[10,10,10,10,10,10,10,10,10,10,8]);
+    for(const [id,x,y] of [['cushion-1-1',272,842],['cushion-10-1',40,1164],['cushion-10-10',1048,1164],['cushion-11-1',114,1224],['cushion-11-8',980,1224]] as const) {
+        const seat=SEAT_MAP.find(s=>s.id===id)!;
+        assert.equal(seat.x,x/1086);assert.equal(seat.y,y/1448);
+        assert.ok(seat.x-seat.width/2>0&&seat.x+seat.width/2<1);
+    }
+});
+test('all names avoid chat/footer after resizing or a full-width comment',()=>{
+    for(const [width,height]of [[768,1024],[1024,768]]) {
+        const slots=projectSeats(width,height,3/4);
+        for(const right of [310,width-30]) {
+            const chat={left:30,right,top:height-156,bottom:height-124};
+            const labels=layoutSeatLabels(slots,width,{bottom:height-120,blocked:[chat]});
+            assert.equal(labels.size,slots.length);
+            const rects=[...labels.values()].map(l=>({left:l.x-l.width/2,right:l.x+l.width/2,top:l.y,bottom:l.y+l.height}));
+            for(const r of rects) {
+                assert.ok(r.left>=0&&r.right<=width&&r.top>=0&&r.bottom<=height-120);
+                assert.ok(!(r.left<chat.right&&r.right>chat.left&&r.top<chat.bottom&&r.bottom>chat.top));
+                assert.ok(r.top>=slots[0].y+slots[0].height,'labels remain on the cushion floor');
+            }
+            for(let i=0;i<rects.length;i++)for(let j=i+1;j<rects.length;j++) {
+                const a=rects[i],b=rects[j];assert.ok(!(a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));
+            }
         }
     }
 });
