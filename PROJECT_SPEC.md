@@ -1,4 +1,21 @@
-# Current layout correction — guests inside one continuous sanctuary
+# Current increment — one full-window portrait background
+
+Owner supplies a portrait temple photo with cushions and a red central aisle and
+requests it as the fullscreen background. Use the selected image as one centered,
+aspect-preserving `cover` image across the entire viewport by default. Remove floor
+sampling/stitching and the separate upper photo panel. Keep contain/photo-only and
+optional 9:16 framing available; native fullscreen remains capability-based.
+The new image must be chosen in the existing iPad picker; do not silently overwrite
+the device-local photo or claim the chat image has been bundled when no file exists.
+
+Seat 20–24 mock visitors on two sides of the red carpet, using the decoded image
+aspect and actual object-fit bounds. Adapt their scale/rows to keep names clear of
+comments/footer on portrait and landscape. Preserve source Blob, storage, all
+simulation behavior and legacy modes. Acceptance: one image spans the full viewport,
+no stitched floor, no name overlap/overflow, clear center aisle, 9:16/contain options
+still work, full tests/build and browser checks pass. Keep PR #16 draft.
+
+# Previous layout — photo floor continuation (superseded)
 
 Owner iPad screenshot shows visitors on a separate brown floor outside the temple
 photo. Replace that stage with a continuation of the selected photo's bottom 8%,

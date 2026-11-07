@@ -232,3 +232,10 @@
 - [x] 113 tests/build passed; browser verifies source binding, indoor-floor bounds, label/footer separation at 5 sizes and interaction/photo persistence regressions.
 - [x] Prepare existing draft PR update; remote CI/preview reported at handoff.
 - [ ] Physical iPad seam review; keep production unmerged.
+
+
+## Full-window portrait sanctuary background
+- [x] Default to centered full-window cover, remove the upper image panel and stitched floor; keep optional 9:16/contain.
+- [x] Project visitors into two perspective groups around the red carpet using image aspect/frame/footer bounds.
+- [x] 114 tests/build passed; browser verifies full-window cover, 24 labels/clear aisle at 5 sizes, 9:16/contain, interaction/photo persistence and zero-size observer recovery. Prepare draft PR update; remote checks reported at handoff.
+- [ ] Owner chooses the new portrait photo on iPad and checks real Safari appearance; no production merge.

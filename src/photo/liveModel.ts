@@ -35,13 +35,36 @@ export function applyPhotoLive(state:PhotoLiveState, input:unknown):PhotoLiveSta
         notice:{id:event.id,kind:event.kind,viewerId:person.id,name:person.name,text},
     };
 }
+/** Seats calibrated to the portrait hall: two groups, with the red carpet clear. */
 export function liveSlot(index:number) {
     if (!Number.isInteger(index)||index<0||index>=24) throw Error('Invalid photo LIVE slot');
-    const row=index<4?0:index<10?1:index<17?2:3;
-    const start=[0,4,10,17][row], count=[4,6,7,7][row];
-    const edge=[.28,.16,.10,.08][row];
-    // Front-row arrivals fill the middle first without moving existing guests.
-    const front=[.50,.36,.64,.22,.78,.08,.92];
-    const x=row===3?front[index-start]:edge+(index-start)*(1-2*edge)/(count-1);
-    return {x,y:[0,.22,.45,.70][row],height:[.17,.20,.23,.26][row],width:[.11,.115,.12,.125][row]};
+    const row=Math.floor(index/6), local=index%6, column=Math.floor(local/2), right=local%2===1;
+    const left=[[.43,.365,.30],[.405,.32,.235],[.38,.28,.18],[.355,.24,.125]][row][column];
+    const height=[.040,.044,.048,.052][row], feet=[.595,.665,.735,.805][row];
+    return {x:right?1-left:left,y:feet-height,height,width:[.05,.065,.08,.09][row],row,column,right};
+}
+/** Match the browser's centered object-fit transform, then keep all seats visible. */
+export function projectLiveSlots(width:number,height:number,aspect:number,cover:boolean,footerHeight=124) {
+    if (![width,height,aspect].every(n=>Number.isFinite(n)&&n>0)||!Number.isFinite(footerHeight)||footerHeight<0) throw Error('Invalid photo bounds');
+    const imageHeight=cover?Math.max(height,width/aspect):Math.min(height,width/aspect);
+    const imageWidth=imageHeight*aspect, left=(width-imageWidth)/2, top=(height-imageHeight)/2;
+    const nameHeight=14, gap=4;
+    const floorTop=Math.max(top+.55*imageHeight,120);
+    const floorBottom=Math.min(top+.86*imageHeight,height-footerHeight-nameHeight-6);
+    const first=top+.595*imageHeight, last=top+.805*imageHeight;
+    const compressed=first-.04*imageHeight<floorTop||last>floorBottom;
+    const start=compressed?Math.min(floorBottom-54,floorTop+Math.min(24,.04*imageHeight)):first;
+    const end=compressed?floorBottom:last, step=Math.max(18,(end-start)/3);
+    return Array.from({length:24},(_,index)=>{
+        const slot=liveSlot(index), aisle=[.455,.425,.395,.36][slot.row];
+        const edge=[.27,.20,.14,.08][slot.row];
+        const leftOuter=Math.max(4,left+edge*imageWidth), rightOuter=Math.min(width-4,left+(1-edge)*imageWidth);
+        const leftInner=Math.max(leftOuter+24,left+aisle*imageWidth-gap);
+        const rightInner=Math.min(rightOuter-24,left+(1-aisle)*imageWidth+gap);
+        const band=Math.max(24,slot.right?rightOuter-rightInner:leftInner-leftOuter), cell=band/3;
+        const seatWidth=Math.max(4,Math.min(slot.width*imageWidth,cell-gap));
+        const x=slot.right?rightInner+cell*(slot.column+.5):leftInner-cell*(slot.column+.5);
+        const figureHeight=Math.max(4,Math.min(slot.height*imageHeight,step-nameHeight-3));
+        return {x,y:start+slot.row*step-figureHeight,width:seatWidth,height:figureHeight+nameHeight,nameHeight,row:slot.row};
+    });
 }

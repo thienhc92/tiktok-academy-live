@@ -7,8 +7,9 @@ lại ảnh để dùng overlay trên cùng thiết bị và cùng URL preview.
 
 ## Bố cục và thao tác
 
-- Mặc định khung 9:16: ảnh chính điện nguyên tỉ lệ trong vùng trên, phần sàn lấy từ chính ảnh được nối dài phía dưới. Ảnh không được chỉnh sửa nội dung. Tùy chọn phủ kín
-  cũ vẫn là thao tác rõ ràng có cảnh báo cắt mép.
+- Mặc định ảnh nền phủ toàn cửa sổ với `object-fit: cover`, giữ tỉ lệ và căn giữa;
+  có thể cắt mép. Khung 9:16 và contain là tùy chọn. Không còn tách ảnh phía trên
+  hoặc nối sàn. Tắt **Phủ kín khung** nếu cần nhìn trọn ảnh; tệp ảnh không bị sửa.
 - 20 khách mô phỏng ban đầu, tối đa 24, dùng roster ID và sprite có sẵn từ mô phỏng
   cũ; bốn hàng tên cách nhau, không tràn ngang/đè hàng nút. Các sprite là artwork
   được tạo ở mốc trước, không phải người thật trong ảnh chủ sở hữu.
@@ -36,7 +37,7 @@ vững của backend. Không tiếp nhận event mạng, không lưu số liệu
 
 ## Kiểm chứng
 
-- 113 kiểm thử qua; `npm run build` qua TypeScript frontend/local/backend và Vite.
+- 114 kiểm thử qua; `npm run build` qua TypeScript frontend/local/backend và Vite.
 - Browser Chromium: mọi action, hết hạn notice/effect, bình luận có chuỗi HTML chỉ
   hiển thị chữ, 20→24 khách/cap, simulator/hidden-tab pause, đổi chế độ ảnh tĩnh.
 - 768×1024, 390×844, 320×568, 1024×768, 1440×900: không cuộn ngang, các hộp tên
@@ -51,7 +52,7 @@ PR #16 tiếp tục nháp, chưa merge production. Truy cập cùng alias previe
 Các route `?experience=3d`, `?experience=live`, `?experience=academy` và dữ liệu cũ
 được giữ. Không dependency/dịch vụ trả phí hoặc backend deployment mới.
 
-## Sửa bố cục: Phật tử ở trong điện
+## Lịch sử: nối sàn 2D (đã thay bằng ảnh nền toàn màn hình)
 
 Ảnh iPad của chủ sở hữu cho thấy mảng sàn nâu tách rời chính điện. Đã thay mảng này
 bằng chính Blob ảnh đang hiển thị, cắt lấy 8% dưới cùng trong CSS và kéo dài phần
@@ -69,3 +70,23 @@ figure nằm trong vùng sàn ảnh, xa nhỏ/gần lớn, nhãn không chồng/
 Kiểm thêm ảnh dọc/ngang, cover, reload và các tương tác. Fixture thử không phải ảnh
 chủ sở hữu. Cần xem đường nối thực tế trên iPad với ảnh đã chọn; ảnh khác có vùng
 sàn khác vị trí có thể cần chỉnh vùng cắt. Đây là nối dài sàn 2D, không tái tạo 3D.
+
+## Hiện tại: ảnh dọc phủ toàn cửa sổ
+
+Theo ảnh dọc mới của chủ sở hữu, bỏ toàn bộ lớp nối sàn. Một `img` duy nhất phủ
+viewport, căn giữa, cover mặc định; không kéo méo ảnh. Ảnh vẫn là Blob người dùng
+chọn trên iPad và không bị ghi lại/upload. Vì ảnh trong chat không có tệp workspace,
+người dùng đổi sang ảnh dọc mới bằng **Chọn ảnh chính điện**; không tự thay ảnh cũ.
+
+Bỏ dòng chữ trang trí giữa ảnh để giữ tượng rõ. Vị trí khách chia 4 hàng × 6 chỗ,
+hai bên thảm đỏ; phối cảnh xa/gần. `projectLiveSlots` khớp phép biến đổi cover/contain
+và vùng crop thực tế, chừa bình luận/footer. ResizeObserver theo dõi frame/footer,
+bỏ qua kích thước bằng 0 khi ẩn/đổi hướng; có fallback resize. Metadata ảnh lấy từ
+naturalWidth/Height, không đổi nội dung ảnh. Khi không đủ chỗ ở màn hình thấp, giảm
+kích thước nhân vật để giữ bảng tên không chồng; bố cục ưu tiên iPad dọc.
+
+Kiểm chứng Chromium: ảnh/phần khung trùng toàn viewport ở 5 kích thước, không có
+lớp sàn ghép, 24 bảng tên ở hai bên lối giữa không chồng/đè bình luận, 9:16/contain/
+photo-only vẫn dùng được; tương tác/thông báo/lưu-reload ảnh và storage cũ qua.
+Fixtures chỉ dùng QA, không thay ảnh chủ sở hữu. Chưa xác minh crop/keyboard/browser
+chrome trên iPad thật. Giữ cùng URL alias để dùng lại ảnh, mở ☰ để chọn ảnh dọc mới.

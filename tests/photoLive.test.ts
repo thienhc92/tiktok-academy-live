@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { LIVE_ROSTER, LIVE_NOTICE_MS, applyPhotoLive, initialPhotoLive, liveSlot } from '../src/photo/liveModel.ts';
+import { LIVE_ROSTER, LIVE_NOTICE_MS, applyPhotoLive, initialPhotoLive, liveSlot, projectLiveSlots } from '../src/photo/liveModel.ts';
 import { vi } from '../src/i18n/vi.ts';
 test('photo LIVE reuses stable identities with 20 guests, bounded joins and no nickname identity',()=>{
     let state=initialPhotoLive();assert.equal(state.visitors.length,20);
@@ -37,14 +37,31 @@ test('24 floor slots keep nickname boxes apart and preserve central altar; notic
     assert.match(vi['Photo LIVE disclaimer'],/Mô phỏng|mô phỏng/);
 });
 
-test('interior rows follow perspective and new foreground guests fill the center without shifting others',()=>{
-    const back=liveSlot(0),middle=liveSlot(10),front=liveSlot(17);
-    assert.ok(back.height<middle.height&&middle.height<front.height);
-    assert.ok(back.width<middle.width&&middle.width<front.width);
-    assert.ok(back.x>liveSlot(10).x,'distant rows cluster toward the altar center');
-    assert.equal(front.x,.5);assert.equal((liveSlot(18).x+liveSlot(19).x)/2,.5);
-    for(let i=0;i<24;i++) for(let j=i+1;j<24;j++) {
-        const a=liveSlot(i), b=liveSlot(j);
-        if(a.y!==b.y) assert.ok(a.y+a.height<=b.y,'rows must not collide vertically');
+test('portrait sanctuary seats flank the carpet in symmetrical perspective rows',()=>{
+    for(let row=0;row<4;row++) {
+        for(let column=0;column<3;column++) {
+            const left=liveSlot(row*6+column*2), right=liveSlot(row*6+column*2+1);
+            assert.ok(left.x<.46&&right.x>.54);assert.equal(left.x+right.x,1);
+            assert.equal(left.y,right.y);assert.ok(left.y>=.55&&left.y+left.height<=.81);
+        }
     }
+    assert.ok(liveSlot(0).height<liveSlot(18).height);
+});
+test('photo projection fits 24 seats above controls with no nickname overlap and a clear central aisle',()=>{
+    for(const [width,height,footer] of [[768,1024,164],[390,844,164],[320,568,118],[1024,768,164],[1440,900,164],[576,1024,164]]) {
+        for(const cover of [true,false]) {
+            const slots=projectLiveSlots(width,height,3/4,cover,footer);
+            assert.equal(slots.length,24);
+            for(const [i,s] of slots.entries()) {
+                assert.ok(s.x-s.width/2>=0&&s.x+s.width/2<=width);
+                assert.ok(s.y>=0&&s.y+s.height<height-footer);
+                assert.ok(i%2===0?s.x+s.width/2<width/2:s.x-s.width/2>width/2);
+            }
+            for(let i=0;i<24;i++)for(let j=i+1;j<24;j++) {
+                const a=slots[i],b=slots[j],ay=a.y+a.height-14,by=b.y+b.height-14;
+                assert.ok(!(a.x-a.width/2<b.x+b.width/2&&a.x+a.width/2>b.x-b.width/2&&ay<by+14&&ay+14>by),'name boxes overlap');
+            }
+        }
+    }
+    for(const invalid of [0,NaN,Infinity,-1])assert.throws(()=>projectLiveSlots(768,1024,invalid,true));
 });

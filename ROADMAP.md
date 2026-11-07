@@ -109,3 +109,9 @@ review of the 9:16 arrangement, then follow-up product direction.
 Layout correction after iPad review: replace detached brown floor with a source-photo
 floor continuation, align the seam and arrange seated visitors in perspective. No
 new game rules. Next: review the seam/placement on owner's iPad, keep PR #16 draft.
+
+
+New portrait reference supersedes the floor-stitching layout: one full-window image,
+cover by default, optional contain/9:16; projected seats flank the central carpet.
+No new gameplay. Next: owner selects this portrait image through the existing local
+picker and reviews the framing on iPad; keep PR #16 draft.
