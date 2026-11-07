@@ -25,6 +25,9 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - run: npm ci
+      - run: npm ci --prefix trial-server --ignore-scripts
+      - run: npm audit --prefix trial-server --audit-level=high
       - run: npm audit --audit-level=high
+      - run: npm run check:trial
       - run: npm test
       - run: npm run build

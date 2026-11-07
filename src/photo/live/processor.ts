@@ -46,7 +46,7 @@ export function processTempleEvent(state:TempleState,input:unknown,now:number):T
     const activeIds=state.game.visitors.filter(v=>v!==id||profile.active);
     if(profile.active&&!activeIds.includes(id))activeIds.push(id);
     next.game={...state.game,visitors:activeIds};
-    if(e.kind==='leave')return result('processed',next);
+    if(e.kind==='leave'||e.kind==='follow'||e.kind==='share')return result('processed',next);
     let count=1,coins=0;
     const counterKey=(suffix:string)=>JSON.stringify([e.source,e.roomId,e.sessionId,id,suffix]);
     if(e.kind==='like'){

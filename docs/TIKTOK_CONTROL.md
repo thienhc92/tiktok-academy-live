@@ -1,4 +1,4 @@
-# Admin TikTok và Web Broadcast — bản chuẩn bị, chưa kết nối thật
+# Admin TikTok và Web Broadcast — backend thử nghiệm riêng
 
 ## Kết quả kiểm tra repository cũ
 
@@ -7,6 +7,14 @@ Ngày 07/11/2026, đã đọc `thienhc92/phat-tam-live`, nhánh main và toàn b
 Web Broadcast, connector hoặc API server. `src/main.tsx` tham chiếu `./App`
 nhưng file đó không được commit. Không có logic kết nối cũ để tái sử dụng hoặc
 chứng minh đã từng kết nối thành công. Không thể khôi phục code chưa commit từ GitHub.
+
+## Cập nhật thử nghiệm Node được chủ sở hữu duyệt
+
+Đã bổ sung `trial-server/` với connector 2.5.0 thật, Socket.IO và SQLite riêng.
+Xem [hướng dẫn chạy, đăng nhập, giấy phép và giới hạn](../trial-server/README.md).
+Chưa có buổi LIVE đang phát để xác minh nhận event; phép thử tài khoản tham khảo
+trả offline. Không triển khai production. Phần Access dưới đây là adapter cho host
+sau này; backend thử nghiệm hiện dùng native owner login/HttpOnly riêng.
 
 ## Phần đã chuẩn bị trong PR
 
@@ -53,34 +61,15 @@ POST khác bị từ chối, payload Connect tối đa 1 KiB. Không nhận toke
 cookie từ frontend. Không tồn tại API login/password tự chế. Trang chưa cấu hình
 backend (hoặc Pages trả HTML thay vì API) báo rõ chưa cấu hình, không báo Connected.
 
-## Chặn phát hành LIVE thật
+## Cổng phát hành production vẫn đóng
 
-**Đây chưa là connector TikTok chạy được.** `UnconfiguredConnector` luôn trả lỗi;
-không cài SDK, mã AGPL, dịch vụ ký hoặc gọi TikTok. Nguồn SIMULATION chỉ được inject
-trong kiểm thử và luôn có nhãn rõ. Chưa tạo Worker, route, host Node, Access app,
-secrets hoặc thay cấu hình Pages/production. Chưa nối service vào backend đang chạy.
-Bộ điều khiển này không gửi event chùa vào repository/XP học viện.
+`UnconfiguredConnector` vẫn là default an toàn của adapter chưa cấu hình; tiến trình
+Node thử nghiệm chọn `TikTokConnector` thật, không có đường phát events MOCK.
+Không có Worker/route/Access app mới hoặc thay đổi Pages production. Phần thử nghiệm
+được phép dùng connector theo phạm vi riêng đã duyệt, không cấp phép relay/SaaS
+cho bên thứ ba. Không merge vì main đang gắn tự deploy Pages.
 
-Cần duyệt trước các phần sau:
-
-1. Nguồn sự kiện/provider cụ thể, quyền sử dụng và giấy phép. Chưa xác minh có API
-   LIVE công khai cho join/comment/like/gift; xem nghiên cứu trong
-   [TEMPLE_LIVE_FOUNDATION.md](TEMPLE_LIVE_FOUNDATION.md). Không mặc định một SDK
-   unofficial là được phép hoặc miễn phí. Cần fixtures chứng minh ID/message ID,
-   giá quà đáng tin, final/streak, likes scope; không suy diễn user rời từ im lặng.
-2. Nếu dùng Node connector liên tục: duyệt host, chi phí và khả năng chạy nền.
-   Pages không chạy Node daemon; không hứa Workers Free chạy SDK Node Webcast.
-   Nếu dùng provider webhook/stream: cần tài liệu control/auth/handshake cụ thể.
-3. Cấp adapter lưu trữ chùa bền vững cho `TempleRepository`, kiểm thử crash/restart
-   trên host đã duyệt; hiện test controller dùng Memory repository. Không dùng nó
-   làm DB production. Ledger/snapshot phải tách MOCK và học viện, backup/retention
-   phải được duyệt. Trần hiện có 10000 receipt/1000 profile: dừng nhận khi chạm trần.
-   Phòng/phiên mới khác bản lưu bị từ chối, không tự reset điểm.
-4. Duyệt Access app/audience, route HTTPS cùng origin và triển khai staging trước.
-   Issuer/audience là cấu hình server; mọi secret/provider credential chỉ nhập qua
-   công cụ quản lý bí mật server, không chat/Git/frontend. Không đổi account/gói phí.
-5. Sau đó mới tích hợp adapter thật, kiểm thử staging với tài khoản được chủ sở hữu
-   duyệt rõ; hiện chưa kích hoạt tài khoản nào và chưa xác minh LIVE thật.
-
-Do các cổng hạ tầng/provider chưa được duyệt, PR giữ nháp; không auto-merge hoặc
-triển khai production. Các URL mới chỉ là đường dẫn trong bản PR cho tới khi phát hành.
+Trước production cần owner duyệt host chạy liên tục, quota/chi phí thực tế, auth và
+HTTPS route, retention/backup, phép thử tài khoản đang LIVE và thẩm định lại giấy phép.
+Không gửi event chùa vào DB học viện. Tài liệu cũ về provider chưa cấu hình được
+thay bằng [README thử nghiệm](../trial-server/README.md); không coi fixtures là LIVE.

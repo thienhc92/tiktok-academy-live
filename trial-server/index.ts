@@ -1,0 +1,13 @@
+import {mkdirSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {SQLiteTempleRepository} from './repository.ts';
+import {TikTokConnector} from './connector.ts';
+import {createGateway} from './gateway.ts';
+const origin=process.env.TRIAL_ORIGIN??'http://127.0.0.1:3001';
+const folder=resolve(process.env.TRIAL_DATA_DIR??fileURLToPath(new URL('./data/',import.meta.url)));mkdirSync(folder,{recursive:true,mode:0o700});
+const repository=new SQLiteTempleRepository(resolve(folder,'live.sqlite'));
+const diagnostics=new Map<string,number>();
+const gateway=createGateway({origin,password:process.env.TRIAL_ADMIN_PASSWORD??'',repository,connector:()=>new TikTokConnector(code=>{if(Date.now()-(diagnostics.get(code)??0)>10000){diagnostics.set(code,Date.now());console.warn('[TikTok]',code);}})});
+gateway.http.listen(3002,'127.0.0.1',()=>console.info('Private trial listening on loopback :3002. Open frontend /admin/tiktok. No TikTok connection until Connect.'));
+let closing=false;const stop=async()=>{if(closing)return;closing=true;await gateway.close();repository.close();process.exit(0);};process.on('SIGINT',()=>void stop());process.on('SIGTERM',()=>void stop());
