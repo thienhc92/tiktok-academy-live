@@ -11,6 +11,8 @@ import type {TempleRepository} from './repository';
 import {MockTempleSource,UnconfiguredLiveSource,mockTempleEvent} from './sources';
 import {enqueueRitual} from './rituals';
 import type {RitualCue} from './rituals';
+import {enqueueProgress} from './progress';
+import type {ProgressCue} from './progress';
 import {initialSeatPlan,updateSeatPlan} from './seating';
 export function useTempleSession(initialVisitors?:string[]) {
     const [snapshot,setSnapshot]=useState(()=>createTempleState('MOCK',crypto.randomUUID(),initialVisitors));
@@ -21,6 +23,7 @@ export function useTempleSession(initialVisitors?:string[]) {
     const [ready,setReady]=useState(false),[persistent,setPersistent]=useState(!initialVisitors);
     const [connection,setConnection]=useState<ConnectionState>('disconnected');
     const [rituals,setRituals]=useState<RitualCue[]>([]);
+    const [progress,setProgress]=useState<ProgressCue[]>([]);
     const [message,setMessage]=useState(''),[outcome,setOutcome]=useState('');
     const queue=useRef<Promise<unknown>>(Promise.resolve()),loaded=useRef<Promise<unknown>>(Promise.resolve());
     const mounted=useRef(false),readyFlag=useRef(false);
@@ -44,7 +47,7 @@ export function useTempleSession(initialVisitors?:string[]) {
                 repository.current=new MemoryTempleRepository();setPersistent(false);setMessage(t('Temple storage unavailable'));
                 result=await repository.current.transact('MOCK',current.current,change);
             }
-            if(mounted.current){current.current=result.state;setSnapshot(result.state);setOutcome(t('Temple event '+result.outcome));if(result.cue&&!document.hidden)setRituals(previous=>enqueueRitual(previous,result.cue!,Date.now()));}
+            if(mounted.current){current.current=result.state;setSnapshot(result.state);setOutcome(t('Temple event '+result.outcome));if(result.cue&&!document.hidden)setRituals(previous=>enqueueRitual(previous,result.cue!,Date.now()));if(result.progress&&!document.hidden)setProgress(previous=>enqueueProgress(previous,result.progress!,Date.now()));}
         }).catch(()=>{if(mounted.current)setMessage(t('Temple processing error'));});
     },[]);
     useEffect(()=>{
@@ -57,7 +60,12 @@ export function useTempleSession(initialVisitors?:string[]) {
         const timer=setTimeout(()=>setRituals(previous=>previous.filter(c=>c.expiresAt>Date.now())),Math.max(20,Math.min(...rituals.map(c=>c.expiresAt))-Date.now()+10));
         return ()=>clearTimeout(timer);
     },[rituals]);
-    useEffect(()=>{const hide=()=>{if(document.hidden)setRituals([]);};document.addEventListener('visibilitychange',hide);return ()=>document.removeEventListener('visibilitychange',hide);},[]);
+    useEffect(()=>{
+        if(!progress.length)return;
+        const timer=setTimeout(()=>setProgress(previous=>previous.filter(c=>c.expiresAt>Date.now())),Math.max(20,Math.min(...progress.map(c=>c.expiresAt))-Date.now()+10));
+        return ()=>clearTimeout(timer);
+    },[progress]);
+    useEffect(()=>{const hide=()=>{if(document.hidden){setRituals([]);setProgress([]);}};document.addEventListener('visibilitychange',hide);return ()=>document.removeEventListener('visibilitychange',hide);},[]);
     const send=useCallback((kind:LiveAction|'leave',viewerId:string,text?:string,coins?:number)=>{
         if(!viewerId||!readyFlag.current)return;
         const s=current.current,p=s.profiles[viewerId],fixture=LIVE_ROSTER.find(p=>p.id===viewerId);
@@ -78,5 +86,5 @@ export function useTempleSession(initialVisitors?:string[]) {
         const ids=new Set(seated.map(a=>a.user.id));
         return {seated,waiting:displayedParticipants.filter(p=>!ids.has(p.id))};
     },[plan,displayedParticipants]);
-    return {snapshot,state:snapshot.game,participants:displayedParticipants,seating,rituals,send,requestLive,ready,persistent,connection,message,outcome,pending:plan.pending};
+    return {snapshot,state:snapshot.game,participants:displayedParticipants,seating,rituals,progress,send,requestLive,ready,persistent,connection,message,outcome,pending:plan.pending};
 }

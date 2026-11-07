@@ -14,7 +14,7 @@ test('activity merit is separate from contribution, gifts and academic XP',()=>{
     let s=seed();
     for(const [id,kind]of [['b','bow'],['i','incense'],['f','flower'],['l','like']] as const)s=processTempleEvent(s,e(id,kind),start).state;
     assert.equal(s.merit['viewer-1'],18);assert.equal(s.game.contributionScore['viewer-1'],14);
-    const p=templeParticipants(s)[0];assert.equal(p.meritScore,18);assert.equal(p.rank,'visitor');assert.ok('seatId'in p);assert.ok(!('xp'in p));
+    const p=templeParticipants(s)[0];assert.equal(p.meritScore,18);assert.equal(p.rank,1);assert.ok('seatId'in p);assert.ok(!('xp'in p));
     assert.deepEqual(MOCK_GIFT_TIERS,[1,5,10,30]);
     for(const coins of MOCK_GIFT_TIERS){const r=processTempleEvent(s,e('gift-'+coins,'gift',start,'viewer-1',undefined,coins),start);s=r.state;assert.equal(s.merit['viewer-1'],18);}
     assert.equal(s.game.contributionScore['viewer-1'],474);

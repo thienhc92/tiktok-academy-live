@@ -1,16 +1,19 @@
 import {LIVE_ROSTER,initialPhotoLive,applyPhotoLive} from '../liveModel.ts';
 import type {PhotoLiveState,LiveEvent} from '../liveModel.ts';
 import {isTempleEvent,templeEventKey} from './events.ts';
-import {MERIT_RULES,emptyMeritLimits,allowMeritAction,isPrayerComment,meritRank} from './merit.ts';
+import {MERIT_RULES,emptyMeritLimits,allowMeritAction,isPrayerComment} from './merit.ts';
 import type {MeritLimits} from './merit.ts';
 import {ritualCue} from './rituals.ts';
 import type {RitualCue} from './rituals.ts';
+import {contributionRank} from './ranks.ts';
+import {progressCue} from './progress.ts';
+import type {ProgressCue} from './progress.ts';
 import type {TempleMode} from './events.ts';
 export const TEMPLE_RECEIPT_LIMIT=10000, TEMPLE_USER_LIMIT=1000;
 export type TempleProfile={userId:string;nickname:string;avatar:string|null;presenceAt:number;presenceKey:string;profileAt:number;active:boolean};
 export type TempleState={version:2;merit:Record<string,number>;meritLimits:Record<string,MeritLimits>;mode:TempleMode;roomId:string;sessionId:string;game:PhotoLiveState;profiles:Record<string,TempleProfile>;receipts:string[];counters:Record<string,number>;closed:string[];clock:number};
 export type TempleOutcome='processed'|'duplicate'|'invalid'|'anonymous'|'pending'|'stale'|'aggregate'|'capacity'|'rate-limited';
-export type TempleResult={state:TempleState;outcome:TempleOutcome;cue?:RitualCue};
+export type TempleResult={state:TempleState;outcome:TempleOutcome;cue?:RitualCue;progress?:ProgressCue};
 export function createTempleState(mode:TempleMode,sessionId:string,visitors?:string[]):TempleState {
     const game=initialPhotoLive(mode==='MOCK'?visitors:[]);
     const profiles=Object.fromEntries(game.visitors.map(id=>[id,{userId:id,nickname:LIVE_ROSTER.find(p=>p.id===id)!.name,avatar:'/temple/devotee-realistic.webp',presenceAt:0,presenceKey:'',profileAt:0,active:true}]));
@@ -94,8 +97,9 @@ export function processTempleEvent(state:TempleState,input:unknown,now:number):T
     // Late, valid rewards may update points without resurrecting a departed viewer.
     next.game={...next.game,visitors:activeIds};
     if(ritual==='bow'&&next.game.notice)next.game={...next.game,notice:{...next.game.notice,kind:'bow'}};
-    return {...result('processed',next),...(ritual?{cue:ritualCue(key,id,ritual,next.clock)}:{})};
+    const progress=progressCue(key,id,(next.merit[id]??0)-(state.merit[id]??0),state.game.contributionScore[id]??0,next.game.contributionScore[id]??0,next.clock);
+    return {...result('processed',next),...(progress?{progress:{...progress,noticeId:next.game.notice?.id}}:{}),...(ritual?{cue:ritualCue(key,id,ritual,next.clock)}:{})};
 }
 export function templeParticipants(state:TempleState){
-    return state.game.visitors.map(id=>{const p=state.profiles[id];return {...p,id,name:p.nickname,contributionScore:state.game.contributionScore[id]??0,meritScore:state.merit[id]??0,rank:meritRank(state.merit[id]??0),seatId:null as string|null};});
+    return state.game.visitors.map(id=>{const p=state.profiles[id];return {...p,id,name:p.nickname,contributionScore:state.game.contributionScore[id]??0,meritScore:state.merit[id]??0,rank:contributionRank(state.game.contributionScore[id]??0).level,seatId:null as string|null};});
 }
