@@ -1,0 +1,9 @@
+.git
+**/node_modules
+**/.env*
+**/.dev.vars*
+**/*.sqlite*
+**/*.db*
+dist
+docs/previews
+trial-server/data

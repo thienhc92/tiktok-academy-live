@@ -70,7 +70,9 @@ Nếu dùng Codespaces hoặc dev host riêng đã được chủ sở hữu qu�
 4. Safari đăng nhập GitHub cho private forwarded port, rồi đăng nhập quản trị thử nghiệm.
    Vite chỉ proxy `/api/temple` và `/socket.io` khi dùng `dev:trial`. Không sửa Pages.
 
-Node bind 127.0.0.1:3002. `TRIAL_ORIGIN` chỉ cho HTTPS hoặc HTTP loopback;
+Xem [phương án nối domain website hiện có](../deploy/live/README.md) cho HTTPS/WSS qua Pages proxy và cấu hình host sau khi được duyệt. Không cần Codespaces để vận hành website thật.
+
+Node thử nghiệm mặc định bind 127.0.0.1:3002. `TRIAL_ORIGIN` chỉ cho HTTPS hoặc HTTP loopback;
 Origin của POST và Socket.IO phải khớp. Tất cả state/Connect/Disconnect/socket cần
 phiên hợp lệ. Socket chỉ gửi snapshot, không nhận event/điểm từ browser.
 Codespaces có thể ngủ/dừng: không cam kết chạy liên tục, không mua máy chủ.

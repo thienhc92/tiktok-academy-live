@@ -51,3 +51,19 @@ test('HTTP/Socket.IO gateway refuses anonymous clients and never connects TikTok
   const response=await fetch(url+'/api/temple/connect',{method:'POST',headers:{Origin:'http://127.0.0.1:3001',Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify({username:'example'})});assert.equal((await response.json()).error,'offline');assert.equal(starts,1);
  }finally{await gateway.close();repository.close();}
 });
+test('hosted gateway requires edge secret for login/API and WSS handshake, keeping health non-sensitive',async()=>{
+ const repository=new SQLiteTempleRepository(':memory:'),password=randomBytes(24).toString('hex'),key=randomBytes(32).toString('hex');
+ const origin='https://tiktok-academy-live.pages.dev';
+ const gateway=createGateway({origin,password,gatewayKey:key,repository,connector:()=>{throw Error('must not connect');}});
+ await new Promise<void>(r=>gateway.http.listen(0,'127.0.0.1',r));const address=gateway.http.address();assert.ok(address&&typeof address!=='string');const url='http://127.0.0.1:'+address.port;
+ try{
+  assert.equal((await fetch(url+'/api/temple/login')).status,403);
+  assert.equal((await fetch(url+'/api/temple/state',{headers:{'X-Temple-Gateway':'forged'}})).status,403);
+  assert.deepEqual(await (await fetch(url+'/healthz')).json(),{service:'temple-live',status:'process-up'});
+  const login=await fetch(url+'/api/temple/login',{method:'POST',redirect:'manual',headers:{Origin:origin,'X-Temple-Gateway':key,'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({password})});assert.equal(login.status,303);assert.match(login.headers.get('Set-Cookie')!,/Secure/);const cookie=login.headers.get('Set-Cookie')!.split(';')[0];
+  const bad=io(url,{transports:['websocket'],reconnection:false,extraHeaders:{Origin:origin,Cookie:cookie}});
+  await new Promise<void>((resolve,reject)=>{bad.once('connect_error',()=>resolve());bad.once('connect',()=>reject(Error('unexpected connection')));});bad.disconnect();
+  const good=io(url,{transports:['websocket'],reconnection:false,extraHeaders:{Origin:origin,Cookie:cookie,'X-Temple-Gateway':key}});
+  const frame=await new Promise<{status:string}>((resolve,reject)=>{good.once('temple:state',resolve);good.once('connect_error',reject);});assert.equal(frame.status,'disconnected');good.disconnect();
+ }finally{await gateway.close();repository.close();}
+});

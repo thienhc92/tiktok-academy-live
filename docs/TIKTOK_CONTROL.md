@@ -61,6 +61,12 @@ POST khác bị từ chối, payload Connect tối đa 1 KiB. Không nhận toke
 cookie từ frontend. Không tồn tại API login/password tự chế. Trang chưa cấu hình
 backend (hoặc Pages trả HTML thay vì API) báo rõ chưa cấu hình, không báo Connected.
 
+## Chuẩn bị hosting cùng domain
+
+Audit xác nhận Cloudflare Pages; đã chuẩn bị advanced-mode proxy API/WSS, image
+Node và secret guard. Xem [audit, chi phí và các cổng phê duyệt](../deploy/live/README.md).
+Chưa có backend public được xác minh, không tạo tài nguyên hoặc phát hành production.
+
 ## Cổng phát hành production vẫn đóng
 
 `UnconfiguredConnector` vẫn là default an toàn của adapter chưa cấu hình; tiến trình
