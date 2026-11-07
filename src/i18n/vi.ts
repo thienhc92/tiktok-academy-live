@@ -1,5 +1,15 @@
 /** Central Vietnamese catalog. Keys are stable English source phrases, never saved IDs. */
 export const vi: Record<string,string> = {
+"Temple contribution rank 1":"Người mới",
+"Temple contribution rank 2":"Phật tử",
+"Temple contribution rank 3":"Tinh tấn",
+"Temple contribution rank 4":"Hộ pháp",
+"Temple contribution rank 5":"Đại hộ pháp",
+"Temple contribution ranking":"Top 10 đóng góp",
+"Temple selected contribution":"Cấp bậc và điểm đóng góp của khách đang chọn",
+"Temple contribution points":"{0} điểm",
+"Temple contribution promoted":"Chúc mừng {0} đạt cấp {1} 🪷",
+"Temple merit received":"{0} nhận +{1} công đức mô phỏng",
 "Temple selected merit":"Công đức mô phỏng của khách đang chọn",
 "Temple bow":"Lạy Phật",
 "Photo LIVE notice bow":"{0} vừa lạy Phật mô phỏng",

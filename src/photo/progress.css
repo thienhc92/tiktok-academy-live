@@ -1,0 +1,14 @@
+.pl-progress-effects{position:absolute;inset:0;z-index:36;pointer-events:none;overflow:hidden}
+.pl-merit-feedback{position:absolute;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:2px;height:18px;font-size:11px;line-height:16px;color:#ffe4a3;text-shadow:0 1px 3px #241309;animation:pl-merit-rise 2.4s ease-out both}
+.pl-merit-feedback b{font-weight:700}.pl-merit-feedback i{font-style:normal;font-size:14px}
+.pl-name[data-promoted=true]{border-color:#f7d788;box-shadow:inset 0 0 5px #efbd6d;animation:pl-rank-glow 2.4s ease-out both}
+.pl-progress-notice{position:absolute;top:26%;left:4%;max-width:29%;margin:0;padding:6px 8px;border:1px solid #cfa76588;border-radius:8px;background:#2a1b10ee;color:#ffe5a9;font-size:10px;line-height:1.4;overflow-wrap:anywhere;z-index:60;pointer-events:none}
+.photo-live .pl-ranking{pointer-events:auto;max-width:220px;max-height:22%;display:flex;flex-direction:column;overflow:hidden}
+.photo-live .pl-ranking-toggle{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;min-height:26px;padding:3px 0;background:none;border:0;border-radius:0;font-size:11px;color:#f5d99f;text-align:left}
+.pl-selected-contribution{padding:4px 0;font-size:10px;line-height:1.4;overflow-wrap:anywhere}.pl-selected-contribution>span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.pl-selected-contribution>b{font-size:10px;color:#f5d99f;font-weight:400}
+.pl-contribution-top{min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 0 0 18px;margin:4px 0 0;font-size:10px}
+.pl-contribution-top li{padding:4px 0;border-top:1px solid #dfb16d22}.pl-contribution-top li>span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pl-contribution-top small{font-size:9px;color:#dec8a5;line-height:1.4}
+@keyframes pl-merit-rise{0%{opacity:0;transform:translate(-50%,0)}15%,65%{opacity:1}100%{opacity:0;transform:translate(-50%,-10px)}}
+@keyframes pl-rank-glow{0%,100%{box-shadow:inset 0 0 4px #e4af6155}40%{box-shadow:inset 0 0 6px #ffe1a2}}
+@media(prefers-reduced-motion:reduce){.pl-merit-feedback,.pl-name[data-promoted=true]{animation:none}}
+.photo-live .pl-selected-contribution{display:block;margin:0;font-size:10px}.photo-live .pl-selected-contribution>b{font-size:10px}.photo-live .pl-ranking-toggle>span{flex:0 0 auto}

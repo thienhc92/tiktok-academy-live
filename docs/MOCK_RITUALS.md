@@ -40,8 +40,13 @@ Hạn mức được lưu cùng điểm nên refresh không reset cooldown hoặ
 
 Câu niệm nhận diện toàn câu, không phân biệt dấu/chữ hoa; cho phép khoảng trắng và
 ký hiệu trang trí như 🙏. Không dò substring hoặc tính hai lần cho comment + cue.
-Mỗi khoản điểm cap 999999. `rank` là mốc hoạt động mô phỏng: Khách ghé chùa (0),
-Bạn đồng hành (50), Thường ghé chùa (200), Gắn bó (1000), tính từ meritScore.
+Mỗi khoản điểm cap 999999. `rank` được suy ra từ contributionScore theo cấu hình
+MOCK `live/ranks.ts`: Người mới (0), Phật tử (100), Tinh tấn (500), Hộ pháp (2000),
+Đại hộ pháp (10000). meritScore độc lập; không thay đổi quy tắc cộng điểm trong bảng.
+Cấp không được lưu riêng: mở lại snapshot v1/v2 giữ nguyên điểm và receipts, không
+phát lại thông báo lên cấp. Top 10 dùng điểm đóng góp và thứ tự tham gia ổn định.
+Hiệu ứng nhận công đức/lên cấp tối đa 6 nhóm, tự dọn sau 2400ms; không giữ ghế
+thêm sau nghi thức. Bảng Top 10 có thể đóng, vẫn hiển thị cấp người đang chọn.
 Projection user có userId, nickname, meritScore, contributionScore, rank và seatId;
 seatId lấy từ plan đang hiển thị, null nếu đang chờ. Không lưu seatId/rank trùng lặp
 như nguồn điểm có thẩm quyền. Avatar và dữ liệu học viện giữ riêng như trước.
