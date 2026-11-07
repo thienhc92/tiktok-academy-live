@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { t } from '../i18n/vi';
-import { LIVE_ROSTER, LIVE_NOTICE_MS } from './liveModel';
+import { LIVE_ROSTER } from './liveModel';
 import { projectSeats, layoutSeatLabels, SEAT_MAP } from './seatMap';
 import type { LiveAction } from './liveModel';
 import { useTempleSession } from './live/useTempleSession';
@@ -40,19 +40,12 @@ export function PhotoLive({onControls,operator,photoAspect,initialVisitors}:{onC
     const [hidden,setHidden]=useState(document.hidden);
     const simulationIndex=useRef(0);
     const stateRef=useRef(state); stateRef.current=state;
-    const [notice,setNotice]=useState<typeof state.notice>(null);
+    const notice=session.notice;
     useEffect(()=>{
         const update=()=>setHidden(document.hidden);
         document.addEventListener('visibilitychange',update);
         return ()=>document.removeEventListener('visibilitychange',update);
     },[]);
-    useEffect(()=>{
-        if (!state.notice) return;
-        if(session.progress.some(p=>p.rankLevel&&p.noticeId===state.notice!.id)){setNotice(null);return;}
-        setNotice(state.notice);
-        const timer=setTimeout(()=>setNotice(null),LIVE_NOTICE_MS);
-        return ()=>clearTimeout(timer);
-    },[state.notice]);
     function send(kind:LiveAction|'leave',viewerId=selected,message?:string,coins?:number) {
         session.send(kind,viewerId,message,coins);
     }
@@ -88,11 +81,7 @@ export function PhotoLive({onControls,operator,photoAspect,initialVisitors}:{onC
             return <button key={person.id} className="pl-visitor" data-viewer-id={person.id} data-seat-id={seat.id} data-score={person.contributionScore} data-merit={person.meritScore} data-rank={person.rank} data-ritual={pose?.kind} aria-label={t('Photo LIVE choose person',person.name)} title={t('Photo LIVE person score',person.name,person.contributionScore)} aria-pressed={selected===person.id} onClick={()=>setSelected(person.id)} style={{left:`${slot.x}px`,top:`${slot.y}px`,height:`${slot.height}px`,width:`${slot.width}px`,zIndex:10+seat.row,animationDelay:`${index%7*-.8}s`} as React.CSSProperties}>
                 <img src="/temple/devotee-realistic.webp" alt="" draggable={false}/>{pose&&<span className="pl-prayer-mark" key={pose.id} aria-hidden="true">🙏</span>}
             </button>;
-        })}<div className="pl-name-layer"><svg className="pl-name-guides" aria-hidden="true">{seating.seated.map(({seat})=>{
-            const slot=projected.get(seat.id)!,label=labels.get(seat.id)!;
-            const edgeY=label.y<slot.y+slot.height?label.y+label.height:label.y;
-            return Math.abs(label.x-slot.x)>3||Math.abs(edgeY-slot.y-slot.height)>3?<line key={seat.id} x1={slot.x} y1={slot.y+slot.height} x2={label.x} y2={edgeY}/>:null;
-        })}</svg>{seating.seated.map(({user:person,seat})=>{
+        })}<div className="pl-name-layer">{seating.seated.map(({user:person,seat})=>{
             const label=labels.get(seat.id)!;
             return <span key={person.id} className="pl-name" data-for-viewer-id={person.id} data-seat-id={seat.id} data-selected={selected===person.id} data-promoted={promoted.has(person.id)} title={person.name} style={{left:`${label.x}px`,top:`${label.y}px`,width:`${label.width}px`,height:`${label.height}px`,fontSize:`${label.fontSize}px`,lineHeight:`${label.height-2}px`}}>{person.name}</span>;
         })}</div></section>

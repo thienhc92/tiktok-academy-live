@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { LIVE_ROSTER, LIVE_NOTICE_MS, CONTRIBUTION_WEIGHTS, applyPhotoLive, initialPhotoLive } from '../src/photo/liveModel.ts';
 import { SEAT_MAP, SEAT_IMAGE, assignSeats, projectSeats, layoutSeatLabels } from '../src/photo/seatMap.ts';
+import {enqueueNotice,NOTICE_QUEUE_LIMIT} from '../src/photo/live/notices.ts';
 import { vi } from '../src/i18n/vi.ts';
 
 test('capacity derives from photographed seats; joins can exceed capacity without losing identities',()=>{
@@ -144,11 +145,38 @@ test('all names avoid chat/footer after resizing or a full-width comment',()=>{
             for(const r of rects) {
                 assert.ok(r.left>=0&&r.right<=width&&r.top>=0&&r.bottom<=height-120);
                 assert.ok(!(r.left<chat.right&&r.right>chat.left&&r.top<chat.bottom&&r.bottom>chat.top));
-                assert.ok(r.top>=slots[0].y+slots[0].height,'labels remain on the cushion floor');
+                assert.ok(r.top>=slots[0].y-20,'labels stay below the altar');
             }
             for(let i=0;i<rects.length;i++)for(let j=i+1;j<rects.length;j++) {
                 const a=rects[i],b=rects[j];assert.ok(!(a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));
             }
         }
     }
+});
+
+test('names sit behind and above their own figures, never on their head/body or the carpet',()=>{
+    const slots=projectSeats(768,1024,3/4),labels=layoutSeatLabels(slots,768);
+    for(const seat of slots){
+        const label=labels.get(seat.id)!;
+        assert.ok(label.y+label.height<=seat.y-2);
+        const peers=slots.filter(s=>s.row===seat.row&&s.zone===seat.zone);
+        if(seat.zone.endsWith('left'))assert.ok(label.x+label.width/2<=Math.max(...peers.map(s=>s.x+s.width/2))+1e-9);
+        else assert.ok(label.x-label.width/2>=Math.min(...peers.map(s=>s.x-s.width/2))-1e-9);
+    }
+    const partial=layoutSeatLabels(slots.slice(0,20),768);
+    for(const [id,label]of partial)assert.deepEqual(label,labels.get(id));
+});
+test('notification FIFO preserves simultaneous valid rituals, ignores duplicates and stays bounded',()=>{
+    const user=LIVE_ROSTER[0];let state=initialPhotoLive([user.id]);
+    let queue:NonNullable<typeof state.notice>[]=[];
+    for(const [i,kind]of (['bow','incense','flower'] as const).entries()){
+        state=applyPhotoLive(state,{id:'notice-'+i,kind,viewerId:user.id});
+        queue=enqueueNotice(queue,state.notice!);
+    }
+    assert.deepEqual(queue.map(n=>n.kind),['bow','incense','flower']);
+    assert.equal(enqueueNotice(queue,queue[0]).length,3);
+    assert.equal(queue.slice(1)[0].kind,'incense');
+    for(let i=0;i<100;i++)queue=enqueueNotice(queue,{...queue[0],id:'extra-'+i});
+    assert.equal(queue.length,NOTICE_QUEUE_LIMIT);assert.equal(queue[0].kind,'bow');
+    assert.equal(LIVE_NOTICE_MS,3000);
 });

@@ -1,8 +1,8 @@
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {t} from '../../i18n/vi';
 import type {ConnectionState} from '../../events/types';
-import type {LiveAction} from '../liveModel';
-import {LIVE_ROSTER} from '../liveModel';
+import type {LiveAction,LiveNotice} from '../liveModel';
+import {LIVE_ROSTER,LIVE_NOTICE_MS} from '../liveModel';
 import {SEAT_MAP} from '../seatMap';
 import {createTempleState,processTempleEvent,templeParticipants} from './processor';
 import type {TempleResult} from './processor';
@@ -13,6 +13,7 @@ import {enqueueRitual} from './rituals';
 import type {RitualCue} from './rituals';
 import {enqueueProgress} from './progress';
 import type {ProgressCue} from './progress';
+import {enqueueNotice} from './notices';
 import {initialSeatPlan,updateSeatPlan} from './seating';
 export function useTempleSession(initialVisitors?:string[]) {
     const [snapshot,setSnapshot]=useState(()=>createTempleState('MOCK',crypto.randomUUID(),initialVisitors));
@@ -24,6 +25,8 @@ export function useTempleSession(initialVisitors?:string[]) {
     const [connection,setConnection]=useState<ConnectionState>('disconnected');
     const [rituals,setRituals]=useState<RitualCue[]>([]);
     const [progress,setProgress]=useState<ProgressCue[]>([]);
+    const [notices,setNotices]=useState<LiveNotice[]>([]);
+    const notice=notices[0]??null;
     const [message,setMessage]=useState(''),[outcome,setOutcome]=useState('');
     const queue=useRef<Promise<unknown>>(Promise.resolve()),loaded=useRef<Promise<unknown>>(Promise.resolve());
     const mounted=useRef(false),readyFlag=useRef(false);
@@ -39,6 +42,7 @@ export function useTempleSession(initialVisitors?:string[]) {
     const consume=useCallback((input:unknown)=>{
         queue.current=queue.current.then(async()=>{
             await loaded.current;if(!mounted.current)return;
+            const previousNoticeId=current.current.game.notice?.id;
             const change=(s:typeof current.current)=>processTempleEvent(s,input,Date.now());
             let result:TempleResult;
             try{result=await repository.current.transact('MOCK',current.current,change);}
@@ -47,7 +51,11 @@ export function useTempleSession(initialVisitors?:string[]) {
                 repository.current=new MemoryTempleRepository();setPersistent(false);setMessage(t('Temple storage unavailable'));
                 result=await repository.current.transact('MOCK',current.current,change);
             }
-            if(mounted.current){current.current=result.state;setSnapshot(result.state);setOutcome(t('Temple event '+result.outcome));if(result.cue&&!document.hidden)setRituals(previous=>enqueueRitual(previous,result.cue!,Date.now()));if(result.progress&&!document.hidden)setProgress(previous=>enqueueProgress(previous,result.progress!,Date.now()));}
+            if(mounted.current){
+                const nextNotice=result.state.game.notice;
+                if(!document.hidden&&result.outcome==='processed'&&nextNotice&&nextNotice.id!==previousNoticeId&&!result.progress?.rankLevel)
+                    setNotices(previous=>enqueueNotice(previous,nextNotice));
+                current.current=result.state;setSnapshot(result.state);setOutcome(t('Temple event '+result.outcome));if(result.cue&&!document.hidden)setRituals(previous=>enqueueRitual(previous,result.cue!,Date.now()));if(result.progress&&!document.hidden)setProgress(previous=>enqueueProgress(previous,result.progress!,Date.now()));}
         }).catch(()=>{if(mounted.current)setMessage(t('Temple processing error'));});
     },[]);
     useEffect(()=>{
@@ -65,7 +73,12 @@ export function useTempleSession(initialVisitors?:string[]) {
         const timer=setTimeout(()=>setProgress(previous=>previous.filter(c=>c.expiresAt>Date.now())),Math.max(20,Math.min(...progress.map(c=>c.expiresAt))-Date.now()+10));
         return ()=>clearTimeout(timer);
     },[progress]);
-    useEffect(()=>{const hide=()=>{if(document.hidden){setRituals([]);setProgress([]);}};document.addEventListener('visibilitychange',hide);return ()=>document.removeEventListener('visibilitychange',hide);},[]);
+    useEffect(()=>{
+        if(!notice)return;
+        const timer=setTimeout(()=>setNotices(previous=>previous.slice(1)),LIVE_NOTICE_MS);
+        return ()=>clearTimeout(timer);
+    },[notice?.id]);
+    useEffect(()=>{const hide=()=>{if(document.hidden){setRituals([]);setProgress([]);setNotices([]);}};document.addEventListener('visibilitychange',hide);return ()=>document.removeEventListener('visibilitychange',hide);},[]);
     const send=useCallback((kind:LiveAction|'leave',viewerId:string,text?:string,coins?:number)=>{
         if(!viewerId||!readyFlag.current)return;
         const s=current.current,p=s.profiles[viewerId],fixture=LIVE_ROSTER.find(p=>p.id===viewerId);
@@ -86,5 +99,5 @@ export function useTempleSession(initialVisitors?:string[]) {
         const ids=new Set(seated.map(a=>a.user.id));
         return {seated,waiting:displayedParticipants.filter(p=>!ids.has(p.id))};
     },[plan,displayedParticipants]);
-    return {snapshot,state:snapshot.game,participants:displayedParticipants,seating,rituals,progress,send,requestLive,ready,persistent,connection,message,outcome,pending:plan.pending};
+    return {snapshot,state:snapshot.game,participants:displayedParticipants,seating,rituals,progress,notice,send,requestLive,ready,persistent,connection,message,outcome,pending:plan.pending};
 }
