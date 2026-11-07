@@ -255,3 +255,12 @@
 - [x] Stable descending-score allocation, empty seats, overflow waiting/replacement; collision-aware names and perspective sprites.
 - [x] 11 Photo LIVE + 3 Vietnamese tests passed; production/TypeScript build passed. Chromium 108 floor contacts, waitlist displacement, score calculation, label collisions and existing actions passed at 768×1024 and 1024×768. Screenshots inspected.
 - [ ] Required CI/PR/merge reported at handoff; physical iPad Safari crowd-readability verification remains pending.
+
+
+## Đại Hùng Điện — new PNG / rebuilt 108 seats / all names
+- [x] Fetch owner upload from main 1849a59; verify unchanged 1086×1448 PNG/blob 7218e527. Use exact existing filename; no crop/zoom/stretch or fallback image.
+- [x] Rebuild all 108 seat contacts from real red/gold cushions: 10×10 + 8. Preserve score formulas and assignment algorithm; no invented seats.
+- [x] Always-visible names in an independent layer, ellipsis, physical-row packing, chat/footer avoidance and compact labels for letterboxed views. Preserve sprites/actions/statistics.
+- [x] 13 Photo LIVE and 3 Vietnamese tests passed. Final TypeScript/production build passed; existing archived 3D chunk warning remains.
+- [x] Chromium: 20 users via isolated component fixture, 108 via production preview; 768×1024 + full-occupancy landscape. Exact PNG HTTP 200/hash; every cushion contact/name, no label collisions/clipped corners, contribution/actions/comments and two long comments after resize passed. Screenshots inspected.
+- [ ] Draft PR and required CI reported at handoff; wait for owner review before merge. Physical iPad Safari/FPS remains unverified.

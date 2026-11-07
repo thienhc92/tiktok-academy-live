@@ -1,3 +1,10 @@
+# Current default — Đại Hùng Điện
+
+The active background is now `476F2A78-424C-424C-8954-C43DFEC82BC7.png`, with a
+new map of 108 real red/gold cushions and all names visible. See
+[the current documentation and screenshots](DAI_HUNG_DIEN.md).
+The previous background descriptions below are historical.
+
 # Phật Tâm Live — ảnh chính thức và khách mô phỏng
 
 ## Ảnh gốc

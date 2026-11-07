@@ -1,3 +1,11 @@
+# Current review — Đại Hùng Điện
+
+Replace the active photo with the owner's new PNG and recalibrate 108 real
+red/gold cushions. Keep contribution ranking and mock controls unchanged; show
+every seated name. Implementation, local tests/build and 20/108 iPad screenshots
+complete. Create a draft PR and await owner visual review before merge.
+See `docs/DAI_HUNG_DIEN.md` for source verification, map and QA evidence.
+
 # Current milestone — contribution-ranked seating
 
 Map the full official cushion floor, derive capacity from the map, assign by mock

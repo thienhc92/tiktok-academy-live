@@ -4,10 +4,11 @@ import { t } from '../i18n/vi';
 import { toggleFullscreen } from '../broadcast/fullscreen';
 import './style.css';
 import { PhotoLive } from './PhotoLive';
+import { SEAT_IMAGE } from './seatMap';
 
-const BACKGROUND = '/images/phat-tam-live-background-ipad.png';
+const BACKGROUND = SEAT_IMAGE.src;
 function PhotoApp() {
-    const [photoAspect, setPhotoAspect] = useState(1086 / 1448);
+    const [photoAspect, setPhotoAspect] = useState(SEAT_IMAGE.width / SEAT_IMAGE.height);
     const [loaded, setLoaded] = useState(false);
     const [failed, setFailed] = useState(false);
     const [portrait, setPortrait] = useState(false);

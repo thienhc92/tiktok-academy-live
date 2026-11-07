@@ -1,3 +1,26 @@
+# Current increment — Đại Hùng Điện PNG and complete names
+
+Use the owner's exact `public/images/476F2A78-424C-424C-8954-C43DFEC82BC7.png`
+from main commit 1849a59, replacing the old default background. Verify PNG bytes
+before use; render the entire image centered with contain, without zoom, crop,
+stretch or camera inset. Never fall back to the previous image.
+
+The actual image contains 108 valid red/gold cushions: ten rows of ten and a last
+row of eight. Recalibrate every contact/scale to these cushions; do not reuse the
+previous map or invent seats. Preserve the existing score calculation and
+row-first/center-first assignment algorithm. All seated users must have visible,
+ellipsized names, including front rows and lower corners; pack names around
+existing chat/footer without moving avatars or hiding names. Preserve the three
+Buddhas, altar, censer, center carpet and all mock interactions/statistics.
+
+Acceptance: verify image HTTP 200/hash, exact contain projection for every seated
+user, 20/108 occupancy, all names visible without overlap or corner clipping,
+768×1024 screenshots, targeted tests and final production/TypeScript build.
+Create a PR for owner review; do not auto-merge this increment. No real TikTok,
+new backend, paid service or dependency.
+
+# Previous contribution-seat milestone
+
 # Current increment — contribution-ranked cushion seating
 
 Keep the exact official PNG and centered contain rendering unchanged. Replace

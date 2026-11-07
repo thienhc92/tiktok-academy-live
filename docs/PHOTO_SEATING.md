@@ -1,3 +1,12 @@
+# Current seat map — Đại Hùng Điện
+
+The active image/map and all-name layout now follow the owner's new PNG.
+See [current source, 108 cushion map and QA](DAI_HUNG_DIEN.md).
+The old source/map and label-hiding notes below are historical and superseded.
+Contribution weights and ranking rules remain unchanged.
+
+# Previous background seating implementation
+
 # Xếp chỗ theo đóng góp mô phỏng
 
 ## Bản đồ ảnh
