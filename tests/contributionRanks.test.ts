@@ -66,3 +66,36 @@ test('existing v1/v2 saved scores and receipts are preserved; ranks are derived 
     assert.equal(processTempleEvent(restored,e('legacy','gift',now,undefined,30),now).progress,undefined);
     const {merit,meritLimits,...old}=v2;const v1=restoreTempleSnapshot({...old,version:1},'MOCK');assert.equal(v1.game.contributionScore.viewer,500);assert.equal(templeParticipants(v1)[0].rank,3);
 });
+
+test('gift contribution feedback uses only actual committed delta, does not mint merit or replay',()=>{
+    const event=e('gift-only','gift',now,undefined,1),first=processTempleEvent(seed(),event,now);
+    assert.equal(first.progress?.meritDelta,0);assert.equal(first.progress?.contributionDelta,10);assert.equal(first.progress?.rankLevel,undefined);
+    const loaded=restoreTempleSnapshot(JSON.parse(JSON.stringify(first.state)),'MOCK');
+    const duplicate=processTempleEvent(loaded,event,now+1000);assert.equal(duplicate.progress,undefined);assert.equal(duplicate.state.game.contributionScore.viewer,10);
+    const capped=processTempleEvent({...loaded,game:{...loaded.game,contributionScore:{viewer:999995}}},e('gift-cap','gift',now+1000,undefined,30),now+1000);
+    assert.equal(capped.progress?.contributionDelta,4);assert.equal(capped.progress?.meritDelta,0);
+    const merged=enqueueProgress([first.progress!],progressCue('another','viewer',5,10,15,now+100)!,now+100);
+    assert.equal(merged[0].meritDelta,5);assert.equal(merged[0].contributionDelta,15);assert.equal(merged[0].expiresAt,now+2400);
+});
+test('point feedback avoids all name rectangles while staying in its cushion wing',()=>{
+    const slots=projectSeats(768,1024,3/4),labels=layoutSeatLabels(slots,768),blocked=[...labels.values()];
+    const first=slots[0],near=progressPosition(labels.get(first.id)!,first,slots,768,30,blocked);assert.ok(Math.abs(near.x-first.x)<20,'front-row feedback remains near its own user');
+    for(const seat of slots){
+        const p=progressPosition(labels.get(seat.id)!,seat,slots,768,90,blocked);
+        for(const b of blocked)assert.ok(!(p.x-p.width/2<b.x+b.width/2&&p.x+p.width/2>b.x-b.width/2&&p.y-10<b.y+b.height&&p.y+18>b.y));
+        assert.ok(p.y>=Math.min(...slots.map(s=>s.y))-40);
+    }
+});
+test('108 seat swaps stay atomic through every ritual kind and ignore small adjacent changes',()=>{
+    const users=Array.from({length:109},(_,i)=>({id:'u'+i,contributionScore:109-i}));
+    const initial=initialSeatPlan(users,now),boost=users.map(u=>({...u,contributionScore:u.id==='u108'?1000:u.contributionScore}));
+    for(const duration of [2200,2400,2800]){
+        const held=updateSeatPlan(initial,boost,now+5000,now+5000+duration);
+        assert.deepEqual(held.assigned,initial.assigned);
+        const moved=updateSeatPlan(held,boost,now+5000+duration);
+        assert.equal(moved.assigned[0].userId,'u108');assert.equal(new Set(moved.assigned.map(a=>a.seatId)).size,108);assert.equal(new Set(moved.assigned.map(a=>a.userId)).size,108);
+        assert.deepEqual(updateSeatPlan(moved,boost,now+5001+duration).assigned,moved.assigned);
+    }
+    const minor=users.map(u=>({...u,contributionScore:u.id==='u1'?u.contributionScore+2:u.contributionScore}));
+    assert.deepEqual(updateSeatPlan(initial,minor,now+5000).assigned,initial.assigned);
+});
