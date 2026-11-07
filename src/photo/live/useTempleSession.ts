@@ -53,8 +53,8 @@ export function useTempleSession(initialVisitors?:string[]) {
             }
             if(mounted.current){
                 const nextNotice=result.state.game.notice;
-                if(!document.hidden&&result.outcome==='processed'&&nextNotice&&nextNotice.id!==previousNoticeId&&!result.progress?.rankLevel)
-                    setNotices(previous=>enqueueNotice(previous,nextNotice));
+                if(!document.hidden&&result.outcome==='processed'&&nextNotice&&nextNotice.id!==previousNoticeId&&(!result.progress?.rankLevel||nextNotice.kind==='gift'))
+                    setNotices(previous=>enqueueNotice(previous,result.progress?.giftCoins?{...nextNotice,coins:result.progress.giftCoins,contributionDelta:result.progress.contributionDelta}:nextNotice));
                 current.current=result.state;setSnapshot(result.state);setOutcome(t('Temple event '+result.outcome));if(result.cue&&!document.hidden)setRituals(previous=>enqueueRitual(previous,result.cue!,Date.now()));if(result.progress&&!document.hidden)setProgress(previous=>enqueueProgress(previous,result.progress!,Date.now()));}
         }).catch(()=>{if(mounted.current)setMessage(t('Temple processing error'));});
     },[]);

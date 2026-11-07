@@ -14,7 +14,7 @@ export const LIVE_NOTICE_MS = 3000;
 export const LIVE_ACTIONS = ['join','like','incense','flower','wish','gift','bow'] as const;
 export type LiveAction = typeof LIVE_ACTIONS[number];
 export type LiveEvent = {id:string; kind:LiveAction; viewerId:string; text?:string; coins?:number; count?:number};
-export type LiveNotice = LiveEvent & {name:string};
+export type LiveNotice = LiveEvent & {name:string;contributionDelta?:number};
 export type PhotoLiveState = {
     visitors:string[]; likes:number; incense:number; flowers:number;
     activity:Record<string,number>; contributionScore:Record<string,number>; comments:{id:string;name:string;text:string}[];

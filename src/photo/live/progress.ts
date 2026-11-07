@@ -2,7 +2,7 @@ import {contributionRank} from './ranks.ts';
 import type {ContributionLevel} from './ranks.ts';
 import type {ProjectedSeat} from '../seatMap.ts';
 export const PROGRESS_LIMIT=6,PROGRESS_DURATION_MS=2400;
-export type ProgressCue={id:string;userId:string;meritDelta:number;contributionDelta:number;rankLevel?:ContributionLevel;noticeId?:string;createdAt:number;expiresAt:number};
+export type ProgressCue={id:string;userId:string;meritDelta:number;contributionDelta:number;giftCoins?:number;rankLevel?:ContributionLevel;noticeId?:string;createdAt:number;expiresAt:number};
 export function progressCue(id:string,userId:string,meritDelta:number,beforeContribution:number,afterContribution:number,now:number):ProgressCue|undefined {
     const before=contributionRank(beforeContribution).level,after=contributionRank(afterContribution).level;
     const contributionDelta=Math.max(0,afterContribution-beforeContribution);
@@ -14,6 +14,7 @@ export function enqueueProgress(current:readonly ProgressCue[],cue:ProgressCue,n
     const old=active.find(c=>c.userId===cue.userId);
     if(old)return active.map(c=>c!==old?c:{...old,id:cue.id,meritDelta:old.meritDelta+cue.meritDelta,contributionDelta:old.contributionDelta+cue.contributionDelta,
         noticeId:cue.rankLevel?cue.noticeId:old.noticeId,
+        giftCoins:Math.max(old.giftCoins??0,cue.giftCoins??0)||undefined,
         rankLevel:cue.rankLevel&&cue.rankLevel>(old.rankLevel??0)?cue.rankLevel:old.rankLevel,
         expiresAt:cue.rankLevel&&cue.rankLevel>(old.rankLevel??0)?cue.expiresAt:old.expiresAt});
     if(active.length<PROGRESS_LIMIT)return [...active,cue];
