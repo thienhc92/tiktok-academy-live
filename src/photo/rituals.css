@@ -14,7 +14,3 @@
 @keyframes pl-incense-smoke{0%{opacity:0;transform:translateY(0) scale(.55)}25%{opacity:.55}100%{opacity:0;transform:translateY(-30px) scale(1.3)}}
 @keyframes pl-lotus-flight{0%{opacity:0;transform:translate3d(0,0,0) scale(.6)}12%{opacity:.9}60%{opacity:.8;transform:translate3d(var(--ritual-mid-x),var(--ritual-mid-y),0) scale(.8)}100%{opacity:0;transform:translate3d(var(--ritual-dx),var(--ritual-dy),0) scale(.35)}}
 @media(prefers-reduced-motion:reduce){.pl-visitor[data-ritual] img{animation:none;will-change:auto}.pl-prayer-mark{animation:none;opacity:.8}.pl-smoke{animation:none;opacity:.12}.pl-lotus-offering{animation:none;opacity:.6}}
-/* Compact ritual notices stay beside the image's face region, never over a Buddha face. */
-.photo-live .pl-notice-bow,.photo-live .pl-notice-incense,.photo-live .pl-notice-flower{top:18%;left:4%;right:auto;max-width:29%;padding:6px 8px;gap:5px;border-radius:8px}
-.photo-live .pl-notice-bow b,.photo-live .pl-notice-incense b,.photo-live .pl-notice-flower b{font-size:clamp(9px,1.5cqw,11px);line-height:1.3;min-width:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.photo-live .pl-notice-bow>span,.photo-live .pl-notice-incense>span,.photo-live .pl-notice-flower>span{font-size:16px}

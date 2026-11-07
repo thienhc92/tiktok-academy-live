@@ -52,8 +52,8 @@ export function projectSeats(width:number,height:number,aspect:number) {
 }
 export type ProjectedSeat = ReturnType<typeof projectSeats>[number];
 export type LabelObstacle = {left:number;right:number;top:number;bottom:number};
-/** Every occupied seat gets a name. Pack rows around existing chat/footer UI,
- * never hide names or move avatars. Stable physical ordering survives score changes.
+/** Every occupied seat gets a name behind its figure, above the head.
+ * Pack around chat/footer without moving avatars. Physical ordering is stable.
  */
 export function layoutSeatLabels(seats:readonly ProjectedSeat[],frameWidth:number,
     options:{bottom?:number;blocked?:readonly LabelObstacle[]}={}) {
@@ -65,10 +65,13 @@ export function layoutSeatLabels(seats:readonly ProjectedSeat[],frameWidth:numbe
     let nextTop=options.bottom??Infinity;
     for(const row of rows) {
         const members=seats.filter(s=>s.row===row);
-        let y=Math.min(Math.min(...members.map(s=>s.y+s.height))+1,nextTop-height-2);
+        let y=Math.min(Math.min(...members.map(s=>s.y))-height-2,nextTop-height-1);
         const groups=(['left','right'] as const).map(side=>({side,seats:members.filter(s=>s.zone.endsWith(side)).sort((a,b)=>a.x-b.x)}));
         const bandsFor=(side:'left'|'right')=>{
-            let bands=side==='left'?[[2,frameWidth/2-3]]:[[frameWidth/2+3,frameWidth-2]];
+            const wing=members.filter(s=>s.zone.endsWith(side));
+            const imageLeft=(frameWidth-(members[0]?.imageWidth??frameWidth))/2;
+            let bands=side==='left'?[[imageLeft+2,Math.max(...wing.map(s=>s.x+s.width/2))]]:
+                [[Math.min(...wing.map(s=>s.x-s.width/2)),frameWidth-imageLeft-2]];
             for(const box of blocked.filter(b=>y<b.bottom&&y+height>b.top)) {
                 bands=bands.flatMap(([l,r])=>box.right<=l||box.left>=r?[[l,r]]:
                     [[l,Math.min(r,box.left-3)],[Math.max(l,box.right+3),r]].filter(([a,b])=>b>a));
