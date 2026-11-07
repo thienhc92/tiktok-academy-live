@@ -7,13 +7,13 @@ export const LIVE_ROSTER = [...TEMPLE_PEOPLE,...Array.from({length:Math.max(0,
     }))];
 export const CONTRIBUTION_WEIGHTS = Object.freeze({join:0,wish:0,like:1,incense:5,flower:8,giftCoin:10});
 const MAX_SCORE = 999999;
-export function contributionReward(event:Pick<LiveEvent,'kind'|'coins'>):number {
-    return event.kind==='gift'?CONTRIBUTION_WEIGHTS.giftCoin*(event.coins??0):CONTRIBUTION_WEIGHTS[event.kind];
+export function contributionReward(event:Pick<LiveEvent,'kind'|'coins'|'count'>):number {
+    return event.kind==='like'?CONTRIBUTION_WEIGHTS.like*(event.count??1):event.kind==='gift'?CONTRIBUTION_WEIGHTS.giftCoin*(event.coins??0):CONTRIBUTION_WEIGHTS[event.kind];
 }
 export const LIVE_NOTICE_MS = 3000;
 export const LIVE_ACTIONS = ['join','like','incense','flower','wish','gift'] as const;
 export type LiveAction = typeof LIVE_ACTIONS[number];
-export type LiveEvent = {id:string; kind:LiveAction; viewerId:string; text?:string; coins?:number};
+export type LiveEvent = {id:string; kind:LiveAction; viewerId:string; text?:string; coins?:number; count?:number};
 export type LiveNotice = LiveEvent & {name:string};
 export type PhotoLiveState = {
     visitors:string[]; likes:number; incense:number; flowers:number;
@@ -23,21 +23,22 @@ export type PhotoLiveState = {
 export function initialPhotoLive(visitors=LIVE_ROSTER.slice(0,SEAT_MAP.length).map(p=>p.id)):PhotoLiveState {
     return {visitors:[...new Set(visitors.filter(id=>LIVE_ROSTER.some(p=>p.id===id)))],likes:0,incense:0,flowers:0,activity:{},contributionScore:{},comments:[],recent:[],notice:null};
 }
-/** Session-only demonstration. Never forwards events to the academic/reward engine. */
-export function applyPhotoLive(state:PhotoLiveState, input:unknown):PhotoLiveState {
+/** Pure mock rules reused by the persistent temple pipeline; never forwards academic rewards. */
+export function applyPhotoLive(state:PhotoLiveState, input:unknown,roster:readonly {id:string;name:string}[]=LIVE_ROSTER):PhotoLiveState {
     if (!input || typeof input!=='object') return state;
     const event=input as LiveEvent;
     if (typeof event.id!=='string'||!event.id.trim()||event.id.length>80||event.id!==event.id.trim()||!LIVE_ACTIONS.includes(event.kind)) return state;
-    const person=LIVE_ROSTER.find(p=>p.id===event.viewerId);
+    const person=roster.find(p=>p.id===event.viewerId);
     if (!person||state.recent.includes(event.id)) return state;
     if (event.kind==='join' ? state.visitors.includes(person.id) : !state.visitors.includes(person.id)) return state;
     if (event.kind==='wish'&&(typeof event.text!=='string'||!event.text.trim()||event.text.length>120)) return state;
     if(event.kind==='gift'&&(!Number.isSafeInteger(event.coins)||event.coins!<=0||event.coins!>1000000)) return state;
+    if(event.kind==='like'&&event.count!==undefined&&(!Number.isSafeInteger(event.count)||event.count<=0||event.count>10000))return state;
     const text=event.kind==='wish'?event.text!.trim():undefined;
     return {
         ...state,
         visitors:event.kind==='join'?[...state.visitors,person.id]:state.visitors,
-        likes:Math.min(999999,state.likes+Number(event.kind==='like')),
+        likes:Math.min(999999,state.likes+(event.kind==='like'?(event.count??1):0)),
         incense:Math.min(999999,state.incense+Number(event.kind==='incense')),
         flowers:Math.min(999999,state.flowers+Number(event.kind==='flower')),
         activity:{...state.activity,[person.id]:Math.min(999999,(state.activity[person.id]??0)+1)},

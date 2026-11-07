@@ -264,3 +264,13 @@
 - [x] 13 Photo LIVE and 3 Vietnamese tests passed. Final TypeScript/production build passed; existing archived 3D chunk warning remains.
 - [x] Chromium: 20 users via isolated component fixture, 108 via production preview; 768×1024 + full-occupancy landscape. Exact PNG HTTP 200/hash; every cushion contact/name, no label collisions/clipped corners, contribution/actions/comments and two long comments after resize passed. Screenshots inspected.
 - [ ] Draft PR and required CI reported at handoff; wait for owner review before merge. Physical iPad Safari/FPS remains unverified.
+
+
+## Temple LIVE preparation — offline boundary and persistence
+- [x] Reuse adapter/envelope and contribution reducers; add normalized temple join/comment/like/gift/leave with stable userId/profile/avatar metadata. No academic XP changes.
+- [x] MOCK source and unconfigured LIVE source; selecting LIVE retains MOCK and explains missing approval/configuration, without network requests.
+- [x] IndexedDB transactional receipt/point/presence/high-water updates, validated snapshots, separate mode namespaces; memory warning on storage failure without overwriting old records.
+- [x] Leave/rejoin keeps points; cumulative likes, final gift streaks and duplicate/out-of-order events handled. Vacancies fill immediately and ranking updates at most every five seconds.
+- [x] Review official TikTok products/webhook events and current unofficial connector README/license boundaries; document permissions, identity uncertainty, hosting and approval gates.
+- [x] 131 full tests and production/TypeScript build passed; Miniflare required elevated localhost execution. Browser: refresh/leave/rejoin, no external requests, 30 concurrent IndexedDB transactions, rollback/replay/corrupt preservation and storage failure passed.
+- [ ] Required PR checks/merge state reported at handoff. Real provider, server integration, production persistence/retention, physical iPad verification and actual TikTok connection remain unimplemented/unapproved.
