@@ -5,6 +5,7 @@ import {MERIT_RULES,emptyMeritLimits,allowMeritAction,isPrayerComment} from './m
 import type {MeritLimits} from './merit.ts';
 import {ritualCue} from './rituals.ts';
 import type {RitualCue} from './rituals.ts';
+import {mockGift} from './gifts.ts';
 import {contributionRank} from './ranks.ts';
 import {progressCue} from './progress.ts';
 import type {ProgressCue} from './progress.ts';
@@ -98,7 +99,7 @@ export function processTempleEvent(state:TempleState,input:unknown,now:number):T
     next.game={...next.game,visitors:activeIds};
     if(ritual==='bow'&&next.game.notice)next.game={...next.game,notice:{...next.game.notice,kind:'bow'}};
     const progress=progressCue(key,id,(next.merit[id]??0)-(state.merit[id]??0),state.game.contributionScore[id]??0,next.game.contributionScore[id]??0,next.clock);
-    return {...result('processed',next),...(progress?{progress:{...progress,noticeId:next.game.notice?.id}}:{}),...(ritual?{cue:ritualCue(key,id,ritual,next.clock)}:{})};
+    return {...result('processed',next),...(progress?{progress:{...progress,noticeId:next.game.notice?.id,...(e.kind==='gift'&&progress.contributionDelta>0&&mockGift(e.coins)?{giftCoins:e.coins}:{})}}:{}),...(ritual?{cue:ritualCue(key,id,ritual,next.clock)}:{})};
 }
 export function templeParticipants(state:TempleState){
     return state.game.visitors.map(id=>{const p=state.profiles[id];return {...p,id,name:p.nickname,contributionScore:state.game.contributionScore[id]??0,meritScore:state.merit[id]??0,rank:contributionRank(state.game.contributionScore[id]??0).level,seatId:null as string|null};});

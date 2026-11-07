@@ -1,5 +1,15 @@
 /** Central Vietnamese catalog. Keys are stable English source phrases, never saved IDs. */
 export const vi: Record<string,string> = {
+"Temple open mock gifts":"Quà tặng mô phỏng",
+"Temple close mock gifts":"Đóng quà mô phỏng",
+"Temple mock gift coins":"{0} xu",
+"Temple mock gift user":"Người tặng: {0}",
+"Temple mock gifts help":"Chỉ MOCK · Không giao dịch tiền thật",
+"Temple mock gift received":"{0} tặng {1} · +{2} đóng góp",
+"Temple mock gift 1":"Quà an lành",
+"Temple mock gift 5":"Hoa sen",
+"Temple mock gift 10":"Hào quang",
+"Temple mock gift 30":"Sen vàng",
 "Temple contribution rank 1":"Người mới",
 "Temple contribution rank 2":"Phật tử",
 "Temple contribution rank 3":"Tinh tấn",

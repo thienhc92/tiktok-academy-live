@@ -1,3 +1,4 @@
+import {MOCK_GIFTS,mockGift} from '../src/photo/live/gifts.ts';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {CONTRIBUTION_RANKS,contributionRank,topContributors} from '../src/photo/live/ranks.ts';
@@ -98,4 +99,44 @@ test('108 seat swaps stay atomic through every ritual kind and ignore small adja
     }
     const minor=users.map(u=>({...u,contributionScore:u.id==='u1'?u.contributionScore+2:u.contributionScore}));
     assert.deepEqual(updateSeatPlan(initial,minor,now+5000).assigned,initial.assigned);
+});
+
+test('four gift presets use existing contribution weights and reject unknown UI choices',()=>{
+    assert.deepEqual(MOCK_GIFTS.map(g=>[g.coins,g.points]),[[1,10],[5,50],[10,100],[30,300]]);
+    assert.deepEqual(MOCK_GIFTS.map(g=>g.icon),['🎁','🌸','🪷','✨']);
+    for(const coins of [0,-1,2,NaN,Infinity])assert.equal(mockGift(coins),undefined);
+});
+test('every preset credits the correct stable identity once, with bounded gift effects and no merit',()=>{
+    for(const gift of MOCK_GIFTS){
+        const event=e('preset-'+gift.coins,'gift',now,undefined,gift.coins),r=processTempleEvent(seed(),event,now);
+        assert.equal(r.state.game.contributionScore.viewer,gift.points);assert.equal(r.state.merit.viewer??0,0);
+        assert.equal(r.progress?.giftCoins,gift.coins);assert.equal(r.progress?.contributionDelta,gift.points);
+        assert.equal(r.state.game.contributionScore.other,undefined);
+        const restored=restoreTempleSnapshot(JSON.parse(JSON.stringify(r.state)),'MOCK');
+        assert.equal(processTempleEvent(restored,event,now+100).progress,undefined);
+        assert.equal(restored.game.contributionScore.viewer,gift.points);
+        assert.equal(templeParticipants(restored)[0].rank,gift.coins>=10?2:1);
+    }
+});
+test('many gifts retain all rewards while coalescing only the strongest bounded visual preset',()=>{
+    let cues:ReturnType<typeof enqueueProgress>=[],s=seed();
+    for(let i=0;i<108;i++){
+        const event=mockTempleEvent('gift',{id:'gift-user-'+i,nickname:'Khách '+i},s,'gift-'+i,now,undefined,30);
+        const r=processTempleEvent(s,event,now);s=r.state;cues=enqueueProgress(cues,r.progress!,now);
+    }
+    assert.equal(Object.keys(s.game.contributionScore).length,108);assert.equal(Object.values(s.game.contributionScore).reduce((a,b)=>a+b,0),32400);
+    assert.equal(cues.length,PROGRESS_LIMIT);
+    let same=enqueueProgress([],processTempleEvent(seed(),e('large','gift',now,undefined,30),now).progress!,now);
+    const small=processTempleEvent(seed(),e('small','gift',now+10,undefined,1),now+10);
+    same=enqueueProgress(same,small.progress!,now+10);assert.equal(same.length,1);assert.equal(same[0].giftCoins,30);assert.equal(same[0].contributionDelta,310);
+});
+test('gift promotion updates Top 10 immediately but seats wait for active worship',()=>{
+    const users=Array.from({length:108},(_,i)=>({id:'u'+i,contributionScore:0}));
+    let plan=initialSeatPlan(users,now);const state=createTempleState('MOCK','gift-seats',[]);
+    const gift=mockTempleEvent('gift',{id:'u107',nickname:'Khách'},state,'promotion-gift',now+5000,undefined,10);
+    const r=processTempleEvent(state,gift,now+5000);assert.equal(r.progress?.rankLevel,2);
+    const updated=users.map(u=>({...u,contributionScore:r.state.game.contributionScore[u.id]??0}));
+    assert.equal(topContributors(updated)[0].id,'u107');
+    plan=updateSeatPlan(plan,updated,now+5000,now+7800);assert.equal(plan.assigned.at(-1)!.userId,'u107');
+    plan=updateSeatPlan(plan,updated,now+7800);assert.equal(plan.assigned[0].userId,'u107');assert.equal(new Set(plan.assigned.map(a=>a.seatId)).size,108);
 });
