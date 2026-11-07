@@ -1,0 +1,4 @@
+# Optional existing-VPS setup only. Do not run without owner-approved DNS/host.
+{$LIVE_BACKEND_HOST} {
+    reverse_proxy 127.0.0.1:3002
+}

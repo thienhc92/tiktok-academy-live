@@ -1,0 +1,1 @@
+{"version":1,"include":["/api/temple","/api/temple/*","/socket.io","/socket.io/*"],"exclude":[]}

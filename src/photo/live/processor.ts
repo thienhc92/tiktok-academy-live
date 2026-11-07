@@ -46,7 +46,7 @@ export function processTempleEvent(state:TempleState,input:unknown,now:number):T
     const activeIds=state.game.visitors.filter(v=>v!==id||profile.active);
     if(profile.active&&!activeIds.includes(id))activeIds.push(id);
     next.game={...state.game,visitors:activeIds};
-    if(e.kind==='leave')return result('processed',next);
+    if(e.kind==='leave'||e.kind==='follow'||e.kind==='share')return result('processed',next);
     let count=1,coins=0;
     const counterKey=(suffix:string)=>JSON.stringify([e.source,e.roomId,e.sessionId,id,suffix]);
     if(e.kind==='like'){
@@ -72,7 +72,7 @@ export function processTempleEvent(state:TempleState,input:unknown,now:number):T
     }
     let ritual:'bow'|'incense'|'flower'|undefined;
     let merit=0;
-    if(state.mode==='MOCK'){
+    if(state.mode==='MOCK'||(e.kind==='comment'&&isPrayerComment(e.text))){
         const limits=state.meritLimits[id]??emptyMeritLimits();
         const prayer=e.kind==='bow'||(e.kind==='comment'&&isPrayerComment(e.text));
         if(prayer){

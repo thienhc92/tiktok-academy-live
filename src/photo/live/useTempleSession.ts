@@ -15,8 +15,9 @@ import {enqueueProgress} from './progress';
 import type {ProgressCue} from './progress';
 import {enqueueNotice} from './notices';
 import {initialSeatPlan,updateSeatPlan} from './seating';
-export function useTempleSession(initialVisitors?:string[]) {
-    const [snapshot,setSnapshot]=useState(()=>createTempleState('MOCK',crypto.randomUUID(),initialVisitors));
+export function useTempleSession(initialVisitors?:string[],remote?:import('../../templeLive/protocol').LiveFrame) {
+    const external=remote!==undefined;
+    const [snapshot,setSnapshot]=useState(()=>createTempleState(external?'LIVE':'MOCK',crypto.randomUUID(),initialVisitors));
     const current=useRef(snapshot);current.current=snapshot;
     // Explicit fixture data is isolated and never reads or writes an owner's progress.
     const repository=useRef<TempleRepository>(initialVisitors?new MemoryTempleRepository():new IndexedTempleRepository());
@@ -31,6 +32,7 @@ export function useTempleSession(initialVisitors?:string[]) {
     const queue=useRef<Promise<unknown>>(Promise.resolve()),loaded=useRef<Promise<unknown>>(Promise.resolve());
     const mounted=useRef(false),readyFlag=useRef(false);
     useEffect(()=>{
+        if(external)return;
         mounted.current=true;let active=true;
         loaded.current=repository.current.transact('MOCK',current.current,s=>({state:s,outcome:'processed'})).then(result=>{
             if(active){current.current=result.state;setSnapshot(result.state);readyFlag.current=true;setReady(true);}
@@ -38,7 +40,7 @@ export function useTempleSession(initialVisitors?:string[]) {
             if(active){repository.current=new MemoryTempleRepository();setPersistent(false);setMessage(t('Temple storage unavailable'));readyFlag.current=true;setReady(true);}
         });
         return ()=>{active=false;mounted.current=false;readyFlag.current=false;};
-    },[]);
+    },[external]);
     const consume=useCallback((input:unknown)=>{
         queue.current=queue.current.then(async()=>{
             await loaded.current;if(!mounted.current)return;
@@ -59,13 +61,14 @@ export function useTempleSession(initialVisitors?:string[]) {
         }).catch(()=>{if(mounted.current)setMessage(t('Temple processing error'));});
     },[]);
     useEffect(()=>{
+        if(external)return;
         const adapter=source.current;
         adapter.start({event:consume,connection:setConnection,error:()=>setMessage(t('Temple processing error'))});
         return ()=>adapter.stop();
-    },[consume]);
+    },[consume,external]);
     useEffect(()=>{
         if(!rituals.length)return;
-        const timer=setTimeout(()=>setRituals(previous=>previous.filter(c=>c.expiresAt>Date.now())),Math.max(20,Math.min(...rituals.map(c=>c.expiresAt))-Date.now()+10));
+        const timer=setTimeout(()=>setRituals(previous=>previous.filter(c=>c.expiresAt>Date.now())),Math.max(20,Math.min(...activeRituals.map(c=>c.expiresAt))-Date.now()+10));
         return ()=>clearTimeout(timer);
     },[rituals]);
     useEffect(()=>{
@@ -80,18 +83,20 @@ export function useTempleSession(initialVisitors?:string[]) {
     },[notice?.id]);
     useEffect(()=>{const hide=()=>{if(document.hidden){setRituals([]);setProgress([]);setNotices([]);}};document.addEventListener('visibilitychange',hide);return ()=>document.removeEventListener('visibilitychange',hide);},[]);
     const send=useCallback((kind:LiveAction|'leave',viewerId:string,text?:string,coins?:number)=>{
-        if(!viewerId||!readyFlag.current)return;
+        if(external||!viewerId||!readyFlag.current)return;
         const s=current.current,p=s.profiles[viewerId],fixture=LIVE_ROSTER.find(p=>p.id===viewerId);
         if(!p&&!fixture)return;
         source.current.emit(mockTempleEvent(kind,{id:viewerId,nickname:p?.nickname??fixture!.name,avatar:p?.avatar??'/temple/devotee-realistic.webp'},s,crypto.randomUUID(),Date.now(),text,coins));
-    },[]);
+    },[external]);
     const requestLive=()=>new UnconfiguredLiveSource().start({event:()=>{},connection:()=>{},error:()=>setMessage(t('Temple LIVE unavailable'))});
-    const participants=useMemo(()=>templeParticipants(snapshot),[snapshot]);
+    const viewSnapshot=remote?.snapshot??snapshot;
+    const activeRituals=remote?remote.rituals.filter(c=>c.expiresAt>Date.now()):rituals;
+    const participants=useMemo(()=>templeParticipants(viewSnapshot),[viewSnapshot]);
     const [plan,setPlan]=useState(()=>initialSeatPlan(participants,Date.now()));
     useEffect(()=>{
-        const update=()=>setPlan(previous=>updateSeatPlan(previous,participants,Date.now(),Math.max(0,...rituals.map(c=>c.expiresAt))));
+        const update=()=>setPlan(previous=>updateSeatPlan(previous,participants,Date.now(),Math.max(0,...activeRituals.map(c=>c.expiresAt))));
         update();const timer=setInterval(update,1000);return ()=>clearInterval(timer);
-    },[participants,rituals]);
+    },[participants,activeRituals]);
     const displayedParticipants=useMemo(()=>participants.map(p=>({...p,seatId:plan.assigned.find(a=>a.userId===p.id)?.seatId??null})),[participants,plan]);
     const seating=useMemo(()=>{
         const users=new Map(displayedParticipants.map(p=>[p.id,p]));
@@ -99,5 +104,5 @@ export function useTempleSession(initialVisitors?:string[]) {
         const ids=new Set(seated.map(a=>a.user.id));
         return {seated,waiting:displayedParticipants.filter(p=>!ids.has(p.id))};
     },[plan,displayedParticipants]);
-    return {snapshot,state:snapshot.game,participants:displayedParticipants,seating,rituals,progress,notice,send,requestLive,ready,persistent,connection,message,outcome,pending:plan.pending};
+    return {snapshot:viewSnapshot,state:viewSnapshot.game,participants:displayedParticipants,seating,rituals:activeRituals,progress:remote?remote.progress.filter(c=>c.expiresAt>Date.now()):progress,notice:external?null:notice,send,requestLive,ready:external?remote.status==='connected':ready,persistent:external||persistent,connection:external?remote.status:connection,message,outcome,pending:plan.pending};
 }
